@@ -21,7 +21,6 @@ public class Product {
     private String Receiver;
     @Column(name="arrival_date", nullable = false)
     private Date arrivalDate;
-    @Column(nullable = false)
     @ManyToOne()
     @JoinColumn(name = "loaded_by_employee_id" )
     private Employee loadedByEmployee;

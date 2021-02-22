@@ -9,26 +9,30 @@ public class Equipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
+    @Column(name = "equipment_name", nullable = false)
     private String equipmentName;
+    @Column(name = "is_workable", nullable = false)
     private boolean isWorkable;
+    @Column(name = "date_of_receipt", nullable = false)
     private Date dateOfReceipt;
     @OneToOne(mappedBy = "equipment")
-    private Equipment equipment;
+    private Incidents incidents;
 
-    public Equipment(long id, String equipmentName, boolean isWorkable, Date dateOfReceipt, Equipment equipment) {
+    public Equipment(long id, String equipmentName, boolean isWorkable, Date dateOfReceipt, Incidents incidents) {
         this.id = id;
         this.equipmentName = equipmentName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
-        this.equipment = equipment;
+        this.incidents = incidents;
     }
 
-    public Equipment(String equipmentName, boolean isWorkable, Date dateOfReceipt, Equipment equipment) {
+    public Equipment(String equipmentName, boolean isWorkable, Date dateOfReceipt, Incidents incidents) {
         this.equipmentName = equipmentName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
-        this.equipment = equipment;
+        this.incidents = incidents;
     }
 
     public Equipment() {
@@ -66,11 +70,11 @@ public class Equipment {
         this.dateOfReceipt = dateOfReceipt;
     }
 
-    public Equipment getEquipment() {
-        return equipment;
+    public Incidents getIncidents() {
+        return incidents;
     }
 
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
+    public void setIncidents(Incidents incidents) {
+        this.incidents = incidents;
     }
 }

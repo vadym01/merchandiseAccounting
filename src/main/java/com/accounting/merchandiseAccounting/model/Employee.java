@@ -1,5 +1,7 @@
 package com.accounting.merchandiseAccounting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,12 +9,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "employee")
+@NamedQuery(name = "Employee.getAllEmployee",query = "FROM Employee")
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private long id;
+    private Long id;
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
@@ -21,16 +24,18 @@ public class Employee {
     private String patronymic;
     @Column(name = "birth_date", nullable = false)
     private Date birthDate;
-    @OneToMany(mappedBy = "loaded_by_employee_id", fetch = FetchType.LAZY)
-    @Column(nullable = false)
+    @JsonIgnore
+    @OneToMany(mappedBy = "loadedByEmployee", fetch = FetchType.LAZY)
     private List<Product> productListLoadedByEmployee = new ArrayList<>();
-    @OneToMany(mappedBy = "sent_by_employee_id", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "sentByEmployeeId", fetch = FetchType.LAZY)
     private List<Product> productListSentByEmployee = new ArrayList<>();
+    @JsonIgnore
     @OneToOne(mappedBy = "employee")
     private Incidents incidents;
 
 
-    public Employee(long id, String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee,Incidents incidents) {
+    public Employee(Long id, String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee,Incidents incidents) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,11 +59,12 @@ public class Employee {
     public Employee() {
     }
 
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
