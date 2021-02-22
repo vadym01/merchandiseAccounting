@@ -21,20 +21,34 @@ public class Employee {
     private String patronymic;
     @Column(name = "birth_date", nullable = false)
     private Date birthDate;
+    @OneToMany(mappedBy = "loaded_by_employee_id", fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private List<Product> productListLoadedByEmployee = new ArrayList<>();
+    @OneToMany(mappedBy = "sent_by_employee_id", fetch = FetchType.LAZY)
+    private List<Product> productListSentByEmployee = new ArrayList<>();
+    @OneToOne(mappedBy = "employee")
+    private Incidents incidents;
 
-    public Employee(long id, String firstName, String lastName, String patronymic, Date birthDate) {
+
+    public Employee(long id, String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee,Incidents incidents) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.birthDate = birthDate;
+        this.productListLoadedByEmployee = productListLoadedByEmployee;
+        this.productListSentByEmployee = productListSentByEmployee;
+        this.incidents = incidents;
     }
 
-    public Employee(String firstName, String lastName, String patronymic, Date birthDate) {
+    public Employee(String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee, Incidents incidents) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.birthDate = birthDate;
+        this.productListLoadedByEmployee = productListLoadedByEmployee;
+        this.productListSentByEmployee = productListSentByEmployee;
+        this.incidents = incidents;
     }
 
     public Employee() {
@@ -78,5 +92,29 @@ public class Employee {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public List<Product> getProductListLoadedByEmployee() {
+        return productListLoadedByEmployee;
+    }
+
+    public void setProductListLoadedByEmployee(List<Product> productListLoadedByEmployee) {
+        this.productListLoadedByEmployee = productListLoadedByEmployee;
+    }
+
+    public List<Product> getProductListSentByEmployee() {
+        return productListSentByEmployee;
+    }
+
+    public void setProductListSentByEmployee(List<Product> productListSentByEmployee) {
+        this.productListSentByEmployee = productListSentByEmployee;
+    }
+
+    public Incidents getIncidents() {
+        return incidents;
+    }
+
+    public void setIncidents(Incidents incidents) {
+        this.incidents = incidents;
     }
 }

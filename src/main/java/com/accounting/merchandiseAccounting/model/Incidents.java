@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "incidents")
 public class Incidents {
 
     @Id
@@ -13,16 +14,26 @@ public class Incidents {
     private String incidentDescription;
     @Column(name = "incident_date", nullable = false)
     private Date date;
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+    @OneToOne
+    @JoinColumn(name="equipment_id")
+    private Equipment equipment;
 
-    public Incidents(long id, String incidentDescription, Date date) {
+    public Incidents(long id, String incidentDescription, Date date, Employee employee, Equipment equipment) {
         this.id = id;
         this.incidentDescription = incidentDescription;
         this.date = date;
+        this.employee = employee;
+        this.equipment = equipment;
     }
 
-    public Incidents(String incidentDescription, Date date) {
+    public Incidents(String incidentDescription, Date date, Employee employee, Equipment equipment) {
         this.incidentDescription = incidentDescription;
         this.date = date;
+        this.employee = employee;
+        this.equipment = equipment;
     }
 
     public Incidents() {
@@ -50,5 +61,21 @@ public class Incidents {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
     }
 }
