@@ -5,6 +5,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "incidents")
+@NamedQueries({
+        @NamedQuery(name = "findAllIncidents", query = "FROM Incidents"),
+        @NamedQuery(name = "findIncidentById", query = "FROM Incidents WHERE id = :id"),
+        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incidents WHERE id = :id")
+})
 public class Incidents {
 
     @Id

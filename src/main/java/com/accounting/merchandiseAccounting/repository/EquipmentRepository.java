@@ -1,10 +1,16 @@
 package com.accounting.merchandiseAccounting.repository;
 
 import com.accounting.merchandiseAccounting.model.Equipment;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface EquipmentRepository{
+    void saveEquipment(Equipment equipment);
+    Equipment findEquipmentById(long id);
+    int deleteEquipmentById(long id);
+    List<Equipment> getAllEquipment();
+
 
 }

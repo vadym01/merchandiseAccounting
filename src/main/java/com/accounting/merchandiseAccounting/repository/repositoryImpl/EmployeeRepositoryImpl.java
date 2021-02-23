@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
@@ -34,10 +35,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Autowired
     private EntityManager entityManager;
-
     @Autowired
-    SessionFactory sessionFactory;
-    Session session;
+    private SessionFactory sessionFactory;
+    private Session session;
 
     @PostConstruct
     public void init() {
@@ -47,7 +47,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Transactional
     @Override
     public List<Employee> getAllEmployee() {
-        List employeeList;
+        List <Employee> employeeList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("getAllEmployee");
             employeeList = query.list();

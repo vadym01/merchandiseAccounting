@@ -1,12 +1,10 @@
-package com.accounting.merchandiseAccounting.repository;
+package com.accounting.merchandiseAccounting.service;
 
 import com.accounting.merchandiseAccounting.model.Product;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface ProductRepository{
+public interface ProductService {
     void saveProduct(Product product);
     Product findProductById(long id);
     List<Product> getAllProducts();
