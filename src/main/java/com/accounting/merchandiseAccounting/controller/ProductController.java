@@ -1,6 +1,7 @@
 package com.accounting.merchandiseAccounting.controller;
 
 import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
+import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
@@ -19,8 +21,8 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> productList = productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts(@RequestParam Optional<String> productName){
+        List<Product> productList = productService.findProductByProductName(productName.orElse("_"));
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 

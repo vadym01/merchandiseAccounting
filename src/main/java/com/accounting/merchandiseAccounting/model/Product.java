@@ -8,7 +8,8 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "getAllProducts", query = "FROM Product"),
         @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE id = :id"),
-        @NamedQuery(name = "findProductById", query = "FROM Product WHERE id = :id")
+        @NamedQuery(name = "findProductById", query = "FROM Product WHERE id = :id"),
+        @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName")
 })
 public class Product {
 
@@ -16,6 +17,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INV_number", nullable = false)
     private long INVNumber;
+    @Column(name = "product_name", nullable = false)
+    private String productName;
     @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "volume", nullable = false)
@@ -26,39 +29,53 @@ public class Product {
     private String Receiver;
     @Column(name="arrival_date", nullable = false)
     private Date arrivalDate;
+    @Column(name = "is_present", columnDefinition = "boolean default true")
+    private boolean isPresent;
     @ManyToOne()
     @JoinColumn(name = "loaded_by_employee_id" )
     private Employee loadedByEmployee;
     @ManyToOne()
     @JoinColumn(name = "sent_by_employee_id")
     private Employee sentByEmployeeId;
-    @Column(name = "shipment_date",nullable = false)
+    @Column(name = "shipment_date")
     private Date shipmentDate;
 
-    public Product(long INVNumber, String description, double volume, String sender, String receiver, Date arrivalDate, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(long INVNumber,String productName, String description, double volume, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
         this.INVNumber = INVNumber;
+        this.productName = productName;
         this.description = description;
         this.volume = volume;
         Sender = sender;
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
+        this.isPresent = isPresent;
         this.loadedByEmployee = loadedByEmployee;
         this.sentByEmployeeId = sentByEmployeeId;
         this.shipmentDate = shipmentDate;
     }
 
-    public Product(String description, double volume, String sender, String receiver, Date arrivalDate, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(String productName, String description, double volume, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+        this.productName = productName;
         this.description = description;
         this.volume = volume;
         Sender = sender;
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
+        this.isPresent = isPresent;
         this.loadedByEmployee = loadedByEmployee;
         this.sentByEmployeeId = sentByEmployeeId;
         this.shipmentDate = shipmentDate;
     }
 
     public Product() {
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public long getINVNumber() {
@@ -100,6 +117,14 @@ public class Product {
 
     public void setArrivalDate(Date arrivalDate) {
         this.arrivalDate = arrivalDate;
+    }
+
+    public boolean isPresent() {
+        return isPresent;
+    }
+
+    public void setPresent(boolean present) {
+        isPresent = present;
     }
 
     public Employee getLoadedByEmployee() {

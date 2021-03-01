@@ -14,5 +14,6 @@ public interface EmployeeRepository {
     void saveEmployee(Employee employee);
     int deleteEmployeeById(long id);
     Employee getEmployeeById(long id);
+    List<Employee> findEmployeeByName(String name);
 //    void updateEmployee(Employee employee);
 }

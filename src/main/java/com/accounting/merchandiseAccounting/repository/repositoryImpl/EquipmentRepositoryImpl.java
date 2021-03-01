@@ -38,7 +38,11 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
     @Override
     @Transactional
     public void saveEquipment(Equipment equipment) {
+        try{
+
+        }catch (Exception e){
             session.save(equipment);
+        }
     }
 
     @Transactional

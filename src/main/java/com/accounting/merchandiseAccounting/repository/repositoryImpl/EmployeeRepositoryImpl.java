@@ -60,8 +60,26 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Transactional
     @Override
+    public List<Employee> findEmployeeByName(String name) {
+        try {
+            Query query = session.getNamedQuery("findEmployeeByName")
+                    .setParameter("firstName",'%' + name + '%');
+            List<Employee> employeeList = query.list();
+            return employeeList;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @Transactional
+    @Override
     public void saveEmployee(Employee employee) {
+        try{
             session.save(employee);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
     }
 
     @Transactional
@@ -83,7 +101,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public Employee getEmployeeById(long id) {
         try {
-            Query query = session.getNamedQuery("getEmployeeById").setParameter("id", id);
+            Query query = session.getNamedQuery("getEmployeeById")
+                    .setParameter("id", id);
             Employee employee = (Employee) query.list().get(0);
             return employee;
         }catch (Exception e){

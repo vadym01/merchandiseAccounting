@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -23,10 +24,11 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> getAllEmployees(){
-        List<Employee> employeeList =  employeeService.getAllEmployees();
-        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+    public ResponseEntity<List<Employee>> findEmployeeByFirstName(@RequestParam Optional<String> name){
+        List<Employee> employeeList = employeeService.findEmployeeByName(name.orElse("_"));
+        return new ResponseEntity<>(employeeList,HttpStatus.OK);
     }
+
 
     @PostMapping
     public ResponseEntity<?> saveEmployee(@Validated @RequestBody Employee employee){

@@ -53,9 +53,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Transactional
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> findProductByProductName(String productName) {
         try {
-            Query query = session.getNamedQuery("getAllProducts");
+            Query query = session.getNamedQuery("findProductByProductName")
+                    .setParameter("productName",'%' + productName + '%');
             List<Product> productList = query.list();
             return productList;
         }catch (Exception e){

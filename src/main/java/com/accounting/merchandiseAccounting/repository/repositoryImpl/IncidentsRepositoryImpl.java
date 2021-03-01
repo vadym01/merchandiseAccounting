@@ -45,12 +45,16 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
     @Transactional
     @Override
     public void registerNewIncident(Incidents incidents, long employeeId, long equipmentId) {
-        Incidents customIncidents = incidents;
-        Employee employee = employeeService.findOneById(employeeId);
-        Equipment equipment = equipmentService.findEquipmentById(equipmentId);
-        customIncidents.setEmployee(employee);
-        customIncidents.setEquipment(equipment);
-        session.save(incidents);
+        try {
+            Incidents customIncidents = incidents;
+            Employee employee = employeeService.findOneById(employeeId);
+            Equipment equipment = equipmentService.findEquipmentById(equipmentId);
+            customIncidents.setEmployee(employee);
+            customIncidents.setEquipment(equipment);
+            session.save(incidents);
+        }catch (Exception e){
+            logger.info(e.getMessage());
+        }
     }
 
     @Transactional
