@@ -27,22 +27,26 @@ public class Equipment {
     private boolean isWorkable;
     @Column(name = "date_of_receipt", nullable = false)
     private Date dateOfReceipt;
+    @Column(name = "lifting_capacity", nullable = false)
+    private double liftingCapacity;
     @JsonIgnore
     @OneToOne(mappedBy = "equipment")
     private Incidents incidents;
 
-    public Equipment(long id, String equipmentName, boolean isWorkable, Date dateOfReceipt, Incidents incidents) {
+    public Equipment(long id, String equipmentName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
         this.id = id;
         this.equipmentName = equipmentName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
+        this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
     }
 
-    public Equipment(String equipmentName, boolean isWorkable, Date dateOfReceipt, Incidents incidents) {
+    public Equipment(String equipmentName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
         this.equipmentName = equipmentName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
+        this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
     }
 
@@ -75,6 +79,14 @@ public class Equipment {
 
     public Date getDateOfReceipt() {
         return dateOfReceipt;
+    }
+
+    public double getLiftingCapacity() {
+        return liftingCapacity;
+    }
+
+    public void setLiftingCapacity(double liftingCapacity) {
+        this.liftingCapacity = liftingCapacity;
     }
 
     public void setDateOfReceipt(Date dateOfReceipt) {

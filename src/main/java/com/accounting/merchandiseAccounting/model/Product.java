@@ -23,6 +23,8 @@ public class Product {
     private String description;
     @Column(name = "volume", nullable = false)
     private double volume;
+    @Column(name = "weight", nullable = false)
+    private double weight;
     @Column(name="sender", nullable = false)
     private String Sender;
     @Column(name = "receiver", nullable = false)
@@ -40,11 +42,12 @@ public class Product {
     @Column(name = "shipment_date")
     private Date shipmentDate;
 
-    public Product(long INVNumber,String productName, String description, double volume, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(long INVNumber,String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
         this.INVNumber = INVNumber;
         this.productName = productName;
         this.description = description;
         this.volume = volume;
+        this.weight = weight;
         Sender = sender;
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
@@ -54,10 +57,11 @@ public class Product {
         this.shipmentDate = shipmentDate;
     }
 
-    public Product(String productName, String description, double volume, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
         this.productName = productName;
         this.description = description;
         this.volume = volume;
+        this.weight = weight;
         Sender = sender;
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
@@ -93,7 +97,6 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     public String getSender() {
         return Sender;
@@ -157,5 +160,13 @@ public class Product {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }
