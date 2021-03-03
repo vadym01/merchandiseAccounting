@@ -98,6 +98,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
     }
 
+    @Transactional
     @Override
     public Employee getEmployeeById(long id) {
         try {
@@ -105,6 +106,19 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                     .setParameter("id", id);
             Employee employee = (Employee) query.list().get(0);
             return employee;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @Transactional
+    @Override
+    public List<Employee> getAllAvailableEmployees() {
+        try {
+            Query query = session.getNamedQuery("getAllAvailableEmployees");
+            List<Employee> employeeList = query.list();
+            return employeeList;
         }catch (Exception e){
             logger.error(e.getMessage());
             return null;

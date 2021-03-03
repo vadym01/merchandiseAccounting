@@ -11,6 +11,6 @@ public interface EquipmentRepository{
     Equipment findEquipmentById(long id);
     int deleteEquipmentById(long id);
     List<Equipment> getAllEquipment();
-
-
+    void updateAvailableStatusById(long id);
+    List<Equipment> getAllAvailableEquipment();
 }

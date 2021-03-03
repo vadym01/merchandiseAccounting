@@ -15,8 +15,9 @@ import java.util.List;
         @NamedQuery(name = "getAllEmployee", query = "FROM Employee"),
         @NamedQuery(name = "deleteEmployeeById", query = "DELETE Employee WHERE id = :id"),
         @NamedQuery(name = "getEmployeeById", query = "FROM Employee WHERE id = :id"),
-        @NamedQuery(name = "findEmployeeByName", query = "FROM Employee as e WHERE e.firstName LIKE :firstName")
-
+        @NamedQuery(name = "findEmployeeByName", query = "FROM Employee as e WHERE e.firstName LIKE :firstName"),
+        @NamedQuery(name = "getAllAvailableEmployees",
+                query = "SELECT e FROM Employee e WHERE e NOT IN (SELECT i.employee from Incidents i)")
 })
 public class Employee {
 

@@ -13,4 +13,5 @@ public interface EmployeeService {
     int deleteById(long id);
     Employee findOneById(long id);
     List<Employee> findEmployeeByName(String name);
+    List<Employee> getAllAvailableEmployees();
 }

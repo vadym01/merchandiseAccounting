@@ -25,6 +25,11 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
+    public void updateAvailableStatusById(long id) {
+        equipmentRepository.updateAvailableStatusById(id);
+    }
+
+    @Override
     public int deleteEquipmentById(long id) {
         return equipmentRepository.deleteEquipmentById(id);
     }
@@ -32,5 +37,11 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public List<Equipment> getAllEquipment() {
         return equipmentRepository.getAllEquipment();
+    }
+
+    @Override
+    public List<Equipment> getAllAvailableEquipment() {
+        List<Equipment> equipmentList = equipmentRepository.getAllAvailableEquipment();
+        return equipmentList;
     }
 }

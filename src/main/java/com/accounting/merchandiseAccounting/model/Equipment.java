@@ -12,7 +12,9 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "findEquipmentById", query = "FROM Equipment WHERE id = :id"),
         @NamedQuery(name = "deleteEquipmentById", query = "DELETE Equipment WHERE id = :id"),
-        @NamedQuery(name = "getAllEquipment", query = "FROM Equipment")
+        @NamedQuery(name = "getAllEquipment", query = "FROM Equipment"),
+        @NamedQuery(name = "updateAvailableStatusById", query = "UPDATE Equipment e SET e.isWorkable = :isWorkable WHERE e.id = :id"),
+        @NamedQuery(name = "getAllAvailableEquipment", query = "SELECT e FROM Equipment e WHERE e NOT IN (SELECT i.equipment FROM Incidents i)")
 })
 public class Equipment {
 

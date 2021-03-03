@@ -54,6 +54,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employee,HttpStatus.OK);
     }
 
+    @GetMapping("available")
+    public ResponseEntity<?> getAllAvailableEmployee(){
+        List<Employee> employeeList = employeeService.getAllAvailableEmployees();
+        return new ResponseEntity<>(employeeList,HttpStatus.OK);
+    }
 
 
 }

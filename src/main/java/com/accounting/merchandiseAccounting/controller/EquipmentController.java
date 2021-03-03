@@ -3,13 +3,13 @@ package com.accounting.merchandiseAccounting.controller;
 import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
 import com.accounting.merchandiseAccounting.model.Equipment;
 import com.accounting.merchandiseAccounting.service.EquipmentService;
+import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 @RestController
@@ -22,7 +22,11 @@ public class EquipmentController {
     @GetMapping
     public ResponseEntity<?> getAllEquipment(){
         List<Equipment> equipmentList = equipmentService.getAllEquipment();
+       try {
         return new ResponseEntity<>(equipmentList, HttpStatus.OK);
+       }catch (PropertyAccessException propertyAccessException){
+           return new ResponseEntity<PropertyAccessException>(propertyAccessException,HttpStatus.EXPECTATION_FAILED);
+       }
     }
 
     @GetMapping("{id}")
@@ -47,5 +51,17 @@ public class EquipmentController {
             throw new ResourceNotFoundException("Equipment with id: " + " is not present");
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity changeEquipmentAvailableStatus(@PathVariable("id") long id){
+        equipmentService.updateAvailableStatusById(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("available")
+    public ResponseEntity getAllAvailableEquipment(){
+        List<Equipment> equipmentList = equipmentService.getAllAvailableEquipment();
+        return new ResponseEntity(equipmentList,HttpStatus.OK);
     }
 }

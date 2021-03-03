@@ -49,4 +49,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeById = employeeRepository.getEmployeeById(id);
         return employeeById;
     }
+
+    @Override
+    public List<Employee> getAllAvailableEmployees() {
+        List<Employee> employeeList = employeeRepository.getAllAvailableEmployees();
+        return employeeList;
+    }
 }

@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 @Service
 public class EquipmentRepositoryImpl implements EquipmentRepository {
@@ -39,9 +38,9 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
     @Transactional
     public void saveEquipment(Equipment equipment) {
         try{
-
-        }catch (Exception e){
             session.save(equipment);
+        }catch (Exception e){
+            logger.error(e.getMessage());
         }
     }
 
@@ -73,6 +72,14 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
         }
     }
 
+    @Override
+    public void updateAvailableStatusById(long id) {
+        session.getTransaction().begin();
+       Equipment equipment = session.find(Equipment.class,id);
+       equipment.setWorkable(!equipment.isWorkable());
+       session.getTransaction().commit();
+    }
+
     @Transactional
     @Override
     public List<Equipment> getAllEquipment() {
@@ -84,5 +91,18 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
             logger.error(e.getMessage());
         }
         return equipmentList;
+    }
+
+    @Transactional
+    @Override
+    public List<Equipment> getAllAvailableEquipment() {
+        try{
+            Query query = session.getNamedQuery("getAllAvailableEquipment");
+            List<Equipment> equipmentList = query.list();
+            return equipmentList;
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
     }
 }
