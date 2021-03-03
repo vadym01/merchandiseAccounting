@@ -46,4 +46,16 @@ public class ProductController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @GetMapping("to/proceed")
+    public ResponseEntity findAllProductsWitchIsNotProcessed(){
+        List<Product> productList = productService.findAllProductsWitchIsNotProcessed();
+        return new ResponseEntity(productList,HttpStatus.OK);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity updateProductProceedStatusById(@PathVariable("id") long id){
+        productService.updateProductProceedStatusById(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

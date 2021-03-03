@@ -44,4 +44,6 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<Equipment> equipmentList = equipmentRepository.getAllAvailableEquipment();
         return equipmentList;
     }
+
+
 }

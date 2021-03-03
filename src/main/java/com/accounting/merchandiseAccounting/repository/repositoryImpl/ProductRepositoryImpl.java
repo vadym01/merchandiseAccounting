@@ -1,7 +1,10 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
+import com.accounting.merchandiseAccounting.model.Equipment;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
+import com.accounting.merchandiseAccounting.service.EquipmentService;
+import com.accounting.merchandiseAccounting.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Transaction;
@@ -25,6 +28,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     private EntityManager entityManager;
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private EquipmentService equipmentService;
+    @Autowired
+    private ProductService productService;
     private Session session;
 
     @PostConstruct
@@ -78,5 +85,31 @@ public class ProductRepositoryImpl implements ProductRepository {
              logger.error(e.getMessage());
              return 0;
          }
+    }
+
+    @Transactional
+    @Override
+    public List<Product> findAllProductsWitchIsNotProcessed() {
+        try {
+            Query query = session.getNamedQuery("findAllProductsWitchIsNotProcessed");
+            List<Product> productList = query.list();
+            return productList;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public void updateProductProceedStatusById(long id) {
+        try {
+            session.getTransaction().begin();
+            Product product = session.find(Product.class,id);
+            product.setProcessed(!product.isProcessed());
+            session.save(product);
+            session.getTransaction().commit();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
     }
 }

@@ -9,7 +9,9 @@ import java.util.Date;
         @NamedQuery(name = "getAllProducts", query = "FROM Product"),
         @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE id = :id"),
         @NamedQuery(name = "findProductById", query = "FROM Product WHERE id = :id"),
-        @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName")
+        @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName"),
+        @NamedQuery(name = "findAllProductsWitchIsNotProcessed", query = "FROM Product p WHERE p.isProcessed = false"),
+        @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.id = :id")
 })
 public class Product {
 
@@ -25,16 +27,18 @@ public class Product {
     private double volume;
     @Column(name = "weight", nullable = false)
     private double weight;
-    @Column(name="sender", nullable = false)
+    @Column(name = "sender", nullable = false)
     private String Sender;
     @Column(name = "receiver", nullable = false)
     private String Receiver;
-    @Column(name="arrival_date", nullable = false)
+    @Column(name = "arrival_date", nullable = false)
     private Date arrivalDate;
     @Column(name = "is_present", columnDefinition = "boolean default true")
     private boolean isPresent;
+    @Column(name = "is_processed", columnDefinition = "boolean default false")
+    private boolean isProcessed;
     @ManyToOne()
-    @JoinColumn(name = "loaded_by_employee_id" )
+    @JoinColumn(name = "loaded_by_employee_id")
     private Employee loadedByEmployee;
     @ManyToOne()
     @JoinColumn(name = "sent_by_employee_id")
@@ -42,7 +46,7 @@ public class Product {
     @Column(name = "shipment_date")
     private Date shipmentDate;
 
-    public Product(long INVNumber,String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
         this.INVNumber = INVNumber;
         this.productName = productName;
         this.description = description;
@@ -52,12 +56,13 @@ public class Product {
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
+        this.isProcessed = isProcessed;
         this.loadedByEmployee = loadedByEmployee;
         this.sentByEmployeeId = sentByEmployeeId;
         this.shipmentDate = shipmentDate;
     }
 
-    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate,boolean isPresent, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
         this.productName = productName;
         this.description = description;
         this.volume = volume;
@@ -66,6 +71,7 @@ public class Product {
         Receiver = receiver;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
+        this.isProcessed = isProcessed;
         this.loadedByEmployee = loadedByEmployee;
         this.sentByEmployeeId = sentByEmployeeId;
         this.shipmentDate = shipmentDate;
@@ -128,6 +134,14 @@ public class Product {
 
     public void setPresent(boolean present) {
         isPresent = present;
+    }
+
+    public boolean isProcessed() {
+        return isProcessed;
+    }
+
+    public void setProcessed(boolean processed) {
+        isProcessed = processed;
     }
 
     public Employee getLoadedByEmployee() {

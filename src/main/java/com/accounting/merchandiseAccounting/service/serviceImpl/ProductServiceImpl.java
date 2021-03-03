@@ -33,4 +33,15 @@ public class ProductServiceImpl implements ProductService {
     public int deleteProductById(long id) {
         return productRepository.deleteProductById(id);
     }
+
+    @Override
+    public List<Product> findAllProductsWitchIsNotProcessed() {
+        List<Product> productList = productRepository.findAllProductsWitchIsNotProcessed();
+        return productList;
+    }
+
+    @Override
+    public void updateProductProceedStatusById(long id) {
+        productRepository.updateProductProceedStatusById(id);
+    }
 }

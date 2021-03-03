@@ -9,4 +9,6 @@ public interface ProductService {
     Product findProductById(long id);
     List<Product> findProductByProductName(String productName);
     int deleteProductById(long id);
+    List<Product> findAllProductsWitchIsNotProcessed();
+    void updateProductProceedStatusById(long id);
 }
