@@ -143,11 +143,11 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.getTransaction().begin();
             Query query = session.getNamedQuery("updateProductLoadedByEmployee");
             Employee employee = session.find(Employee.class, productForProceedDto.getCurrentEmployeeId());
-            query.setParameter("loadedByEmployee",employee);
+            query.setParameter("loadedByEmployee", employee);
             query.setParameter("INVNumber", productForProceedDto.getProductId());
-          query.executeUpdate();
+            query.executeUpdate();
             session.getTransaction().commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
@@ -155,11 +155,33 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional
     @Override
     public ProductForProceedDTO getProductLoadedByEmployee(long INVNumber) {
-          ProductForProceedDTO product = (ProductForProceedDTO) session.getNamedQuery("getProductLoadedByEmployee")
+        try{
+        ProductForProceedDTO product = (ProductForProceedDTO) session.getNamedQuery("getProductLoadedByEmployee")
                 .setParameter("INVNumber", INVNumber)
                 .unwrap(Query.class)
                 .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                 .getResultList().get(0);
-          return product;
+        return product;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @Transactional
+    @Override
+    public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
+        try {
+        Employee employee = session.find(Employee.class, employeeId);
+        List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
+                .setParameter("loadedByEmployee", employee)
+                .unwrap(Query.class)
+                .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
+                .getResultList();
+        return productForProceedDTOList;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
     }
 }

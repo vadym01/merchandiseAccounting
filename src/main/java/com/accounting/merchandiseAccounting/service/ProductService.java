@@ -16,4 +16,6 @@ public interface ProductService {
     List<ProductForProceedDTO> getProductInfoForProceeding();
     void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto);
     ProductForProceedDTO getProductLoadedByEmployee(long INVNumber);
+    List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId);
+
 }

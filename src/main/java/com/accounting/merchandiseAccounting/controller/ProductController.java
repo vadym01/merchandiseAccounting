@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -73,5 +73,12 @@ public class ProductController {
         productService.updateProductLoadedByEmployee(productInfoDto);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @GetMapping("history/of/{employeeId}")
+    public ResponseEntity getProductHistoryByEmployee(@PathVariable("employeeId") long employeeId){
+        List<ProductForProceedDTO> productHistory = productService.getProductHistoryByEmployeeId(employeeId);
+        return new ResponseEntity(productHistory, HttpStatus.OK);
+    }
+
 
 }

@@ -24,7 +24,12 @@ import java.util.Date;
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
-                    " FROM Product p WHERE p.INVNumber = :INVNumber")
+                    " FROM Product p WHERE p.INVNumber = :INVNumber"),
+        @NamedQuery(name = "getProductHistoryByEmployeeId", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
+                " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.arrivalDate as arrivalDate," +
+                " p.shipmentDate as shipmentDate" +
+                " FROM Product p WHERE p.loadedByEmployee = :loadedByEmployee")
 })
 public class Product {
 

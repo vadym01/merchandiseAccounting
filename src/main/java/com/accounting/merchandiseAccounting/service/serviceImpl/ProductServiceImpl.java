@@ -63,4 +63,9 @@ public class ProductServiceImpl implements ProductService {
         ProductForProceedDTO productForProceedDTO = productRepository.getProductLoadedByEmployee(INVNumber);
         return productForProceedDTO;
     }
+
+    @Override
+    public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
+        return productRepository.getProductHistoryByEmployeeId(employeeId);
+    }
 }

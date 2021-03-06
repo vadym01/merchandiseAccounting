@@ -18,4 +18,5 @@ public interface ProductRepository{
     List<ProductForProceedDTO> getProductInfoForProceeding();
     void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto);
     ProductForProceedDTO getProductLoadedByEmployee(long id);
+    List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId);
 }
