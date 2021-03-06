@@ -114,8 +114,9 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.getTransaction().begin();
             Product product = session.find(Product.class, id);
             product.setProcessed(!product.isProcessed());
-            session.save(product);
+            session.update(product);
             session.getTransaction().commit();
+
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
