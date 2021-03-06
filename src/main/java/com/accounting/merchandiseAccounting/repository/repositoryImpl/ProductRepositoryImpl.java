@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.xml.transform.Transformer;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -179,6 +180,22 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                 .getResultList();
         return productForProceedDTOList;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent) {
+        try{
+            List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductInfoByDate")
+                    .setParameter("shipment_date", shipment_date)
+                    .setParameter("isPresent", isPresent)
+                    .unwrap(Query.class)
+                    .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
+                    .getResultList();
+            return productForProceedDTOList;
         }catch (Exception e){
             logger.error(e.getMessage());
             return null;

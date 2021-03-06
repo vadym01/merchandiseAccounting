@@ -19,7 +19,8 @@ import java.util.Date;
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
                 " FROM Product p WHERE isProcessed = false AND p.loadedByEmployee = NULL ORDER BY p.arrivalDate ASC"),
-        @NamedQuery(name = "updateProductLoadedByEmployee", query = "UPDATE Product p SET p.loadedByEmployee = :loadedByEmployee WHERE p.INVNumber = :INVNumber"),
+        @NamedQuery(name = "updateProductLoadedByEmployee", query = "UPDATE Product p SET p.loadedByEmployee = :loadedByEmployee" +
+                " WHERE p.INVNumber = :INVNumber"),
         @NamedQuery(name = "getProductLoadedByEmployee", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
@@ -29,7 +30,13 @@ import java.util.Date;
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
-                " FROM Product p WHERE p.loadedByEmployee = :loadedByEmployee")
+                " FROM Product p WHERE p.loadedByEmployee = :loadedByEmployee"),
+        @NamedQuery(name = "getProductInfoByDate", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
+                " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.arrivalDate as arrivalDate," +
+                " p.shipmentDate as shipmentDate" +
+                " FROM Product p WHERE shipment_date = :shipment_date AND isPresent = :isPresent"),
+
 })
 public class Product {
 

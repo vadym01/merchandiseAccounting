@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,19 +26,19 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(@RequestParam Optional<String> productName){
+    public ResponseEntity<List<Product>> getAllProducts(@RequestParam Optional<String> productName) {
         List<Product> productList = productService.findProductByProductName(productName.orElse("_"));
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProductByInv(@PathVariable("id") long id){
+    public ResponseEntity<Product> getProductByInv(@PathVariable("id") long id) {
         Product product = productService.findProductById(id);
-        return new ResponseEntity<>(product,HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody Product product){
+    public ResponseEntity createProduct(@RequestBody Product product) {
         productService.saveProduct(product);
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -44,40 +46,48 @@ public class ProductController {
     @DeleteMapping("{id}")
     public ResponseEntity deleteProductById(@PathVariable("id") long id) throws ResourceNotFoundException {
         int result = productService.deleteProductById(id);
-        if(result == 0){
+        if (result == 0) {
             throw new ResourceNotFoundException("Product with id: " + id + " not found");
         }
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PatchMapping("/submit/proceeded/{id}")
-    public ResponseEntity updateProductProceedStatusById(@PathVariable("id") long id){
+    public ResponseEntity updateProductProceedStatusById(@PathVariable("id") long id) {
         productService.updateProductProceedStatusById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/to/proceed")
-    public ResponseEntity getProductListToProceed(){
+    public ResponseEntity getProductListToProceed() {
         List<ProductForProceedDTO> productForProceedDTOS = productService.getProductInfoForProceeding();
-        return new ResponseEntity(productForProceedDTOS,HttpStatus.OK);
+        return new ResponseEntity(productForProceedDTOS, HttpStatus.OK);
     }
 
     @GetMapping("/to/proceed/{INVNumber}")
-    public ResponseEntity getProductToProceed(@PathVariable("INVNumber") long INVNumber){
+    public ResponseEntity getProductToProceed(@PathVariable("INVNumber") long INVNumber) {
         ProductForProceedDTO productForProceedDTO = productService.getProductLoadedByEmployee(INVNumber);
-        return new ResponseEntity(productForProceedDTO,HttpStatus.OK);
+        return new ResponseEntity(productForProceedDTO, HttpStatus.OK);
     }
 
     @PatchMapping("update/begin/proceed")
-    public ResponseEntity updateProductLoadedBy(@RequestBody ProductLoadedByEmployeeInfoDTO productInfoDto){
+    public ResponseEntity updateProductLoadedBy(@RequestBody ProductLoadedByEmployeeInfoDTO productInfoDto) {
         productService.updateProductLoadedByEmployee(productInfoDto);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("history/of/{employeeId}")
-    public ResponseEntity getProductHistoryByEmployee(@PathVariable("employeeId") long employeeId){
+    public ResponseEntity getProductHistoryByEmployee(@PathVariable("employeeId") long employeeId) {
         List<ProductForProceedDTO> productHistory = productService.getProductHistoryByEmployeeId(employeeId);
         return new ResponseEntity(productHistory, HttpStatus.OK);
+    }
+
+    @GetMapping("history/by/date/{shipment_date}/{isPresent}")
+    public ResponseEntity getProductListInfoByDate(@PathVariable("shipment_date") String date,
+                                               @PathVariable("isPresent") boolean isPresent) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<ProductForProceedDTO> productForProceedDTOList = productService.getProductInfoByDate(date, isPresent);
+        return new ResponseEntity(productForProceedDTOList, HttpStatus.OK);
     }
 
 

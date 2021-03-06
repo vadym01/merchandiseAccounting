@@ -5,6 +5,7 @@ import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -19,4 +20,5 @@ public interface ProductRepository{
     void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto);
     ProductForProceedDTO getProductLoadedByEmployee(long id);
     List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId);
+    List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent);
 }

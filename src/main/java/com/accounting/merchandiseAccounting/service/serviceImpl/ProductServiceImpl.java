@@ -8,6 +8,7 @@ import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,5 +68,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
         return productRepository.getProductHistoryByEmployeeId(employeeId);
+    }
+
+    @Override
+    public List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent) {
+        List<ProductForProceedDTO> productForProceedDTOList = productRepository.getProductInfoByDate(shipment_date,isPresent);
+        return productForProceedDTOList;
     }
 }
