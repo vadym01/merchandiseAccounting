@@ -1,5 +1,7 @@
 package com.accounting.merchandiseAccounting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,8 +12,19 @@ import java.util.Date;
         @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE id = :id"),
         @NamedQuery(name = "findProductById", query = "FROM Product WHERE id = :id"),
         @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName"),
-        @NamedQuery(name = "findAllProductsWitchIsNotProcessed", query = "FROM Product p WHERE p.isProcessed = false"),
-        @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.id = :id")
+        @NamedQuery(name = "findAllProductsWhichIsNotProcessed", query = "FROM Product p WHERE p.isProcessed = false"),
+        @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.id = :id"),
+        @NamedQuery(name = "getProductInfoForProceeding", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
+                " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.arrivalDate as arrivalDate," +
+                " p.shipmentDate as shipmentDate" +
+                " FROM Product p WHERE isProcessed = false AND p.loadedByEmployee = NULL ORDER BY p.arrivalDate ASC"),
+        @NamedQuery(name = "updateProductLoadedByEmployee", query = "UPDATE Product p SET p.loadedByEmployee = :loadedByEmployee WHERE p.INVNumber = :INVNumber"),
+        @NamedQuery(name = "getProductLoadedByEmployee", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
+                " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.arrivalDate as arrivalDate," +
+                " p.shipmentDate as shipmentDate" +
+                " FROM Product p WHERE p.INVNumber = :INVNumber")
 })
 public class Product {
 
@@ -28,9 +41,9 @@ public class Product {
     @Column(name = "weight", nullable = false)
     private double weight;
     @Column(name = "sender", nullable = false)
-    private String Sender;
+    private String sender;
     @Column(name = "receiver", nullable = false)
-    private String Receiver;
+    private String receiver;
     @Column(name = "arrival_date", nullable = false)
     private Date arrivalDate;
     @Column(name = "is_present", columnDefinition = "boolean default true")
@@ -42,50 +55,43 @@ public class Product {
     private Employee loadedByEmployee;
     @ManyToOne()
     @JoinColumn(name = "sent_by_employee_id")
-    private Employee sentByEmployeeId;
+    private Employee sentByEmployee;
     @Column(name = "shipment_date")
     private Date shipmentDate;
 
-    public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+
+    public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
         this.INVNumber = INVNumber;
         this.productName = productName;
         this.description = description;
         this.volume = volume;
         this.weight = weight;
-        Sender = sender;
-        Receiver = receiver;
+        this.sender = sender;
+        this.receiver = receiver;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
         this.isProcessed = isProcessed;
         this.loadedByEmployee = loadedByEmployee;
-        this.sentByEmployeeId = sentByEmployeeId;
+        this.sentByEmployee = sentByEmployee;
         this.shipmentDate = shipmentDate;
     }
 
-    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployeeId, Date shipmentDate) {
+    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
         this.productName = productName;
         this.description = description;
         this.volume = volume;
         this.weight = weight;
-        Sender = sender;
-        Receiver = receiver;
+        this.sender = sender;
+        this.receiver = receiver;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
         this.isProcessed = isProcessed;
         this.loadedByEmployee = loadedByEmployee;
-        this.sentByEmployeeId = sentByEmployeeId;
+        this.sentByEmployee = sentByEmployee;
         this.shipmentDate = shipmentDate;
     }
 
     public Product() {
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public long getINVNumber() {
@@ -96,6 +102,14 @@ public class Product {
         this.INVNumber = INVNumber;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -104,20 +118,36 @@ public class Product {
         this.description = description;
     }
 
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
     public String getSender() {
-        return Sender;
+        return sender;
     }
 
     public void setSender(String sender) {
-        Sender = sender;
+        this.sender = sender;
     }
 
     public String getReceiver() {
-        return Receiver;
+        return receiver;
     }
 
     public void setReceiver(String receiver) {
-        Receiver = receiver;
+        this.receiver = receiver;
     }
 
     public Date getArrivalDate() {
@@ -152,12 +182,12 @@ public class Product {
         this.loadedByEmployee = loadedByEmployee;
     }
 
-    public Employee getSentByEmployeeId() {
-        return sentByEmployeeId;
+    public Employee getSentByEmployee() {
+        return sentByEmployee;
     }
 
-    public void setSentByEmployeeId(Employee sentByEmployeeId) {
-        this.sentByEmployeeId = sentByEmployeeId;
+    public void setSentByEmployee(Employee sentByEmployee) {
+        this.sentByEmployee = sentByEmployee;
     }
 
     public Date getShipmentDate() {
@@ -166,21 +196,5 @@ public class Product {
 
     public void setShipmentDate(Date shipmentDate) {
         this.shipmentDate = shipmentDate;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
     }
 }

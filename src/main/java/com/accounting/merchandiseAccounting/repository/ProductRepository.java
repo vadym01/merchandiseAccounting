@@ -1,5 +1,7 @@
 package com.accounting.merchandiseAccounting.repository;
 
+import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +13,9 @@ public interface ProductRepository{
     Product findProductById(long id);
     List<Product> findProductByProductName(String productName);
     int deleteProductById(long id);
-    List<Product> findAllProductsWitchIsNotProcessed();
+    List<Product> findAllProductsWhichIsNotProcessed();
     void updateProductProceedStatusById(long id);
+    List<ProductForProceedDTO> getProductInfoForProceeding();
+    void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto);
+    ProductForProceedDTO getProductLoadedByEmployee(long id);
 }

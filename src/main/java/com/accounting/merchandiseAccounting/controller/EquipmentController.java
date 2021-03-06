@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/equipment")
 public class EquipmentController {

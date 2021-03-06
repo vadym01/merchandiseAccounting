@@ -1,5 +1,6 @@
 package com.accounting.merchandiseAccounting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "employee")
 @NamedQueries({
-        @NamedQuery(name = "getAllEmployee", query = "FROM Employee"),
+        @NamedQuery(name = "getAllEmployee", query = "FROM Employee "),
         @NamedQuery(name = "deleteEmployeeById", query = "DELETE Employee WHERE id = :id"),
         @NamedQuery(name = "getEmployeeById", query = "FROM Employee WHERE id = :id"),
         @NamedQuery(name = "findEmployeeByName", query = "FROM Employee as e WHERE e.firstName LIKE :firstName"),
@@ -35,12 +36,13 @@ public class Employee {
     @Size(min = 2, message = "patronymic should be at list 2 characters")
     private String patronymic;
     @Column(name = "birth_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     @JsonIgnore
     @OneToMany(mappedBy = "loadedByEmployee", fetch = FetchType.LAZY)
     private List<Product> productListLoadedByEmployee = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "sentByEmployeeId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sentByEmployee", fetch = FetchType.LAZY)
     private List<Product> productListSentByEmployee = new ArrayList<>();
     @JsonIgnore
     @OneToOne(mappedBy = "employee")

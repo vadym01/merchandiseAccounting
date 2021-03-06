@@ -1,5 +1,7 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
+import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.ProductService;
@@ -35,13 +37,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAllProductsWitchIsNotProcessed() {
-        List<Product> productList = productRepository.findAllProductsWitchIsNotProcessed();
+    public List<Product> findAllProductsWhichIsNotProcessed() {
+        List<Product> productList = productRepository.findAllProductsWhichIsNotProcessed();
         return productList;
     }
 
     @Override
     public void updateProductProceedStatusById(long id) {
         productRepository.updateProductProceedStatusById(id);
+    }
+
+    @Override
+    public List<ProductForProceedDTO> getProductInfoForProceeding() {
+        List<ProductForProceedDTO> productForProceedDTOS = productRepository.getProductInfoForProceeding();
+        return productForProceedDTOS;
+    }
+
+    @Override
+    public void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto) {
+        productRepository.updateProductLoadedByEmployee(productForProceedDto);
+    }
+
+    @Override
+    public ProductForProceedDTO getProductLoadedByEmployee(long INVNumber) {
+        ProductForProceedDTO productForProceedDTO = productRepository.getProductLoadedByEmployee(INVNumber);
+        return productForProceedDTO;
     }
 }
