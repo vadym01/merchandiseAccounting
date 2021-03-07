@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -84,11 +84,22 @@ public class ProductController {
 
     @GetMapping("history/by/date/{shipment_date}/{isPresent}")
     public ResponseEntity getProductListInfoByDate(@PathVariable("shipment_date") String date,
-                                               @PathVariable("isPresent") boolean isPresent) {
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                                   @PathVariable("isPresent") boolean isPresent) {
         List<ProductForProceedDTO> productForProceedDTOList = productService.getProductInfoByDate(date, isPresent);
         return new ResponseEntity(productForProceedDTOList, HttpStatus.OK);
     }
 
+    @PatchMapping("update/begin/shipment/{employeeId}/{INVNumber}")
+    public ResponseEntity updateShipmentValueForSentBy(@PathVariable("employeeId") long employeeId,
+                                                       @PathVariable("INVNumber") long INVNumber) {
+        productService.updateShipmentValueForSentBy(employeeId, INVNumber);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
+    @PatchMapping("update/confirm/shipment/{INVNumber}/{isPresent}")
+    public ResponseEntity updateShipmentValueForIsPresent(@PathVariable("INVNumber") long INVNumber,
+                                                          @PathVariable("isPresent") boolean isPresent) {
+        productService.updateShipmentValueForIsPresent(INVNumber, isPresent);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

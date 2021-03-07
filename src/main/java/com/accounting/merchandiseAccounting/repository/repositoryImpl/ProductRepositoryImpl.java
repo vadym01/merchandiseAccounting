@@ -156,14 +156,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional
     @Override
     public ProductForProceedDTO getProductLoadedByEmployee(long INVNumber) {
-        try{
-        ProductForProceedDTO product = (ProductForProceedDTO) session.getNamedQuery("getProductLoadedByEmployee")
-                .setParameter("INVNumber", INVNumber)
-                .unwrap(Query.class)
-                .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
-                .getResultList().get(0);
-        return product;
-        }catch (Exception e){
+        try {
+            ProductForProceedDTO product = (ProductForProceedDTO) session.getNamedQuery("getProductLoadedByEmployee")
+                    .setParameter("INVNumber", INVNumber)
+                    .unwrap(Query.class)
+                    .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
+                    .getResultList().get(0);
+            return product;
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
@@ -173,22 +173,23 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
         try {
-        Employee employee = session.find(Employee.class, employeeId);
-        List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
-                .setParameter("loadedByEmployee", employee)
-                .unwrap(Query.class)
-                .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
-                .getResultList();
-        return productForProceedDTOList;
-        }catch (Exception e){
+            Employee employee = session.find(Employee.class, employeeId);
+            List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
+                    .setParameter("loadedByEmployee", employee)
+                    .unwrap(Query.class)
+                    .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
+                    .getResultList();
+            return productForProceedDTOList;
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
     }
 
+    @Transactional
     @Override
     public List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent) {
-        try{
+        try {
             List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductInfoByDate")
                     .setParameter("shipment_date", shipment_date)
                     .setParameter("isPresent", isPresent)
@@ -196,9 +197,40 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList();
             return productForProceedDTOList;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateShipmentValueForSentBy(long employeeId, long INVNumber) {
+        try {
+            session.getTransaction().begin();
+            Query query = session.getNamedQuery("updateShipmentValueForSentBy");
+            Employee employee = session.find(Employee.class, employeeId);
+            query.setParameter("sentByEmployee", employee);
+            query.setParameter("INVNumber", INVNumber);
+            query.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {
+        try {
+            session.getTransaction().begin();
+            session.getNamedQuery("updateShipmentValueForIsPresent")
+                    .setParameter("isPresent", isPresent)
+                    .setParameter("INVNumber", INVNumber)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        }catch (Exception e){
+            logger.error(e.getMessage());
         }
     }
 }

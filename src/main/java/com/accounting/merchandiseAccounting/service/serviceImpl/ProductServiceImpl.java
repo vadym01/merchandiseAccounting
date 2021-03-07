@@ -72,7 +72,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent) {
-        List<ProductForProceedDTO> productForProceedDTOList = productRepository.getProductInfoByDate(shipment_date,isPresent);
+        List<ProductForProceedDTO> productForProceedDTOList = productRepository.getProductInfoByDate(shipment_date, isPresent);
         return productForProceedDTOList;
+    }
+
+    @Override
+    public void updateShipmentValueForSentBy(long employeeId, long INVNumber) {
+        productRepository.updateShipmentValueForSentBy(employeeId, INVNumber);
+    }
+
+    @Override
+    public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {
+        productRepository.updateShipmentValueForIsPresent(INVNumber, isPresent);
     }
 }

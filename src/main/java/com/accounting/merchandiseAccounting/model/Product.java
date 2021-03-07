@@ -36,7 +36,10 @@ import java.util.Date;
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
                 " FROM Product p WHERE shipment_date = :shipment_date AND isPresent = :isPresent"),
-
+        @NamedQuery(name = "updateShipmentValueForSentBy", query = "UPDATE Product p SET p.sentByEmployee = :sentByEmployee " +
+                "WHERE p.INVNumber = :INVNumber"),
+        @NamedQuery(name = "updateShipmentValueForIsPresent", query = "UPDATE Product p SET p.isPresent = :isPresent " +
+                "WHERE p.INVNumber = :INVNumber")
 })
 public class Product {
 
