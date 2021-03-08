@@ -3,7 +3,6 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Employee;
-import com.accounting.merchandiseAccounting.model.Equipment;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
@@ -22,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import javax.xml.transform.Transformer;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,8 +47,14 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Transactional
     @Override
-    public void saveProduct(Product product) {
-        session.save(product);
+    public Product saveProduct(Product product) {
+        try {
+            session.save(product);
+            return product;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return null;
+        }
     }
 
     @Transactional
@@ -59,7 +62,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Product findProductById(long id) {
         try {
             Query query = session.createNamedQuery("findProductById").setParameter("id", id);
-            Product product = (Product) query.list().get(0);
+            Product product = (Product) query.getSingleResult();
             return product;
         } catch (Exception e) {
             logger.error(e.getMessage());

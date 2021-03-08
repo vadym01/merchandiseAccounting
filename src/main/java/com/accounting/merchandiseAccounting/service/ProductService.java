@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface ProductService {
-    void saveProduct(Product product);
+    Product saveProduct(Product product);
 
     Product findProductById(long id);
 

@@ -5,12 +5,11 @@ import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface ProductRepository {
-    void saveProduct(Product product);
+    Product saveProduct(Product product);
 
     Product findProductById(long id);
 

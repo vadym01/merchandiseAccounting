@@ -59,7 +59,11 @@ public class Product {
     private String sender;
     @Column(name = "receiver", nullable = false)
     private String receiver;
-    @Column(name = "arrival_date", nullable = false)
+    @Column(name = "receipt_date", nullable = false)
+    private Date receiptDate;
+    @Column(name = "scheduled_shipment_date", nullable = false)
+    private Date scheduledShipmentDate;
+    @Column(name = "arrival_date")
     private Date arrivalDate;
     @Column(name = "is_present", columnDefinition = "boolean default true")
     private boolean isPresent;
@@ -75,7 +79,7 @@ public class Product {
     private Date shipmentDate;
 
 
-    public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
+    public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date receiptDate, Date scheduledShipmentDate, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
         this.INVNumber = INVNumber;
         this.productName = productName;
         this.description = description;
@@ -83,6 +87,8 @@ public class Product {
         this.weight = weight;
         this.sender = sender;
         this.receiver = receiver;
+        this.receiptDate = receiptDate;
+        this.scheduledShipmentDate = scheduledShipmentDate;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
         this.isProcessed = isProcessed;
@@ -91,13 +97,15 @@ public class Product {
         this.shipmentDate = shipmentDate;
     }
 
-    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
+    public Product(String productName, String description, double volume, double weight, String sender, String receiver, Date receiptDate, Date scheduledShipmentDate, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
         this.productName = productName;
         this.description = description;
         this.volume = volume;
         this.weight = weight;
         this.sender = sender;
         this.receiver = receiver;
+        this.receiptDate = receiptDate;
+        this.scheduledShipmentDate = scheduledShipmentDate;
         this.arrivalDate = arrivalDate;
         this.isPresent = isPresent;
         this.isProcessed = isProcessed;
@@ -163,6 +171,22 @@ public class Product {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public Date getReceiptDate() {
+        return receiptDate;
+    }
+
+    public void setReceiptDate(Date receiptDate) {
+        this.receiptDate = receiptDate;
+    }
+
+    public Date getScheduledShipmentDate() {
+        return scheduledShipmentDate;
+    }
+
+    public void setScheduledShipmentDate(Date scheduledShipmentDate) {
+        this.scheduledShipmentDate = scheduledShipmentDate;
     }
 
     public Date getArrivalDate() {
