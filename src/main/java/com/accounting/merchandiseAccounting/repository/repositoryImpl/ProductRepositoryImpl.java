@@ -222,6 +222,17 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
     }
 
+    @Override
+    public long getTotalAmountOfProducts() {
+        long result = 0;
+        try {
+             result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return result;
+    }
+
     @Transactional
     @Override
     public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {
@@ -235,5 +246,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         }catch (Exception e){
             logger.error(e.getMessage());
         }
+
+
     }
 }

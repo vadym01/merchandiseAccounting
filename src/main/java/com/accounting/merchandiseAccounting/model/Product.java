@@ -39,7 +39,8 @@ import java.util.Date;
         @NamedQuery(name = "updateShipmentValueForSentBy", query = "UPDATE Product p SET p.sentByEmployee = :sentByEmployee " +
                 "WHERE p.INVNumber = :INVNumber"),
         @NamedQuery(name = "updateShipmentValueForIsPresent", query = "UPDATE Product p SET p.isPresent = :isPresent " +
-                "WHERE p.INVNumber = :INVNumber")
+                "WHERE p.INVNumber = :INVNumber"),
+        @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT COUNT(p.INVNumber) as total from Product p")
 })
 public class Product {
 

@@ -34,4 +34,6 @@ public interface ProductRepository {
     void updateShipmentValueForSentBy(long employeeId, long INVNumber);
 
     void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent);
+
+    long getTotalAmountOfProducts();
 }

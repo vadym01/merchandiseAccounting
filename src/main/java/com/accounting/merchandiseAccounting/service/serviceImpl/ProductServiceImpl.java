@@ -3,6 +3,7 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
+import com.accounting.merchandiseAccounting.model.ProductStorageReport;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +86,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {
         productRepository.updateShipmentValueForIsPresent(INVNumber, isPresent);
+    }
+
+    @Override
+    public ProductStorageReport getTotalAmountOfProducts() {
+        int totalSpace = 100;
+        int totalAmount = Math.toIntExact(productRepository.getTotalAmountOfProducts());
+        int freeSpace = totalSpace - totalAmount;
+        ProductStorageReport productStorageReport = new ProductStorageReport(totalAmount,freeSpace);
+        return productStorageReport;
     }
 }

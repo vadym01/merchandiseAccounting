@@ -5,6 +5,7 @@ import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
+import com.accounting.merchandiseAccounting.model.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -101,5 +102,11 @@ public class ProductController {
                                                           @PathVariable("isPresent") boolean isPresent) {
         productService.updateShipmentValueForIsPresent(INVNumber, isPresent);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("total")
+    public ResponseEntity getTotalAmountOfProducts(){
+        ProductStorageReport productStorageReport = productService.getTotalAmountOfProducts();
+        return new ResponseEntity(productStorageReport,HttpStatus.OK);
     }
 }
