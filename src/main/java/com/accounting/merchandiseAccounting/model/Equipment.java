@@ -1,10 +1,8 @@
 package com.accounting.merchandiseAccounting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.jfr.Name;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -16,7 +14,7 @@ import java.util.Date;
         @NamedQuery(name = "getAllEquipment", query = "FROM Equipment"),
         @NamedQuery(name = "updateAvailableStatusById", query = "UPDATE Equipment e SET e.isWorkable = :isWorkable WHERE e.id = :id"),
         @NamedQuery(name = "getAllAvailableEquipment", query = "SELECT e FROM Equipment e WHERE e NOT IN (SELECT i.equipment FROM Incidents i)"),
-        @NamedQuery(name = "findEquipmentByEquipmentName", query = "FROM Equipment e WHERE e.equipmentName LIKE :equipmentName")
+        @NamedQuery(name = "findEquipmentByEquipmentName", query = "FROM Equipment as e WHERE e.equipmentName LIKE :equipmentName"),
 })
 public class Equipment {
 

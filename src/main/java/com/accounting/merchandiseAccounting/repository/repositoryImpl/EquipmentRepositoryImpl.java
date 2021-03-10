@@ -120,4 +120,16 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
             return null;
         }
     }
+
+    @Transactional
+    @Override
+    public void updateEquipment(Equipment equipment) {
+        try {
+            session.getTransaction().begin();
+            session.merge(equipment);
+            session.getTransaction().commit();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+    }
 }

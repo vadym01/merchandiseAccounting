@@ -14,4 +14,5 @@ public interface EquipmentRepository{
     void updateAvailableStatusById(long id);
     List<Equipment> getAllAvailableEquipment();
     List<Equipment> findEquipmentByEquipmentName(String equipmentName);
+    void updateEquipment(Equipment equipment);
 }

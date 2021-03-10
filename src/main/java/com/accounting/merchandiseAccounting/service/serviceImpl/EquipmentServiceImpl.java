@@ -50,4 +50,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         List<Equipment> equipmentList = equipmentRepository.findEquipmentByEquipmentName(equipmentName);
         return equipmentList;
     }
+
+    @Override
+    public void updateEquipment(Equipment equipment) {
+        equipmentRepository.updateEquipment(equipment);
+    }
 }

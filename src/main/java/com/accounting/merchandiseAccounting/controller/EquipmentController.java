@@ -22,8 +22,8 @@ public class EquipmentController {
     private EquipmentService equipmentService;
 
     @GetMapping("find/")
-    public ResponseEntity getEquipmentByName(@RequestParam Optional<String> equipmentName){
-        List<Equipment> equipmentList = equipmentService.findEquipmentByEquipmentName(equipmentName.orElse("_"));
+    public ResponseEntity getEquipmentByName(@RequestParam Optional<String> name){
+        List<Equipment> equipmentList = equipmentService.findEquipmentByEquipmentName(name.orElse("_"));
         return new ResponseEntity(equipmentList,HttpStatus.OK);
     }
 
@@ -71,5 +71,11 @@ public class EquipmentController {
     public ResponseEntity getAllAvailableEquipment(){
         List<Equipment> equipmentList = equipmentService.getAllAvailableEquipment();
         return new ResponseEntity(equipmentList,HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity updateEquipment(@RequestBody Equipment equipment){
+        equipmentService.updateEquipment(equipment);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

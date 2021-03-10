@@ -1,6 +1,5 @@
 package com.accounting.merchandiseAccounting.service;
 
-import com.accounting.merchandiseAccounting.DTO.EquipmentStatus;
 import com.accounting.merchandiseAccounting.model.Equipment;
 
 import java.util.List;
@@ -13,4 +12,5 @@ public interface EquipmentService {
     void updateAvailableStatusById (long id);
     List<Equipment> getAllAvailableEquipment();
     List<Equipment> findEquipmentByEquipmentName(String equipmentName);
+    void updateEquipment(Equipment equipment);
 }
