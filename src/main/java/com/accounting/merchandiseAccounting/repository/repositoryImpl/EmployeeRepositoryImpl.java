@@ -124,4 +124,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return null;
         }
     }
+
+    @Override
+    public void updateEmployee(Employee employee) {
+        try{
+            session.getTransaction().begin();
+            session.merge(employee);
+            session.getTransaction().commit();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+    }
 }

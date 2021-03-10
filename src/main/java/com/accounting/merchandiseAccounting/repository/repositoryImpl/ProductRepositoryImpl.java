@@ -3,6 +3,7 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Employee;
+import com.accounting.merchandiseAccounting.model.Equipment;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
@@ -49,7 +50,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Product saveProduct(Product product) {
         try {
-            session.save(product);
+            session.getTransaction().begin();
+            session.saveOrUpdate(product);
+            session.getTransaction().commit();
             return product;
         }catch (Exception e){
             logger.error(e.getMessage());
@@ -112,6 +115,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
     }
 
+    @Transactional
     @Override
     public void updateProductProceedStatusById(long id) {
         try {
@@ -246,7 +250,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         }catch (Exception e){
             logger.error(e.getMessage());
         }
-
-
     }
+
+//    @Transactional
+//    @Override
+//    public void updateProduct(Product product) {
+//        session.update(product);
+//    }
 }

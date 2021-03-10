@@ -56,4 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeList;
     }
 
+    @Override
+    public void updateEmployee(Employee employee) {
+        employeeRepository.updateEmployee(employee);
+    }
 }

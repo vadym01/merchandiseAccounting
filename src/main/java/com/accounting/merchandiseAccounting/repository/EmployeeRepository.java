@@ -16,5 +16,5 @@ public interface EmployeeRepository {
     Employee getEmployeeById(long id);
     List<Employee> findEmployeeByName(String name);
     List<Employee> getAllAvailableEmployees();
-//    void updateEmployee(Employee employee);
+    void updateEmployee(Employee employee);
 }

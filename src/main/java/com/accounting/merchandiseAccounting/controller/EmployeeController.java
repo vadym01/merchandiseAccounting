@@ -24,17 +24,24 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping
+    @GetMapping("find/")
     public ResponseEntity<List<Employee>> findEmployeeByFirstName(@RequestParam Optional<String> name){
         List<Employee> employeeList = employeeService.findEmployeeByName(name.orElse("_"));
         return new ResponseEntity<>(employeeList,HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getAllEmployee(){
+        List<Employee> employeeList = employeeService.getAllEmployees();
+        return new ResponseEntity(employeeList,HttpStatus.OK);
+
     }
 
 
     @PostMapping
     public ResponseEntity<?> saveEmployee(@Validated @RequestBody Employee employee){
         employeeService.saveEmployee(employee);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -59,6 +66,12 @@ public class EmployeeController {
     public ResponseEntity<?> getAllAvailableEmployee(){
         List<Employee> employeeList = employeeService.getAllAvailableEmployees();
         return new ResponseEntity<>(employeeList,HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> changeEmployee(@RequestBody Employee employee){
+        employeeService.updateEmployee(employee);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

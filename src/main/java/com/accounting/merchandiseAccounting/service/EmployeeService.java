@@ -14,5 +14,6 @@ public interface EmployeeService {
     Employee findOneById(long id);
     List<Employee> findEmployeeByName(String name);
     List<Employee> getAllAvailableEmployees();
+    void updateEmployee(Employee employee);
 
 }

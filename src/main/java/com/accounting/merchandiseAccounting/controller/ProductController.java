@@ -40,8 +40,15 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity createProduct(@RequestBody Product product) {
+
         Product productResponse = productService.saveProduct(product);
         return new ResponseEntity(productResponse,HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity updateProduct(@RequestBody Product product){
+        productService.saveProduct(product);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
