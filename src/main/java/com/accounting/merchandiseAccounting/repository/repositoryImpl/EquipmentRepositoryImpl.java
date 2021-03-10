@@ -72,6 +72,21 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
         }
     }
 
+    @Transactional
+    @Override
+        public List<Equipment> findEquipmentByEquipmentName(String name){
+        try{
+            Query query = session.getNamedQuery("findEquipmentByEquipmentName")
+                    .setParameter("equipmentName", '%' + name + '%');
+            List<Equipment> equipmentList =query.list();
+            return equipmentList;
+        }catch (Exception e){
+        logger.error(e.getMessage());
+        return null;
+        }
+    }
+
+    @Transactional
     @Override
     public void updateAvailableStatusById(long id) {
         session.getTransaction().begin();

@@ -12,4 +12,5 @@ public interface EquipmentService {
     List<Equipment> getAllEquipment();
     void updateAvailableStatusById (long id);
     List<Equipment> getAllAvailableEquipment();
+    List<Equipment> findEquipmentByEquipmentName(String equipmentName);
 }

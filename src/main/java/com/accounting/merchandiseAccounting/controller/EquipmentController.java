@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -19,6 +20,12 @@ public class EquipmentController {
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @GetMapping("find/")
+    public ResponseEntity getEquipmentByName(@RequestParam Optional<String> equipmentName){
+        List<Equipment> equipmentList = equipmentService.findEquipmentByEquipmentName(equipmentName.orElse("_"));
+        return new ResponseEntity(equipmentList,HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllEquipment(){

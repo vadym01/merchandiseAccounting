@@ -45,5 +45,9 @@ public class EquipmentServiceImpl implements EquipmentService {
         return equipmentList;
     }
 
-
+    @Override
+    public List<Equipment> findEquipmentByEquipmentName(String equipmentName) {
+        List<Equipment> equipmentList = equipmentRepository.findEquipmentByEquipmentName(equipmentName);
+        return equipmentList;
+    }
 }
