@@ -3,11 +3,10 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Employee;
-import com.accounting.merchandiseAccounting.model.Equipment;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
-import com.accounting.merchandiseAccounting.service.EquipmentService;
+import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +35,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Autowired
     private SessionFactory sessionFactory;
     @Autowired
-    private EquipmentService equipmentService;
+    private VehicleService vehicleService;
     @Autowired
     private ProductService productService;
     private Session session;

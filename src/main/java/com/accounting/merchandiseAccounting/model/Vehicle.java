@@ -7,24 +7,24 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
-@Table(name = "equipment")
+@Table(name = "vehicle")
 @NamedQueries({
-        @NamedQuery(name = "findEquipmentById", query = "FROM Equipment WHERE id = :id"),
-        @NamedQuery(name = "deleteEquipmentById", query = "DELETE Equipment WHERE id = :id"),
-        @NamedQuery(name = "getAllEquipment", query = "FROM Equipment"),
-        @NamedQuery(name = "updateAvailableStatusById", query = "UPDATE Equipment e SET e.isWorkable = :isWorkable WHERE e.id = :id"),
-        @NamedQuery(name = "getAllAvailableEquipment", query = "SELECT e FROM Equipment e WHERE e NOT IN (SELECT i.equipment FROM Incidents i)"),
-        @NamedQuery(name = "findEquipmentByEquipmentName", query = "FROM Equipment as e WHERE e.equipmentName LIKE :equipmentName"),
+        @NamedQuery(name = "findVehicleById", query = "FROM Vehicle WHERE id = :id"),
+        @NamedQuery(name = "deleteVehicleById", query = "DELETE Vehicle WHERE id = :id"),
+        @NamedQuery(name = "getAllVehicles", query = "FROM Vehicle"),
+        @NamedQuery(name = "updateAvailableStatusById", query = "UPDATE Vehicle v SET v.isWorkable = :isWorkable WHERE v.id = :id"),
+        @NamedQuery(name = "getAllAvailableVehicle", query = "SELECT v FROM Vehicle v WHERE v NOT IN (SELECT i.vehicle FROM Incidents i)"),
+        @NamedQuery(name = "findVehicleByVehicleName", query = "FROM Vehicle as v WHERE v.vehicleName LIKE :vehicleName"),
 })
-public class Equipment {
+public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
-    @Column(name = "equipment_name", nullable = false)
-    @Size(min = 2, message = "equipment name name should be at list 2 characters")
-    private String equipmentName;
+    @Column(name = "vehicle_name", nullable = false)
+    @Size(min = 2, message = "vehicle name name should be at list 2 characters")
+    private String vehicleName;
     @Column(name = "is_workable", nullable = false)
     private boolean isWorkable;
     @Column(name = "date_of_receipt", nullable = false)
@@ -32,27 +32,27 @@ public class Equipment {
     @Column(name = "lifting_capacity", nullable = false)
     private double liftingCapacity;
     @JsonIgnore
-    @OneToOne(mappedBy = "equipment")
+    @OneToOne(mappedBy = "vehicle")
     private Incidents incidents;
 
-    public Equipment(long id, String equipmentName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
+    public Vehicle(long id, String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
         this.id = id;
-        this.equipmentName = equipmentName;
+        this.vehicleName = vehicleName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
     }
 
-    public Equipment(String equipmentName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
-        this.equipmentName = equipmentName;
+    public Vehicle(String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
+        this.vehicleName = vehicleName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
     }
 
-    public Equipment() {
+    public Vehicle() {
     }
 
     public long getId() {
@@ -63,12 +63,12 @@ public class Equipment {
         this.id = id;
     }
 
-    public String getEquipmentName() {
-        return equipmentName;
+    public String getVehicleName() {
+        return vehicleName;
     }
 
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
+    public void setVehicleName(String vehicleName) {
+        this.vehicleName = vehicleName;
     }
 
     public boolean isWorkable() {

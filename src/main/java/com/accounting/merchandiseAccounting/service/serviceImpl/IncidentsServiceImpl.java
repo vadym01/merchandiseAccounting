@@ -15,14 +15,14 @@ public class IncidentsServiceImpl implements IncidentsService {
     private IncidentsRepository incidentsRepository;
 
     @Override
-    public void registerNewIncident(Incidents incidents, long employeeId, long equipmentId) {
-        incidentsRepository.registerNewIncident(incidents, employeeId, equipmentId);
+    public void registerNewIncident(Incidents incidents, long employeeId, long vehicleId) {
+        incidentsRepository.registerNewIncident(incidents, employeeId, vehicleId);
     }
 
     @Override
     public Incidents findIncidentById(long id) {
-         Incidents incidents = incidentsRepository.findIncidentById(id);
-         return incidents;
+        Incidents incidents = incidentsRepository.findIncidentById(id);
+        return incidents;
     }
 
     @Override
@@ -35,5 +35,33 @@ public class IncidentsServiceImpl implements IncidentsService {
     public List<Incidents> findAllIncidents() {
         List<Incidents> incidentsList = incidentsRepository.findAllIncidents();
         return incidentsList;
+    }
+
+    @Override
+    public void registerNewIncidentForEmployee(Incidents incidents, long employeeId) {
+        incidentsRepository.registerNewIncidentForEmployee(incidents, employeeId);
+    }
+
+    @Override
+    public Incidents registerNewIncidentForVehicle(Incidents incidents, long vehicleIncident) {
+        Incidents vehicleIncidents = incidentsRepository.registerNewIncidentForVehicle(incidents, vehicleIncident);
+        return vehicleIncidents;
+    }
+
+    @Override
+    public List<Incidents> findIncidentsForVehicle() {
+        List<Incidents> incidentsList = incidentsRepository.findIncidentsForVehicle();
+        return incidentsList;
+    }
+
+    @Override
+    public List<Incidents> findIncidentsForEmployee() {
+        List<Incidents> incidentsList = incidentsRepository.findIncidentsForEmployee();
+        return incidentsList;
+    }
+
+    @Override
+    public void updateVehicleIncident(Incidents incidents) {
+        incidentsRepository.updateVehicleIncident(incidents);
     }
 }

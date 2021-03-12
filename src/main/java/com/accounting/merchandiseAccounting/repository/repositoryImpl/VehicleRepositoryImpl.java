@@ -1,7 +1,7 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.model.Equipment;
-import com.accounting.merchandiseAccounting.repository.EquipmentRepository;
+import com.accounting.merchandiseAccounting.model.Vehicle;
+import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EquipmentRepositoryImpl implements EquipmentRepository {
+public class VehicleRepositoryImpl implements VehicleRepository {
 
     private final static Logger logger = LogManager.getLogger(EmployeeRepositoryImpl.class);
 
@@ -36,9 +36,9 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
 
     @Override
     @Transactional
-    public void saveEquipment(Equipment equipment) {
+    public void saveVehicle(Vehicle vehicle) {
         try{
-            session.save(equipment);
+            session.save(vehicle);
         }catch (Exception e){
             logger.error(e.getMessage());
         }
@@ -46,11 +46,11 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
 
     @Transactional
     @Override
-    public Equipment findEquipmentById(long id) {
+    public Vehicle findVehicleById(long id) {
         try {
-            Query query = session.getNamedQuery("findEquipmentById").setParameter("id",id);
-            Equipment equipment = (Equipment)query.getResultList().get(0);
-            return equipment;
+            Query query = session.getNamedQuery("findVehicleById").setParameter("id",id);
+            Vehicle vehicle = (Vehicle)query.getSingleResult();
+            return vehicle;
         }catch (Exception e){
             logger.error(e.getMessage());
             return null;
@@ -59,9 +59,9 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
 
     @Transactional
     @Override
-    public int deleteEquipmentById(long id) {
+    public int deleteVehicleById(long id) {
         try {
-            Query query = session.getNamedQuery("deleteEquipmentById").setParameter("id",id);
+            Query query = session.getNamedQuery("deleteVehicleById").setParameter("id",id);
             Transaction transaction = session.beginTransaction();
             int num = query.executeUpdate();
             transaction.commit();
@@ -74,12 +74,12 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
 
     @Transactional
     @Override
-        public List<Equipment> findEquipmentByEquipmentName(String name){
+        public List<Vehicle> findVehicleByVehicleName(String name){
         try{
-            Query query = session.getNamedQuery("findEquipmentByEquipmentName")
-                    .setParameter("equipmentName", '%' + name + '%');
-            List<Equipment> equipmentList =query.list();
-            return equipmentList;
+            Query query = session.getNamedQuery("findVehicleByVehicleName")
+                    .setParameter("vehicleName", '%' + name + '%');
+            List<Vehicle> vehicleList =query.list();
+            return vehicleList;
         }catch (Exception e){
         logger.error(e.getMessage());
         return null;
@@ -90,31 +90,31 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
     @Override
     public void updateAvailableStatusById(long id) {
         session.getTransaction().begin();
-       Equipment equipment = session.find(Equipment.class,id);
-       equipment.setWorkable(!equipment.isWorkable());
+       Vehicle vehicle = session.find(Vehicle.class,id);
+       vehicle.setWorkable(!vehicle.isWorkable());
        session.getTransaction().commit();
     }
 
     @Transactional
     @Override
-    public List<Equipment> getAllEquipment() {
-        List<Equipment> equipmentList = new ArrayList<>();
+    public List<Vehicle> getAllVehicle() {
+        List<Vehicle> vehicleList = new ArrayList<>();
         try {
-            Query query = session.getNamedQuery("getAllEquipment");
-            equipmentList = query.list();
+            Query query = session.getNamedQuery("getAllVehicles");
+            vehicleList = query.list();
         }catch (Exception e){
             logger.error(e.getMessage());
         }
-        return equipmentList;
+        return vehicleList;
     }
 
     @Transactional
     @Override
-    public List<Equipment> getAllAvailableEquipment() {
+    public List<Vehicle> getAllAvailableVehicle() {
         try{
-            Query query = session.getNamedQuery("getAllAvailableEquipment");
-            List<Equipment> equipmentList = query.list();
-            return equipmentList;
+            Query query = session.getNamedQuery("getAllAvailableVehicle");
+            List<Vehicle> vehicleList = query.list();
+            return vehicleList;
         }catch (Exception e) {
             logger.error(e.getMessage());
             return null;
@@ -123,13 +123,15 @@ public class EquipmentRepositoryImpl implements EquipmentRepository {
 
     @Transactional
     @Override
-    public void updateEquipment(Equipment equipment) {
+    public void updateVehicle(Vehicle vehicle) {
         try {
             session.getTransaction().begin();
-            session.merge(equipment);
+            session.merge(vehicle);
             session.getTransaction().commit();
         }catch (Exception e){
             logger.error(e.getMessage());
         }
     }
+
+
 }

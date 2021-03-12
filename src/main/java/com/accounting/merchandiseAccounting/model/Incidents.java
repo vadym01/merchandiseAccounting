@@ -8,7 +8,11 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "findAllIncidents", query = "FROM Incidents"),
         @NamedQuery(name = "findIncidentById", query = "FROM Incidents WHERE id = :id"),
-        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incidents WHERE id = :id")
+        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incidents i WHERE id = :id"),
+        @NamedQuery(name = "findIncidentsForVehicle", query = "FROM Incidents WHERE vehicle IS NOT NULL"),
+        @NamedQuery(name = "findIncidentsForEmployee", query = "SELECT i FROM  Incidents i WHERE i.employee IS NOT NULL")
+
+//        SELECT e FROM Vehicle e WHERE e NOT IN (SELECT i.vehicle FROM Incidents i)")
 })
 public class Incidents {
 
@@ -23,22 +27,22 @@ public class Incidents {
     @JoinColumn(name = "employee_id")
     private Employee employee;
     @OneToOne
-    @JoinColumn(name="equipment_id")
-    private Equipment equipment;
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-    public Incidents(long id, String incidentDescription, Date date, Employee employee, Equipment equipment) {
+    public Incidents(long id, String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
         this.id = id;
         this.incidentDescription = incidentDescription;
         this.date = date;
         this.employee = employee;
-        this.equipment = equipment;
+        this.vehicle = vehicle;
     }
 
-    public Incidents(String incidentDescription, Date date, Employee employee, Equipment equipment) {
+    public Incidents(String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
         this.incidentDescription = incidentDescription;
         this.date = date;
         this.employee = employee;
-        this.equipment = equipment;
+        this.vehicle = vehicle;
     }
 
     public Incidents() {
@@ -76,11 +80,22 @@ public class Incidents {
         this.employee = employee;
     }
 
-    public Equipment getEquipment() {
-        return equipment;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    @Override
+    public String toString() {
+        return "Incidents{" +
+                "id=" + id +
+                ", incidentDescription='" + incidentDescription + '\'' +
+                ", date=" + date +
+                ", employee=" + employee +
+                ", vehicle=" + vehicle +
+                '}';
     }
 }
