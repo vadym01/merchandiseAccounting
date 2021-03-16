@@ -37,14 +37,10 @@ public class IncidentsServiceImpl implements IncidentsService {
         return incidentsList;
     }
 
-    @Override
-    public void registerNewIncidentForEmployee(Incidents incidents, long employeeId) {
-        incidentsRepository.registerNewIncidentForEmployee(incidents, employeeId);
-    }
 
     @Override
-    public Incidents registerNewIncidentForVehicle(Incidents incidents, long vehicleIncident) {
-        Incidents vehicleIncidents = incidentsRepository.registerNewIncidentForVehicle(incidents, vehicleIncident);
+    public Incidents registerNewIncidentForVehicle(Incidents incidents) {
+        Incidents vehicleIncidents = incidentsRepository.registerNewIncidentForVehicle(incidents);
         return vehicleIncidents;
     }
 
@@ -60,8 +56,4 @@ public class IncidentsServiceImpl implements IncidentsService {
         return incidentsList;
     }
 
-    @Override
-    public void updateVehicleIncident(Incidents incidents) {
-        incidentsRepository.updateVehicleIncident(incidents);
-    }
 }

@@ -38,7 +38,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Transactional
     public void saveVehicle(Vehicle vehicle) {
         try{
-            session.save(vehicle);
+            session.merge(vehicle);
         }catch (Exception e){
             logger.error(e.getMessage());
         }

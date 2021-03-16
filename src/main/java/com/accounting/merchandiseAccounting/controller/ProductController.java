@@ -38,18 +38,18 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity createProduct(@RequestBody Product product) {
 
         Product productResponse = productService.saveProduct(product);
         return new ResponseEntity(productResponse,HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity updateProduct(@RequestBody Product product){
-        productService.saveProduct(product);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    @PutMapping
+//    public ResponseEntity updateProduct(@RequestBody Product product){
+//        productService.saveProduct(product);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteProductById(@PathVariable("id") long id) throws ResourceNotFoundException {

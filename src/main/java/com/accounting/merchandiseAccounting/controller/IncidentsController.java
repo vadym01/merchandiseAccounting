@@ -38,26 +38,10 @@ public class IncidentsController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PostMapping("/vehicle/{vehicleId}")
-    public ResponseEntity registerNewIncidentForVehicle(@RequestBody Incidents incidents,
-                                                        @PathVariable("vehicleId") long vehicleId) {
-        Incidents vehicleIncident = incidentsService.registerNewIncidentForVehicle(incidents, vehicleId);
+    @PutMapping
+    public ResponseEntity registerNewIncidentForVehicle(@RequestBody Incidents incidents) {
+        Incidents vehicleIncident = incidentsService.registerNewIncidentForVehicle(incidents);
         return new ResponseEntity(vehicleIncident, HttpStatus.OK);
-    }
-
-
-    @PatchMapping("/vehicle/{vehicleId}")
-    public ResponseEntity updateVehicle(@RequestBody Incidents incidents,
-                                        @PathVariable("vehicleId") long vehicleId) {
-        incidentsService.updateVehicleIncident(incidents);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @PostMapping("/employee/{employeeId}")
-    public ResponseEntity registerNewIncidentForEmployee(@RequestBody Incidents incidents,
-                                                         @PathVariable("employeeId") long employeeId) {
-        incidentsService.registerNewIncidentForEmployee(incidents, employeeId);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -70,7 +54,7 @@ public class IncidentsController {
     }
 
     @GetMapping("vehicle")
-    public ResponseEntity findIncidentsForvehicle() {
+    public ResponseEntity findIncidentsForVehicle() {
         List<Incidents> incidentsList = incidentsService.findIncidentsForVehicle();
         return new ResponseEntity(incidentsList, HttpStatus.OK);
     }
@@ -80,6 +64,4 @@ public class IncidentsController {
         List<Incidents> incidentsList = incidentsService.findIncidentsForEmployee();
         return new ResponseEntity(incidentsList, HttpStatus.OK);
     }
-
-
 }

@@ -10,7 +10,7 @@ import java.util.Date;
         @NamedQuery(name = "findIncidentById", query = "FROM Incidents WHERE id = :id"),
         @NamedQuery(name = "deleteIncidentById", query = "DELETE Incidents i WHERE id = :id"),
         @NamedQuery(name = "findIncidentsForVehicle", query = "FROM Incidents WHERE vehicle IS NOT NULL"),
-        @NamedQuery(name = "findIncidentsForEmployee", query = "SELECT i FROM  Incidents i WHERE i.employee IS NOT NULL")
+        @NamedQuery(name = "findIncidentsForEmployee", query = "FROM Incidents WHERE employee IS NOT NULL")
 
 //        SELECT e FROM Vehicle e WHERE e NOT IN (SELECT i.vehicle FROM Incidents i)")
 })
@@ -23,10 +23,10 @@ public class Incidents {
     private String incidentDescription;
     @Column(name = "incident_date", nullable = false)
     private Date date;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 

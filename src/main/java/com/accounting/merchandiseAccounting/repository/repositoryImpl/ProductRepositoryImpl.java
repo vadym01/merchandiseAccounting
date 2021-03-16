@@ -45,12 +45,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         session = sessionFactory.openSession();
     }
 
-    @Transactional
     @Override
     public Product saveProduct(Product product) {
         try {
             session.getTransaction().begin();
-            session.saveOrUpdate(product);
+            session.merge(product);
             session.getTransaction().commit();
             return product;
         }catch (Exception e){

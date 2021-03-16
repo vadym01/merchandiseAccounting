@@ -15,14 +15,10 @@ public interface IncidentsRepository {
 
     List<Incidents> findAllIncidents();
 
-    Incidents registerNewIncidentForVehicle(Incidents incidents, long vehicleId);
-
-    void registerNewIncidentForEmployee(Incidents incidents, long employeeId);
+    Incidents registerNewIncidentForVehicle(Incidents incidents);
 
     List<Incidents> findIncidentsForVehicle();
 
     List<Incidents> findIncidentsForEmployee();
-
-    void updateVehicleIncident(Incidents incidents);
 
 }

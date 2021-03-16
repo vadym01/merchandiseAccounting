@@ -2,7 +2,6 @@ package com.accounting.merchandiseAccounting.service;
 
 
 import com.accounting.merchandiseAccounting.model.Incidents;
-import com.accounting.merchandiseAccounting.model.Vehicle;
 
 import java.util.List;
 
@@ -15,14 +14,10 @@ public interface IncidentsService {
 
     List<Incidents> findAllIncidents();
 
-    void registerNewIncidentForEmployee(Incidents incidents, long employeeId);
-
-    Incidents registerNewIncidentForVehicle(Incidents incidents, long vehicleIncident);
+    Incidents registerNewIncidentForVehicle(Incidents incidents);
 
     List<Incidents> findIncidentsForVehicle();
 
     List<Incidents> findIncidentsForEmployee();
-
-    void updateVehicleIncident(Incidents incidents);
 
 }

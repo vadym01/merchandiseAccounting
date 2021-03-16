@@ -45,11 +45,11 @@ public class Employee {
     @OneToMany(mappedBy = "sentByEmployee", fetch = FetchType.LAZY)
     private List<Product> productListSentByEmployee = new ArrayList<>();
     @JsonIgnore
-    @OneToOne(mappedBy = "employee")
-    private Incidents incidents;
+    @OneToMany(mappedBy = "employee")
+    private List<Incidents> incidents;
 
 
-    public Employee(long id, String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee,Incidents incidents) {
+    public Employee(long id, String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee,List<Incidents> incidents) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,7 +60,7 @@ public class Employee {
         this.incidents = incidents;
     }
 
-    public Employee(String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee, Incidents incidents) {
+    public Employee(String firstName, String lastName, String patronymic, Date birthDate, List<Product> productListLoadedByEmployee, List<Product> productListSentByEmployee, List<Incidents> incidents) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
@@ -130,11 +130,11 @@ public class Employee {
         this.productListSentByEmployee = productListSentByEmployee;
     }
 
-    public Incidents getIncidents() {
+    public List<Incidents> getIncidents() {
         return incidents;
     }
 
-    public void setIncidents(Incidents incidents) {
+    public void setIncidents(List<Incidents> incidents) {
         this.incidents = incidents;
     }
 }

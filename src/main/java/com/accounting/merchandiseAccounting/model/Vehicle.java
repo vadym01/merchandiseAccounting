@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicle")
@@ -32,10 +33,10 @@ public class Vehicle {
     @Column(name = "lifting_capacity", nullable = false)
     private double liftingCapacity;
     @JsonIgnore
-    @OneToOne(mappedBy = "vehicle")
-    private Incidents incidents;
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    private List<Incidents> incidents;
 
-    public Vehicle(long id, String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
+    public Vehicle(long id, String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
         this.id = id;
         this.vehicleName = vehicleName;
         this.isWorkable = isWorkable;
@@ -44,7 +45,7 @@ public class Vehicle {
         this.incidents = incidents;
     }
 
-    public Vehicle(String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, Incidents incidents) {
+    public Vehicle(String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
         this.vehicleName = vehicleName;
         this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
@@ -95,11 +96,11 @@ public class Vehicle {
         this.dateOfReceipt = dateOfReceipt;
     }
 
-    public Incidents getIncidents() {
+    public List<Incidents> getIncidents() {
         return incidents;
     }
 
-    public void setIncidents(Incidents incidents) {
+    public void setIncidents(List<Incidents> incidents) {
         this.incidents = incidents;
     }
 }

@@ -99,38 +99,17 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
         }
     }
 
-//    @Transactional
-//    @Override
-//    public void updateAvailableStatusById(long id) {
-//        session.getTransaction().begin();
-//        Vehicle vehicle = session.find(Vehicle.class,id);
-//        vehicle.setWorkable(!vehicle.isWorkable());
-//        session.getTransaction().commit();
-//    }
-
+    @Transactional
     @Override
-    public Incidents registerNewIncidentForVehicle(Incidents incidents, long vehicleIncident) {
+    public Incidents registerNewIncidentForVehicle(Incidents incidents) {
         try {
-            Vehicle vehicle = session.find(Vehicle.class, vehicleIncident);
-            Incidents incidentsEq = incidents;
-            incidentsEq.setVehicle(vehicle);
-            session.saveOrUpdate(incidentsEq);
-            return incidentsEq;
+            session.getTransaction().begin();
+            session.merge(incidents);
+            session.getTransaction().commit();
+            return incidents;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
-        }
-    }
-
-    @Override
-    public void registerNewIncidentForEmployee(Incidents incidents, long employeeId) {
-        try {
-            Employee employee = session.find(Employee.class, employeeId);
-            Incidents incidentsEm = incidents;
-            incidentsEm.setEmployee(employee);
-            session.save(incidentsEm);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
         }
     }
 
@@ -146,19 +125,5 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
         Query query = session.getNamedQuery("findIncidentsForEmployee");
         List<Incidents> incidentsList = query.getResultList();
         return incidentsList;
-    }
-
-    //    @Override
-//    public void newIncident(Incidents incidents) {
-//
-//    }
-
-
-    @Override
-    public void updateVehicleIncident(Incidents incidents) {
-//        System.out.println(incidents);
-//        session.getTransaction().begin();
-        session.update(incidents);
-//        session.getTransaction().commit();
     }
 }
