@@ -48,6 +48,7 @@ public class VehicleController {
 
     @PostMapping
     public ResponseEntity<?> saveVehicle(@Validated @RequestBody Vehicle vehicle){
+        System.out.println(vehicle);
         vehicleService.saveVehicle(vehicle);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -59,12 +60,6 @@ public class VehicleController {
             throw new ResourceNotFoundException("Vehicle with id: " + " is not present");
         }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PatchMapping("{id}")
-    public ResponseEntity changeVehicleAvailableStatus(@PathVariable("id") long id){
-        vehicleService.updateAvailableStatusById(id);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("available")

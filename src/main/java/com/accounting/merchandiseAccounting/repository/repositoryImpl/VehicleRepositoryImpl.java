@@ -38,7 +38,9 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Transactional
     public void saveVehicle(Vehicle vehicle) {
         try{
+            session.getTransaction().begin();
             session.merge(vehicle);
+            session.getTransaction().commit();
         }catch (Exception e){
             logger.error(e.getMessage());
         }
@@ -84,15 +86,6 @@ public class VehicleRepositoryImpl implements VehicleRepository {
         logger.error(e.getMessage());
         return null;
         }
-    }
-
-    @Transactional
-    @Override
-    public void updateAvailableStatusById(long id) {
-        session.getTransaction().begin();
-       Vehicle vehicle = session.find(Vehicle.class,id);
-       vehicle.setWorkable(!vehicle.isWorkable());
-       session.getTransaction().commit();
     }
 
     @Transactional

@@ -25,11 +25,6 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void updateAvailableStatusById(long id) {
-        vehicleRepository.updateAvailableStatusById(id);
-    }
-
-    @Override
     public int deleteVehicleById(long id) {
         return vehicleRepository.deleteVehicleById(id);
     }

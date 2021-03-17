@@ -3,18 +3,14 @@ package com.accounting.merchandiseAccounting.controller;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
-import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.model.ProductStorageReport;
+import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

@@ -3,9 +3,8 @@ package com.accounting.merchandiseAccounting.service;
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.model.ProductStorageReport;
+import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ProductService {

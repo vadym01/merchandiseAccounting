@@ -11,7 +11,6 @@ public interface VehicleRepository {
     Vehicle findVehicleById(long id);
     int deleteVehicleById(long id);
     List<Vehicle> getAllVehicle();
-    void updateAvailableStatusById(long id);
     List<Vehicle> getAllAvailableVehicle();
     List<Vehicle> findVehicleByVehicleName(String VehicleName);
     void updateVehicle(Vehicle vehicle);

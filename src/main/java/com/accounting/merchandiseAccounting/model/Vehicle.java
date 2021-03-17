@@ -13,7 +13,6 @@ import java.util.List;
         @NamedQuery(name = "findVehicleById", query = "FROM Vehicle WHERE id = :id"),
         @NamedQuery(name = "deleteVehicleById", query = "DELETE Vehicle WHERE id = :id"),
         @NamedQuery(name = "getAllVehicles", query = "FROM Vehicle"),
-        @NamedQuery(name = "updateAvailableStatusById", query = "UPDATE Vehicle v SET v.isWorkable = :isWorkable WHERE v.id = :id"),
         @NamedQuery(name = "getAllAvailableVehicle", query = "SELECT v FROM Vehicle v WHERE v NOT IN (SELECT i.vehicle FROM Incidents i)"),
         @NamedQuery(name = "findVehicleByVehicleName", query = "FROM Vehicle as v WHERE v.vehicleName LIKE :vehicleName"),
 })
@@ -26,8 +25,6 @@ public class Vehicle {
     @Column(name = "vehicle_name", nullable = false)
     @Size(min = 2, message = "vehicle name name should be at list 2 characters")
     private String vehicleName;
-    @Column(name = "is_workable", nullable = false)
-    private boolean isWorkable;
     @Column(name = "date_of_receipt", nullable = false)
     private Date dateOfReceipt;
     @Column(name = "lifting_capacity", nullable = false)
@@ -36,18 +33,16 @@ public class Vehicle {
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     private List<Incidents> incidents;
 
-    public Vehicle(long id, String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
+    public Vehicle(long id, String vehicleName, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
         this.id = id;
         this.vehicleName = vehicleName;
-        this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
     }
 
-    public Vehicle(String vehicleName, boolean isWorkable, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
+    public Vehicle(String vehicleName, Date dateOfReceipt, double liftingCapacity, List<Incidents> incidents) {
         this.vehicleName = vehicleName;
-        this.isWorkable = isWorkable;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incidents = incidents;
@@ -70,14 +65,6 @@ public class Vehicle {
 
     public void setVehicleName(String vehicleName) {
         this.vehicleName = vehicleName;
-    }
-
-    public boolean isWorkable() {
-        return isWorkable;
-    }
-
-    public void setWorkable(boolean workable) {
-        isWorkable = workable;
     }
 
     public Date getDateOfReceipt() {

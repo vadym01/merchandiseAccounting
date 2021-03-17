@@ -1,4 +1,4 @@
-package com.accounting.merchandiseAccounting.model;
+package com.accounting.merchandiseAccounting.DTO;
 
 public class ProductStorageReport {
 
