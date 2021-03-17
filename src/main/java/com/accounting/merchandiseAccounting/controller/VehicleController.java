@@ -49,8 +49,8 @@ public class VehicleController {
     @PostMapping
     public ResponseEntity<?> saveVehicle(@Validated @RequestBody Vehicle vehicle){
         System.out.println(vehicle);
-        vehicleService.saveVehicle(vehicle);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Vehicle newVehicle = vehicleService.saveVehicle(vehicle);
+        return new ResponseEntity<>(newVehicle ,HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")

@@ -43,20 +43,20 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
         session = sessionFactory.openSession();
     }
 
-    @Transactional
-    @Override
-    public void registerNewIncident(Incidents incidents, long employeeId, long vehicleId) {
-        try {
-            Incidents customIncidents = incidents;
-            Employee employee = employeeService.findOneById(employeeId);
-            Vehicle vehicle = vehicleService.findVehicleById(vehicleId);
-            customIncidents.setEmployee(employee);
-            customIncidents.setVehicle(vehicle);
-            session.save(incidents);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
-    }
+//    @Transactional
+//    @Override
+//    public void registerNewIncident(Incidents incidents, long employeeId, long vehicleId) {
+//        try {
+//            Incidents customIncidents = incidents;
+//            Employee employee = employeeService.findOneById(employeeId);
+//            Vehicle vehicle = vehicleService.findVehicleById(vehicleId);
+//            customIncidents.setEmployee(employee);
+//            customIncidents.setVehicle(vehicle);
+//            session.save(incidents);
+//        } catch (Exception e) {
+//            logger.info(e.getMessage());
+//        }
+//    }
 
     @Transactional
     @Override
@@ -101,12 +101,12 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
 
     @Transactional
     @Override
-    public Incidents registerNewIncidentForVehicle(Incidents incidents) {
+    public Incidents saveNewIncident(Incidents incidents) {
         try {
             session.getTransaction().begin();
-            session.merge(incidents);
+            Incidents incidents1 = (Incidents) session.merge(incidents);
             session.getTransaction().commit();
-            return incidents;
+            return incidents1;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;

@@ -29,18 +29,18 @@ public class IncidentsController {
         List<Incidents> incidentsList = incidentsService.findAllIncidents();
         return new ResponseEntity<>(incidentsList, HttpStatus.OK);
     }
-
-    @PostMapping("{employeeId}/{vehicleId}")
-    public ResponseEntity registerNewIncident(@RequestBody Incidents incidents,
-                                              @PathVariable("employeeId") long employeeId,
-                                              @PathVariable("vehicleId") long vehicleId) {
-        incidentsService.registerNewIncident(incidents, employeeId, vehicleId);
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
+//
+//    @PostMapping("{employeeId}/{vehicleId}")
+//    public ResponseEntity registerNewIncident(@RequestBody Incidents incidents,
+//                                              @PathVariable("employeeId") long employeeId,
+//                                              @PathVariable("vehicleId") long vehicleId) {
+//        incidentsService.registerNewIncident(incidents, employeeId, vehicleId);
+//        return new ResponseEntity(HttpStatus.CREATED);
+//    }
 
     @PutMapping
     public ResponseEntity registerNewIncidentForVehicle(@RequestBody Incidents incidents) {
-        Incidents vehicleIncident = incidentsService.registerNewIncidentForVehicle(incidents);
+        Incidents vehicleIncident = incidentsService.saveNewIncident(incidents);
         return new ResponseEntity(vehicleIncident, HttpStatus.OK);
     }
 

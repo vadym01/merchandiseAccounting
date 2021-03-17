@@ -10,12 +10,16 @@ public class ProductForProceedDTO {
     private String description;
     private double volume;
     private double weight;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date arrivalDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date shipmentDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date scheduledShipmentDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date receiptDate;
 
-    public ProductForProceedDTO(long INVNumber, String productName, String description, double volume, double weight, Date arrivalDate, Date shipmentDate) {
+    public ProductForProceedDTO(long INVNumber, String productName, String description, double volume, double weight, Date arrivalDate, Date shipmentDate, Date scheduledShipmentDate, Date receiptDate) {
         this.INVNumber = INVNumber;
         this.productName = productName;
         this.description = description;
@@ -23,15 +27,19 @@ public class ProductForProceedDTO {
         this.weight = weight;
         this.arrivalDate = arrivalDate;
         this.shipmentDate = shipmentDate;
+        this.scheduledShipmentDate = scheduledShipmentDate;
+        this.receiptDate = receiptDate;
     }
 
-    public ProductForProceedDTO(String productName,String description, double volume, double weight, Date arrivalDate, Date shipmentDate) {
+    public ProductForProceedDTO(String productName, String description, double volume, double weight, Date arrivalDate, Date shipmentDate, Date scheduledShipmentDate, Date receiptDate) {
         this.productName = productName;
         this.description = description;
         this.volume = volume;
         this.weight = weight;
         this.arrivalDate = arrivalDate;
         this.shipmentDate = shipmentDate;
+        this.scheduledShipmentDate = scheduledShipmentDate;
+        this.receiptDate = receiptDate;
     }
 
     public ProductForProceedDTO() {
@@ -91,5 +99,21 @@ public class ProductForProceedDTO {
 
     public void setShipmentDate(Date shipmentDate) {
         this.shipmentDate = shipmentDate;
+    }
+
+    public Date getScheduledShipmentDate() {
+        return scheduledShipmentDate;
+    }
+
+    public void setScheduledShipmentDate(Date scheduledShipmentDate) {
+        this.scheduledShipmentDate = scheduledShipmentDate;
+    }
+
+    public Date getReceiptDate() {
+        return receiptDate;
+    }
+
+    public void setReceiptDate(Date receiptDate) {
+        this.receiptDate = receiptDate;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface VehicleRepository {
-    void saveVehicle(Vehicle vehicle);
+    Vehicle saveVehicle(Vehicle vehicle);
     Vehicle findVehicleById(long id);
     int deleteVehicleById(long id);
     List<Vehicle> getAllVehicle();

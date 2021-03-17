@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface IncidentsRepository {
-    void registerNewIncident(Incidents incidents, long employeeId, long vehicleId);
+//    void registerNewIncident(Incidents incidents, long employeeId, long vehicleId);
 
     Incidents findIncidentById(long id);
 
@@ -15,7 +15,7 @@ public interface IncidentsRepository {
 
     List<Incidents> findAllIncidents();
 
-    Incidents registerNewIncidentForVehicle(Incidents incidents);
+    Incidents saveNewIncident(Incidents incidents);
 
     List<Incidents> findIncidentsForVehicle();
 

@@ -14,10 +14,10 @@ public class IncidentsServiceImpl implements IncidentsService {
     @Autowired
     private IncidentsRepository incidentsRepository;
 
-    @Override
-    public void registerNewIncident(Incidents incidents, long employeeId, long vehicleId) {
-        incidentsRepository.registerNewIncident(incidents, employeeId, vehicleId);
-    }
+//    @Override
+//    public void registerNewIncident(Incidents incidents, long employeeId, long vehicleId) {
+//        incidentsRepository.registerNewIncident(incidents, employeeId, vehicleId);
+//    }
 
     @Override
     public Incidents findIncidentById(long id) {
@@ -39,8 +39,8 @@ public class IncidentsServiceImpl implements IncidentsService {
 
 
     @Override
-    public Incidents registerNewIncidentForVehicle(Incidents incidents) {
-        Incidents vehicleIncidents = incidentsRepository.registerNewIncidentForVehicle(incidents);
+    public Incidents saveNewIncident(Incidents incidents) {
+        Incidents vehicleIncidents = incidentsRepository.saveNewIncident(incidents);
         return vehicleIncidents;
     }
 

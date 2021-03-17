@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -119,7 +120,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         try {
             session.getTransaction().begin();
             Product product = session.find(Product.class, id);
-            product.setProcessed(!product.isProcessed());
+            product.setProcessed(true);
+            product.setArrivalDate(new Date());
             session.update(product);
             session.getTransaction().commit();
 
@@ -193,15 +195,16 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Transactional
     @Override
-    public List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent) {
+    public List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent) {
         try {
             List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductInfoByDate")
-                    .setParameter("shipment_date", shipment_date)
-                    .setParameter("isPresent", isPresent)
+                    .setParameter("scheduledShipmentDate", new Date())
+                    .setParameter("isPresent", true)
                     .unwrap(Query.class)
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList();
             return productForProceedDTOList;
+
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
@@ -216,6 +219,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             Query query = session.getNamedQuery("updateShipmentValueForSentBy");
             Employee employee = session.find(Employee.class, employeeId);
             query.setParameter("sentByEmployee", employee);
+            query.setParameter("shipmentDate", new Date());
             query.setParameter("INVNumber", INVNumber);
             query.executeUpdate();
             session.getTransaction().commit();

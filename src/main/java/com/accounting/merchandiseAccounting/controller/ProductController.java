@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +93,14 @@ public class ProductController {
     @GetMapping("history/by/date/{shipment_date}/{isPresent}")
     public ResponseEntity getProductListInfoByDate(@PathVariable("shipment_date") String date,
                                                    @PathVariable("isPresent") boolean isPresent) {
-        List<ProductForProceedDTO> productForProceedDTOList = productService.getProductInfoByDate(date, isPresent);
+        List<ProductForProceedDTO> productForProceedDTOList = new ArrayList<>();
+        try {
+            Date conditionDate = new SimpleDateFormat("yyyy-mm-dd").parse(date);
+            productForProceedDTOList = productService.getProductInfoByDate(conditionDate, isPresent);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return new ResponseEntity(productForProceedDTOList, HttpStatus.OK);
     }
 

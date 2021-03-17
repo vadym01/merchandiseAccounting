@@ -6,7 +6,7 @@ import com.accounting.merchandiseAccounting.model.Incidents;
 import java.util.List;
 
 public interface IncidentsService {
-    void registerNewIncident(Incidents incidents, long employeeId, long vehicleId);
+//    void registerNewIncident(Incidents incidents, long employeeId, long vehicleId);
 
     Incidents findIncidentById(long id);
 
@@ -14,7 +14,7 @@ public interface IncidentsService {
 
     List<Incidents> findAllIncidents();
 
-    Incidents registerNewIncidentForVehicle(Incidents incidents);
+    Incidents saveNewIncident(Incidents incidents);
 
     List<Incidents> findIncidentsForVehicle();
 

@@ -5,6 +5,7 @@ import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductService {
@@ -28,7 +29,7 @@ public interface ProductService {
 
     List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId);
 
-    List<ProductForProceedDTO> getProductInfoByDate(String shipment_date, boolean isPresent);
+    List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent);
 
     void updateShipmentValueForSentBy(long employeeId, long INVNumber);
 

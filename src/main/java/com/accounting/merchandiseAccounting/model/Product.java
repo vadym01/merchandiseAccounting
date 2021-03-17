@@ -16,9 +16,11 @@ import java.util.Date;
         @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.id = :id"),
         @NamedQuery(name = "getProductInfoForProceeding", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.receiptDate as receiptDate," +
+                " p.scheduledShipmentDate as scheduledShipmentDate," +
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
-                " FROM Product p WHERE isProcessed = false AND p.loadedByEmployee = NULL ORDER BY p.arrivalDate ASC"),
+                " FROM Product p WHERE p.isProcessed = false AND p.loadedByEmployee = NULL ORDER BY p.arrivalDate ASC"),
         @NamedQuery(name = "updateProductLoadedByEmployee", query = "UPDATE Product p SET p.loadedByEmployee = :loadedByEmployee" +
                 " WHERE p.INVNumber = :INVNumber"),
         @NamedQuery(name = "getProductLoadedByEmployee", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
@@ -33,11 +35,16 @@ import java.util.Date;
                 " FROM Product p WHERE p.loadedByEmployee = :loadedByEmployee"),
         @NamedQuery(name = "getProductInfoByDate", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
+                " p.receiptDate as receiptDate," +
+                " p.scheduledShipmentDate as scheduledShipmentDate," +
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
-                " FROM Product p WHERE shipment_date = :shipment_date AND isPresent = :isPresent"),
-        @NamedQuery(name = "updateShipmentValueForSentBy", query = "UPDATE Product p SET p.sentByEmployee = :sentByEmployee " +
-                "WHERE p.INVNumber = :INVNumber"),
+                " FROM Product p WHERE scheduledShipmentDate <= :scheduledShipmentDate " +
+                "AND isPresent = :isPresent " +
+                "AND isProcessed = true"),
+        @NamedQuery(name = "updateShipmentValueForSentBy", query = "UPDATE Product  SET sentByEmployee = :sentByEmployee," +
+                "shipmentDate = :shipmentDate " +
+                "WHERE INVNumber = :INVNumber"),
         @NamedQuery(name = "updateShipmentValueForIsPresent", query = "UPDATE Product p SET p.isPresent = :isPresent " +
                 "WHERE p.INVNumber = :INVNumber"),
         @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT COUNT(p.INVNumber) as total from Product p")
@@ -67,7 +74,7 @@ public class Product {
     @Column(name = "arrival_date")
     private Date arrivalDate;
     @Column(name = "is_present", columnDefinition = "boolean default true")
-    private boolean isPresent;
+    private boolean isPresent = true;
     @Column(name = "is_processed", columnDefinition = "boolean default false")
     private boolean isProcessed;
     @ManyToOne()
@@ -117,6 +124,8 @@ public class Product {
 
     public Product() {
     }
+
+
 
     public long getINVNumber() {
         return INVNumber;

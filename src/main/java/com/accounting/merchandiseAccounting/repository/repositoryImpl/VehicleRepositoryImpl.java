@@ -36,13 +36,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     @Transactional
-    public void saveVehicle(Vehicle vehicle) {
+    public Vehicle saveVehicle(Vehicle vehicle) {
         try{
             session.getTransaction().begin();
             session.merge(vehicle);
             session.getTransaction().commit();
+            return vehicle;
         }catch (Exception e){
             logger.error(e.getMessage());
+            return null;
         }
     }
 
