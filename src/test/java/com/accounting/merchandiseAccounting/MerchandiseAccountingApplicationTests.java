@@ -8,6 +8,7 @@ class MerchandiseAccountingApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
