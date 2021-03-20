@@ -10,7 +10,6 @@ import java.util.List;
 public interface EmployeeService {
     List<Employee> getAllEmployees();
     void saveEmployee(Employee employee);
-    int deleteById(long id);
     Employee findOneById(long id);
     List<Employee> findEmployeeByName(String name);
     List<Employee> getAllAvailableEmployees();

@@ -1,6 +1,7 @@
 package com.accounting.merchandiseAccounting.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -20,6 +21,7 @@ public class Incidents {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "incident_description", nullable = false)
+    @Size(min = 2, message = "incidentDescription should be at list 2 characters")
     private String incidentDescription;
     @Column(name = "incident_date", nullable = false)
     private Date date;
@@ -43,6 +45,12 @@ public class Incidents {
         this.date = date;
         this.employee = employee;
         this.vehicle = vehicle;
+    }
+
+    public Incidents(String incidentDescription, Date date, Employee employee) {
+        this.incidentDescription = incidentDescription;
+        this.date = date;
+        this.employee = employee;
     }
 
     public Incidents() {

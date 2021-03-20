@@ -1,12 +1,16 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
+import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
+import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,20 +39,23 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    @Transactional
     public Vehicle saveVehicle(Vehicle vehicle) {
         try{
             session.getTransaction().begin();
             session.merge(vehicle);
             session.getTransaction().commit();
             return vehicle;
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        }catch (HibernateException hibernateException){
+            try {
+                session.getTransaction().rollback();
+            }catch (RuntimeException runtimeException){
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
             return null;
         }
     }
 
-    @Transactional
     @Override
     public Vehicle findVehicleById(long id) {
         try {
@@ -56,12 +63,10 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             Vehicle vehicle = (Vehicle)query.getSingleResult();
             return vehicle;
         }catch (Exception e){
-            logger.error(e.getMessage());
-            return null;
+            throw new IdNotFoundException("Vehicle with id: " + id + " are not present");
         }
     }
 
-    @Transactional
     @Override
     public int deleteVehicleById(long id) {
         try {
@@ -70,13 +75,17 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             int num = query.executeUpdate();
             transaction.commit();
             return num;
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        }catch (HibernateException hibernateException){
+            try {
+                session.getTransaction().rollback();
+            }catch (RuntimeException runtimeException){
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
             return 0;
         }
     }
 
-    @Transactional
     @Override
         public List<Vehicle> findVehicleByVehicleName(String name){
         try{
@@ -85,12 +94,11 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             List<Vehicle> vehicleList =query.list();
             return vehicleList;
         }catch (Exception e){
-        logger.error(e.getMessage());
-        return null;
+            e.printStackTrace();
+        throw new HibernateException("Database connection error");
         }
     }
 
-    @Transactional
     @Override
     public List<Vehicle> getAllVehicle() {
         List<Vehicle> vehicleList = new ArrayList<>();
@@ -98,12 +106,12 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             Query query = session.getNamedQuery("getAllVehicles");
             vehicleList = query.list();
         }catch (Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
+            throw new HibernateException("Database connection error");
         }
         return vehicleList;
     }
 
-    @Transactional
     @Override
     public List<Vehicle> getAllAvailableVehicle() {
         try{
@@ -111,22 +119,23 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             List<Vehicle> vehicleList = query.list();
             return vehicleList;
         }catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            throw new HibernateException("Database connection error");
         }
     }
 
-    @Transactional
     @Override
     public void updateVehicle(Vehicle vehicle) {
         try {
             session.getTransaction().begin();
             session.merge(vehicle);
             session.getTransaction().commit();
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        }catch (HibernateException hibernateException){
+            try {
+                session.getTransaction().rollback();
+            }catch (RuntimeException runtimeException){
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
         }
     }
-
-
 }

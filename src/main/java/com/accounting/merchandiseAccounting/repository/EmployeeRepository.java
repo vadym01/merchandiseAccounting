@@ -12,7 +12,6 @@ public interface EmployeeRepository {
 
     List<Employee> getAllEmployee();
     void saveEmployee(Employee employee);
-    int deleteEmployeeById(long id);
     Employee getEmployeeById(long id);
     List<Employee> findEmployeeByName(String name);
     List<Employee> getAllAvailableEmployees();

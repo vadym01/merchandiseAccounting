@@ -9,12 +9,12 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employee")
 @NamedQueries({
         @NamedQuery(name = "getAllEmployee", query = "FROM Employee "),
-        @NamedQuery(name = "deleteEmployeeById", query = "DELETE Employee WHERE id = :id"),
         @NamedQuery(name = "getEmployeeById", query = "FROM Employee WHERE id = :id"),
         @NamedQuery(name = "findEmployeeByName", query = "FROM Employee as e WHERE e.firstName LIKE :firstName"),
         @NamedQuery(name = "getAllAvailableEmployees",
@@ -39,10 +39,10 @@ public class Employee {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     @JsonIgnore
-    @OneToMany(mappedBy = "loadedByEmployee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "loadedByEmployee", cascade = CascadeType.PERSIST)
     private List<Product> productListLoadedByEmployee = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "sentByEmployee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sentByEmployee", cascade = CascadeType.PERSIST)
     private List<Product> productListSentByEmployee = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "employee")
@@ -70,9 +70,15 @@ public class Employee {
         this.incidents = incidents;
     }
 
-    public Employee() {
+    public Employee(String firstName, String lastName, String patronymic, Date birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+        this.birthDate = birthDate;
     }
 
+    public Employee() {
+    }
 
     public long getId() {
         return id;
@@ -136,5 +142,18 @@ public class Employee {
 
     public void setIncidents(List<Incidents> incidents) {
         this.incidents = incidents;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(patronymic, employee.patronymic) && Objects.equals(birthDate, employee.birthDate) && Objects.equals(productListLoadedByEmployee, employee.productListLoadedByEmployee) && Objects.equals(productListSentByEmployee, employee.productListSentByEmployee) && Objects.equals(incidents, employee.incidents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, patronymic, birthDate, productListLoadedByEmployee, productListSentByEmployee, incidents);
     }
 }
