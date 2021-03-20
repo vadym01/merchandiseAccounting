@@ -1,5 +1,6 @@
 package com.accounting.merchandiseAccounting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Vehicle {
     @Size(min = 2, message = "vehicle name name should be at list 2 characters")
     private String vehicleName;
     @Column(name = "date_of_receipt", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfReceipt;
     @Column(name = "lifting_capacity", nullable = false)
     private double liftingCapacity;

@@ -1,5 +1,7 @@
 package com.accounting.merchandiseAccounting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -24,6 +26,7 @@ public class Incidents {
     @Size(min = 2, message = "incidentDescription should be at list 2 characters")
     private String incidentDescription;
     @Column(name = "incident_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
     @ManyToOne
     @JoinColumn(name = "employee_id")

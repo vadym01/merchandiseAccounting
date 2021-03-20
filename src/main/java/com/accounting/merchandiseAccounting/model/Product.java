@@ -77,10 +77,13 @@ public class Product {
     @Size(min = 2, message = "receiver should be at list 2 characters")
     private String receiver;
     @Column(name = "receipt_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date receiptDate;
     @Column(name = "scheduled_shipment_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date scheduledShipmentDate;
     @Column(name = "arrival_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date arrivalDate;
     @Column(name = "is_present", columnDefinition = "boolean default true")
     private boolean isPresent = true;
@@ -93,6 +96,7 @@ public class Product {
     @JoinColumn(name = "sent_by_employee_id",nullable = false, insertable = false, updatable = false)
     private Employee sentByEmployee;
     @Column(name = "shipment_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date shipmentDate;
 
 
