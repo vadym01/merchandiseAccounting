@@ -1,11 +1,13 @@
 package com.accounting.merchandiseAccounting.controller;
 
-import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
 import com.accounting.merchandiseAccounting.model.Incidents;
 import com.accounting.merchandiseAccounting.service.IncidentsService;
+import com.accounting.merchandiseAccounting.validationService.MapValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class IncidentsController {
     @Autowired
     private IncidentsService incidentsService;
 
+    @Autowired
+    private MapValidationService mapValidationService;
+
     @GetMapping("{id}")
     public ResponseEntity<Incidents> findIncidentById(@PathVariable("id") long id) {
         Incidents incidents = incidentsService.findIncidentById(id);
@@ -29,27 +34,20 @@ public class IncidentsController {
         List<Incidents> incidentsList = incidentsService.findAllIncidents();
         return new ResponseEntity<>(incidentsList, HttpStatus.OK);
     }
-//
-//    @PostMapping("{employeeId}/{vehicleId}")
-//    public ResponseEntity registerNewIncident(@RequestBody Incidents incidents,
-//                                              @PathVariable("employeeId") long employeeId,
-//                                              @PathVariable("vehicleId") long vehicleId) {
-//        incidentsService.registerNewIncident(incidents, employeeId, vehicleId);
-//        return new ResponseEntity(HttpStatus.CREATED);
-//    }
 
     @PutMapping
-    public ResponseEntity registerNewIncidentForVehicle(@RequestBody Incidents incidents) {
+    public ResponseEntity registerNewIncidentForVehicle(@Validated @RequestBody Incidents incidents, BindingResult bindingResult) {
+        ResponseEntity<?> responseEntity = mapValidationService.mapValidationService(bindingResult);
         Incidents vehicleIncident = incidentsService.saveNewIncident(incidents);
         return new ResponseEntity(vehicleIncident, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteIncidentById(@PathVariable("id") long id) throws ResourceNotFoundException {
+    public ResponseEntity deleteIncidentById(@PathVariable("id") long id){
         int response = incidentsService.deleteIncidentById(id);
-        if (response == 0) {
-            throw new ResourceNotFoundException("Incident with id: " + id + " not found");
-        }
+//        if (response == 0) {
+//            throw new I("Incident with id: " + id + " not found");
+//        }
         return new ResponseEntity(HttpStatus.OK);
     }
 

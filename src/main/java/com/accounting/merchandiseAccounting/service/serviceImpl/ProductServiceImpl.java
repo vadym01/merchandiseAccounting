@@ -7,6 +7,7 @@ import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    @Lazy
     @Autowired
     private ProductRepository productRepository;
 

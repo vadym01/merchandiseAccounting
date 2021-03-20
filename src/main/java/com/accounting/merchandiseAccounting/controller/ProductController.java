@@ -2,13 +2,16 @@ package com.accounting.merchandiseAccounting.controller;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
+import com.accounting.merchandiseAccounting.validationService.MapValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -26,6 +29,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private MapValidationService mapValidationService;
+
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(@RequestParam Optional<String> productName) {
         List<Product> productList = productService.findProductByProductName(productName.orElse("_"));
@@ -39,8 +45,9 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity createProduct(@RequestBody Product product) {
-
+    public ResponseEntity createProduct(@Validated @RequestBody Product product, BindingResult bindingResult) {
+        ResponseEntity<?> errorMap = mapValidationService.mapValidationService(bindingResult);
+        if(errorMap != null) return errorMap;
         Product productResponse = productService.saveProduct(product);
         return new ResponseEntity(productResponse,HttpStatus.CREATED);
     }
@@ -52,10 +59,10 @@ public class ProductController {
 //    }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteProductById(@PathVariable("id") long id) throws ResourceNotFoundException {
+    public ResponseEntity deleteProductById(@PathVariable("id") long id) {
         int result = productService.deleteProductById(id);
-        if (result == 0) {
-            throw new ResourceNotFoundException("Product with id: " + id + " not found");
+        if(result == 0){
+            throw new IdNotFoundException("Product with selected id: " + id + " does not exist");
         }
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -100,7 +107,6 @@ public class ProductController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return new ResponseEntity(productForProceedDTOList, HttpStatus.OK);
     }
 

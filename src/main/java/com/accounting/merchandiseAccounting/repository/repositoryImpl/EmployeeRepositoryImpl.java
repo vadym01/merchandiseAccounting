@@ -1,24 +1,15 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.GlobalExceptionHandler;
-import com.accounting.merchandiseAccounting.exceptions.ResourceNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
-import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.query.Query;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.orm.hibernate5.HibernateJdbcException;
-import org.springframework.orm.hibernate5.HibernateQueryException;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 @Service
 public class EmployeeRepositoryImpl implements EmployeeRepository {
@@ -44,95 +34,88 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         session = sessionFactory.openSession();
     }
 
-    @Transactional
     @Override
     public List<Employee> getAllEmployee() {
-        List <Employee> employeeList = new ArrayList<>();
+        List<Employee> employeeList;
         try {
             Query query = session.getNamedQuery("getAllEmployee");
-            employeeList = query.list();
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return null;
+            employeeList = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new HibernateException("Database error");
         }
         return employeeList;
     }
 
-    @Transactional
     @Override
     public List<Employee> findEmployeeByName(String name) {
+        List<Employee> employeeList;
         try {
             Query query = session.getNamedQuery("findEmployeeByName")
-                    .setParameter("firstName",'%' + name + '%');
-            List<Employee> employeeList = query.list();
+                    .setParameter("firstName", '%' + name + '%');
+            employeeList = query.getResultList();
             return employeeList;
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new HibernateException("Database error");
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void saveEmployee(Employee employee) {
-        try{
-            session.save(employee);
-        }catch (Exception e){
-            logger.error(e.getMessage());
-        }
-    }
-
-    @Transactional
-    @Override
-    public int deleteEmployeeById(long id) {
         try {
-            Query query = session.getNamedQuery("deleteEmployeeById");
-            query.setParameter("id", id);
-            Transaction transaction = session.beginTransaction();
-            int num = query.executeUpdate();
-            transaction.commit();
-            return num;
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return 0;
+            session.save(employee);
+        } catch (HibernateException hibernateException) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                logger.error(runtimeException.getMessage());
+            }
+            hibernateException.printStackTrace();
         }
     }
 
-    @Transactional
     @Override
     public Employee getEmployeeById(long id) {
+        Employee employee;
         try {
             Query query = session.getNamedQuery("getEmployeeById")
                     .setParameter("id", id);
-            Employee employee = (Employee) query.list().get(0);
+            employee = (Employee) query.getSingleResult();
             return employee;
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return null;
+        } catch (Exception e) {
+            throw new IdNotFoundException("Employee with id:" + id + " does not exist");
         }
     }
 
-    @Transactional
     @Override
     public List<Employee> getAllAvailableEmployees() {
+        List<Employee> employeeList;
         try {
             Query query = session.getNamedQuery("getAllAvailableEmployees");
-            List<Employee> employeeList = query.list();
+            employeeList = query.getResultList();
             return employeeList;
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            return null;
+        } catch (Exception e) {
+            throw new HibernateException("Hibernate exception");
         }
     }
 
     @Override
     public void updateEmployee(Employee employee) {
-        try{
-            session.getTransaction().begin();
+        try {
+            session.beginTransaction();
             session.merge(employee);
             session.getTransaction().commit();
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        } catch (HibernateException e) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                logger.error(runtimeException.getMessage());
+            }
+            e.printStackTrace();
         }
     }
 }
+
+

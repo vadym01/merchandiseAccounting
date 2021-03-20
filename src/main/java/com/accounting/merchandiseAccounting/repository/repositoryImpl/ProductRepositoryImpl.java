@@ -2,6 +2,7 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
@@ -10,7 +11,7 @@ import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Transaction;
+import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -50,16 +51,20 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Product saveProduct(Product product) {
         try {
             session.getTransaction().begin();
-            session.merge(product);
+            session.save(product);
             session.getTransaction().commit();
             return product;
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        } catch (HibernateException hibernateException) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
             return null;
         }
     }
 
-    @Transactional
     @Override
     public Product findProductById(long id) {
         try {
@@ -67,12 +72,11 @@ public class ProductRepositoryImpl implements ProductRepository {
             Product product = (Product) query.getSingleResult();
             return product;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new IdNotFoundException("Product with selected id: " + id + " does not exist");
         }
     }
 
-    @Transactional
     @Override
     public List<Product> findProductByProductName(String productName) {
         try {
@@ -81,27 +85,30 @@ public class ProductRepositoryImpl implements ProductRepository {
             List<Product> productList = query.list();
             return productList;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new HibernateException("Database connection error");
         }
     }
 
-    @Transactional
     @Override
     public int deleteProductById(long id) {
         try {
-            Query query = session.createNamedQuery("deleteProductById").setParameter("id", id);
-            Transaction transaction = session.beginTransaction();
-            int num = query.executeUpdate();
-            transaction.commit();
-            return num;
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+            session.beginTransaction();
+            int result = session.getNamedQuery("deleteProductById")
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return result;
+        } catch (HibernateException e) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
             return 0;
         }
     }
 
-    @Transactional
     @Override
     public List<Product> findAllProductsWhichIsNotProcessed() {
         try {
@@ -109,28 +116,30 @@ public class ProductRepositoryImpl implements ProductRepository {
             List<Product> productList = query.list();
             return productList;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new HibernateException("Database connection error");
         }
     }
 
-    @Transactional
     @Override
     public void updateProductProceedStatusById(long id) {
         try {
-            session.getTransaction().begin();
             Product product = session.find(Product.class, id);
             product.setProcessed(true);
             product.setArrivalDate(new Date());
+            session.getTransaction().begin();
             session.update(product);
             session.getTransaction().commit();
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+        } catch (HibernateException e) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
+            e.printStackTrace();
         }
     }
 
-    @Transactional
     @Override
     public List<ProductForProceedDTO> getProductInfoForProceeding() {
         try {
@@ -139,28 +148,31 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .getResultList();
             return product;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new HibernateException("Database connection error");
         }
     }
 
-    @Transactional
     @Override
     public void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto) {
         try {
-            session.getTransaction().begin();
             Query query = session.getNamedQuery("updateProductLoadedByEmployee");
             Employee employee = session.find(Employee.class, productForProceedDto.getCurrentEmployeeId());
             query.setParameter("loadedByEmployee", employee);
             query.setParameter("INVNumber", productForProceedDto.getProductId());
+            session.beginTransaction();
             query.executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+        } catch (HibernateException e) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
+            e.printStackTrace();
         }
     }
 
-    @Transactional
     @Override
     public ProductForProceedDTO getProductLoadedByEmployee(long INVNumber) {
         try {
@@ -171,12 +183,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .getResultList().get(0);
             return product;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new IdNotFoundException("product with id: " + INVNumber + " does not exist");
         }
     }
 
-    @Transactional
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
         try {
@@ -188,12 +199,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .getResultList();
             return productForProceedDTOList;
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new IdNotFoundException("Employee with id: " + employeeId + " does not exist");
         }
     }
 
-    @Transactional
     @Override
     public List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent) {
         try {
@@ -204,42 +214,44 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList();
             return productForProceedDTOList;
-
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return null;
+            e.printStackTrace();
+            throw new IdNotFoundException("Product with date: " + shipment_date + " does not exist");
         }
     }
 
-    @Transactional
     @Override
     public void updateShipmentValueForSentBy(long employeeId, long INVNumber) {
         try {
-            session.getTransaction().begin();
             Query query = session.getNamedQuery("updateShipmentValueForSentBy");
             Employee employee = session.find(Employee.class, employeeId);
             query.setParameter("sentByEmployee", employee);
             query.setParameter("shipmentDate", new Date());
             query.setParameter("INVNumber", INVNumber);
+            session.beginTransaction();
             query.executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+        } catch (HibernateException hibernateException) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
         }
     }
 
     @Override
     public long getTotalAmountOfProducts() {
-        long result = 0;
         try {
-             result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
-        }catch (Exception e){
-            logger.error(e.getMessage());
+            long result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new HibernateException("Database connection error");
         }
-        return result;
     }
 
-    @Transactional
     @Override
     public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {
         try {
@@ -249,14 +261,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setParameter("INVNumber", INVNumber)
                     .executeUpdate();
             session.getTransaction().commit();
-        }catch (Exception e){
-            logger.error(e.getMessage());
+        } catch (HibernateException hibernateException) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                runtimeException.printStackTrace();
+            }
+            hibernateException.printStackTrace();
         }
     }
 
-//    @Transactional
-//    @Override
-//    public void updateProduct(Product product) {
-//        session.update(product);
-//    }
 }
