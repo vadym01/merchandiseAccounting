@@ -1,0 +1,47 @@
+create table employee(
+id int primary key auto_increment,
+first_name varchar(100),
+last_name varchar(100),
+patronymic varchar(100),
+birth_date date);
+
+
+create table incidents(
+id int primary key auto_increment,
+incident_description varchar(200),
+incident_date date,
+ employee_id int,
+ vehicle_id int);
+
+
+
+create table product(
+inv_number int primary key auto_increment,
+product_name varchar(100),
+description varchar(100),
+volume double,
+weight double,
+sender varchar(200),
+receiver varchar(200),
+receipt_date date,
+scheduled_shipment_date date,
+arrival_date date,
+is_present boolean,
+is_processed boolean,
+loaded_by_employee_id int,
+sent_by_employee_id int,
+shipment_date date
+);
+
+create table vehicle(
+id int primary key auto_increment,
+vehicle_name varchar(200),
+is_workable boolean,
+date_of_receipt date,
+lifting_capacity double)
+
+alter table product add foreign key(loaded_by_employee_id) references employee(id);
+alter table product add foreign key(sent_by_employee_id) references employee(id);
+
+ alter table incidents add foreign key(employee_id) references employee(id);
+ alter table incidents add foreign key(vehicle_id) references vehicle(id);
