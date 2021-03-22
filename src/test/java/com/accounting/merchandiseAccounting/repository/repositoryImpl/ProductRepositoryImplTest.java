@@ -23,41 +23,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Incidents;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.IncidentsRepository;
-import net.minidev.json.JSONUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.hamcrest.MatcherAssert.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -231,4 +208,5 @@ class ProductRepositoryImplTest {
 //    @Test
 //    void updateShipmentValueForIsPresent() {
 //    }
+
 }
