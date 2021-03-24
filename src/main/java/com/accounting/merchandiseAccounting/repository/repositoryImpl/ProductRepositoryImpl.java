@@ -124,7 +124,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void updateProductProceedStatusById(long id) {
         try {
-            Product product = session.find(Product.class, id);
+            Product product = (Product) session.getNamedQuery("findProductById").setParameter("id", id).getSingleResult();
             product.setProcessed(true);
             product.setArrivalDate(new Date());
             session.getTransaction().begin();
@@ -191,7 +191,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
         try {
-            Employee employee = session.find(Employee.class, employeeId);
+            Employee employee = (Employee) session.getNamedQuery("getEmployeeById")
+                    .setParameter("id", employeeId);
             List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
                     .setParameter("loadedByEmployee", employee)
                     .unwrap(Query.class)
@@ -245,10 +246,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     public long getTotalAmountOfProducts() {
         try {
             long result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
-            return result;
+//            return result;
+            throw new HibernateException("Database connection error");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+//            throw new HibernateException("Database connection error");
+            return 0;
         }
     }
 

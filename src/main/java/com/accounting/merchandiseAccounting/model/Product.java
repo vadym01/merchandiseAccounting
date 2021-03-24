@@ -12,11 +12,11 @@ import java.util.Objects;
 @Table(name = "product")
 @NamedQueries({
         @NamedQuery(name = "getAllProducts", query = "FROM Product"),
-        @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE id = :id"),
-        @NamedQuery(name = "findProductById", query = "FROM Product WHERE id = :id"),
+        @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE INVNumber = :id"),
+        @NamedQuery(name = "findProductById", query = "FROM Product WHERE INVNumber = :id"),
         @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName"),
         @NamedQuery(name = "findAllProductsWhichIsNotProcessed", query = "FROM Product p WHERE p.isProcessed = false"),
-        @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.id = :id"),
+        @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.INVNumber = :id"),
         @NamedQuery(name = "getProductInfoForProceeding", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.receiptDate as receiptDate," +

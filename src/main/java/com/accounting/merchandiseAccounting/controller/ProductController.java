@@ -67,7 +67,7 @@ public class ProductController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PatchMapping("/submit/proceeded/{id}")
+    @PutMapping("/submit/proceeded/{id}")
     public ResponseEntity updateProductProceedStatusById(@PathVariable("id") long id) {
         productService.updateProductProceedStatusById(id);
         return new ResponseEntity(HttpStatus.OK);

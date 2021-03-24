@@ -6,7 +6,7 @@ patronymic varchar(100),
 birth_date date);
 
 
-create table incidents(
+create table incident(
 id int primary key auto_increment,
 incident_description varchar(200),
 incident_date date,
@@ -43,5 +43,5 @@ lifting_capacity double)
 alter table product add foreign key(loaded_by_employee_id) references employee(id);
 alter table product add foreign key(sent_by_employee_id) references employee(id);
 
- alter table incidents add foreign key(employee_id) references employee(id);
- alter table incidents add foreign key(vehicle_id) references vehicle(id);
+ alter table incident add foreign key(employee_id) references employee(id);
+ alter table incident add foreign key(vehicle_id) references vehicle(id);

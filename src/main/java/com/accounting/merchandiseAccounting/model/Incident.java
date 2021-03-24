@@ -7,17 +7,17 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
-@Table(name = "incidents")
+@Table(name = "incident")
 @NamedQueries({
-        @NamedQuery(name = "findAllIncidents", query = "FROM Incidents"),
-        @NamedQuery(name = "findIncidentById", query = "FROM Incidents WHERE id = :id"),
-        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incidents i WHERE id = :id"),
-        @NamedQuery(name = "findIncidentsForVehicle", query = "FROM Incidents WHERE vehicle IS NOT NULL"),
-        @NamedQuery(name = "findIncidentsForEmployee", query = "FROM Incidents WHERE employee IS NOT NULL")
+        @NamedQuery(name = "findAllIncident", query = "FROM Incident"),
+        @NamedQuery(name = "findIncidentById", query = "FROM Incident WHERE id = :id"),
+        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incident i WHERE id = :id"),
+        @NamedQuery(name = "findIncidentForVehicle", query = "FROM Incident WHERE vehicle IS NOT NULL"),
+        @NamedQuery(name = "findIncidentForEmployee", query = "FROM Incident WHERE employee IS NOT NULL")
 
-//        SELECT e FROM Vehicle e WHERE e NOT IN (SELECT i.vehicle FROM Incidents i)")
+//        SELECT e FROM Vehicle e WHERE e NOT IN (SELECT i.vehicle FROM Incident i)")
 })
-public class Incidents {
+public class Incident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Incidents {
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    public Incidents(long id, String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
+    public Incident(long id, String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
         this.id = id;
         this.incidentDescription = incidentDescription;
         this.date = date;
@@ -43,20 +43,20 @@ public class Incidents {
         this.vehicle = vehicle;
     }
 
-    public Incidents(String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
+    public Incident(String incidentDescription, Date date, Employee employee, Vehicle vehicle) {
         this.incidentDescription = incidentDescription;
         this.date = date;
         this.employee = employee;
         this.vehicle = vehicle;
     }
 
-    public Incidents(String incidentDescription, Date date, Employee employee) {
+    public Incident(String incidentDescription, Date date, Employee employee) {
         this.incidentDescription = incidentDescription;
         this.date = date;
         this.employee = employee;
     }
 
-    public Incidents() {
+    public Incident() {
     }
 
     public long getId() {
@@ -99,14 +99,4 @@ public class Incidents {
         this.vehicle = vehicle;
     }
 
-    @Override
-    public String toString() {
-        return "Incidents{" +
-                "id=" + id +
-                ", incidentDescription='" + incidentDescription + '\'' +
-                ", date=" + date +
-                ", employee=" + employee +
-                ", vehicle=" + vehicle +
-                '}';
-    }
 }

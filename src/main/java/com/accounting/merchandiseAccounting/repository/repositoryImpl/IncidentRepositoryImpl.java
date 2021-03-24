@@ -1,10 +1,8 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
-import com.accounting.merchandiseAccounting.model.Employee;
-import com.accounting.merchandiseAccounting.model.Vehicle;
-import com.accounting.merchandiseAccounting.model.Incidents;
-import com.accounting.merchandiseAccounting.repository.IncidentsRepository;
+import com.accounting.merchandiseAccounting.model.Incident;
+import com.accounting.merchandiseAccounting.repository.IncidentRepository;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
 import com.accounting.merchandiseAccounting.service.VehicleService;
 import org.apache.logging.log4j.LogManager;
@@ -17,13 +15,12 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 import org.hibernate.query.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class IncidentsRepositoryImpl implements IncidentsRepository {
+public class IncidentRepositoryImpl implements IncidentRepository {
 
     private final static Logger logger = LogManager.getLogger(EmployeeRepositoryImpl.class);
 
@@ -43,19 +40,19 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
     }
 
     @Override
-    public Incidents findIncidentById(long id) {
+    public Incident findIncidentById(long id) {
         try {
             Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
-            Incidents incidents = (Incidents) query.list().get(0);
-            return incidents;
+            Incident incident = (Incident) query.list().get(0);
+            return incident;
         } catch (Exception e) {
             throw new IdNotFoundException("Incident with id: " + id + " are not present");
         }
     }
 
     @Override
-    public List<Incidents> findAllIncidents() {
-        List<Incidents> incidents = new ArrayList<>();
+    public List<Incident> findAllIncidents() {
+        List<Incident> incidents = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findAllIncidents");
             incidents = query.list();
@@ -85,12 +82,12 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
     }
 
     @Override
-    public Incidents saveNewIncident(Incidents incidents) {
+    public Incident saveNewIncident(Incident incident) {
         try {
             session.getTransaction().begin();
-            Incidents incidents1 = (Incidents) session.merge(incidents);
+            Incident incident1 = (Incident) session.merge(incident);
             session.getTransaction().commit();
-            return incidents1;
+            return incident1;
         } catch (HibernateException hibernateException) {
             try {
                 session.getTransaction().rollback();
@@ -103,11 +100,11 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
     }
 
     @Override
-    public List<Incidents> findIncidentsForVehicle() {
+    public List<Incident> findIncidentsForVehicle() {
         try {
             Query query = session.getNamedQuery("findIncidentsForVehicle");
-            List<Incidents> incidentsList = query.getResultList();
-            return incidentsList;
+            List<Incident> incidentList = query.getResultList();
+            return incidentList;
         }catch (Exception e){
             e.printStackTrace();
             throw new HibernateException("Database connection error");
@@ -115,11 +112,11 @@ public class IncidentsRepositoryImpl implements IncidentsRepository {
     }
 
     @Override
-    public List<Incidents> findIncidentsForEmployee() {
+    public List<Incident> findIncidentsForEmployee() {
         try {
             Query query = session.getNamedQuery("findIncidentsForEmployee");
-            List<Incidents> incidentsList = query.getResultList();
-            return incidentsList;
+            List<Incident> incidentList = query.getResultList();
+            return incidentList;
         }catch (Exception e){
             e.printStackTrace();
             throw new HibernateException("Database connection error");
