@@ -2,7 +2,7 @@ package com.accounting.merchandiseAccounting.controller;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
@@ -44,25 +44,19 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity createProduct(@Validated @RequestBody Product product, BindingResult bindingResult) {
+    @PostMapping
+    public ResponseEntity saveProduct(@Validated @RequestBody Product product, BindingResult bindingResult) {
         ResponseEntity<?> errorMap = mapValidationService.mapValidationService(bindingResult);
         if(errorMap != null) return errorMap;
         Product productResponse = productService.saveProduct(product);
         return new ResponseEntity(productResponse,HttpStatus.CREATED);
     }
 
-//    @PutMapping
-//    public ResponseEntity updateProduct(@RequestBody Product product){
-//        productService.saveProduct(product);
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
     @DeleteMapping("{id}")
     public ResponseEntity deleteProductById(@PathVariable("id") long id) {
         int result = productService.deleteProductById(id);
         if(result == 0){
-            throw new IdNotFoundException("Product with selected id: " + id + " does not exist");
+            throw new CustomExceptionHandler("Product with selected id: " + id + " does not exist");
         }
         return new ResponseEntity(HttpStatus.OK);
     }

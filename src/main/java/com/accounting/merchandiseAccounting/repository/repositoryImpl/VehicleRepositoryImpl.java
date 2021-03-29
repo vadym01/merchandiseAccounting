@@ -1,25 +1,20 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
-import com.accounting.merchandiseAccounting.model.Employee;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import org.hibernate.query.Query;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,14 +40,14 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             session.merge(vehicle);
             session.getTransaction().commit();
             return vehicle;
-        }catch (HibernateException hibernateException){
+        }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
-            return null;
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -63,7 +58,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             Vehicle vehicle = (Vehicle)query.getSingleResult();
             return vehicle;
         }catch (Exception e){
-            throw new IdNotFoundException("Vehicle with id: " + id + " are not present");
+            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
         }
     }
 
@@ -75,14 +70,14 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             int num = query.executeUpdate();
             transaction.commit();
             return num;
-        }catch (HibernateException hibernateException){
+        }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
-            return 0;
+            e.printStackTrace();
+            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
         }
     }
 
@@ -95,21 +90,20 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-        throw new HibernateException("Database connection error");
+        throw new CustomExceptionHandler("No vehicle was found with name: " + name);
         }
     }
 
     @Override
     public List<Vehicle> getAllVehicle() {
-        List<Vehicle> vehicleList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("getAllVehicles");
-            vehicleList = query.list();
+            List<Vehicle> vehicleList = query.list();
+            return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
-        return vehicleList;
     }
 
     @Override
@@ -119,7 +113,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             List<Vehicle> vehicleList = query.list();
             return vehicleList;
         }catch (Exception e) {
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -129,13 +123,14 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             session.getTransaction().begin();
             session.merge(vehicle);
             session.getTransaction().commit();
-        }catch (HibernateException hibernateException){
+        }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 }

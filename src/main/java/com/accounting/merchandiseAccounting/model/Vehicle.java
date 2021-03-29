@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -14,44 +14,54 @@ import java.util.List;
         @NamedQuery(name = "findVehicleById", query = "FROM Vehicle WHERE id = :id"),
         @NamedQuery(name = "deleteVehicleById", query = "DELETE Vehicle WHERE id = :id"),
         @NamedQuery(name = "getAllVehicles", query = "FROM Vehicle"),
-        @NamedQuery(name = "getAllAvailableVehicle", query = "SELECT v FROM Vehicle v WHERE v NOT IN (SELECT i.vehicle FROM Incident i)"),
+        @NamedQuery(name = "getAllAvailableVehicle", query = "SELECT v FROM Vehicle v WHERE v.available = true"),
         @NamedQuery(name = "findVehicleByVehicleName", query = "FROM Vehicle as v WHERE v.vehicleName LIKE :vehicleName"),
 })
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private long id;
-    @Column(name = "vehicle_name", nullable = false)
-    @Size(min = 2, message = "vehicle name name should be at list 2 characters")
+    @Column(name = "vehicle_name")
+    @Size(min = 2, max = 40, message = "vehicle name should contain minimum 2 characters and maximum 40 characters")
+    @NotNull(message = "vehicle name is required")
     private String vehicleName;
-    @Column(name = "available_status")
-    private boolean availableStatus;
-    @Column(name = "date_of_receipt", nullable = false)
+    @Column(name = "available")
+    private boolean available = true;
+    @Column(name = "date_of_receipt")
+    @NotNull(message = "date of receipt is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfReceipt;
-    @Column(name = "lifting_capacity", nullable = false)
+    @Column(name = "lifting_capacity")
+    @DecimalMin(value = "0.1", message = "lifting capacity is required")
     private double liftingCapacity;
     @JsonIgnore
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     private List<Incident> incident;
 
-    public Vehicle(long id, String vehicleName,boolean availableStatus,  Date dateOfReceipt, double liftingCapacity, List<Incident> incident) {
+    public Vehicle(long id, String vehicleName, boolean available, Date dateOfReceipt, double liftingCapacity, List<Incident> incident) {
         this.id = id;
         this.vehicleName = vehicleName;
-        this.availableStatus = availableStatus;
+        this.available = available;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incident = incident;
     }
 
-    public Vehicle(String vehicleName, Date dateOfReceipt,boolean availableStatus, double liftingCapacity, List<Incident> incident) {
+    public Vehicle(String vehicleName, Date dateOfReceipt, boolean available, double liftingCapacity, List<Incident> incident) {
         this.vehicleName = vehicleName;
-        this.availableStatus = availableStatus;
+        this.available = available;
         this.dateOfReceipt = dateOfReceipt;
         this.liftingCapacity = liftingCapacity;
         this.incident = incident;
+    }
+
+    public Vehicle(String vehicleName, boolean available, Date dateOfReceipt, double liftingCapacity) {
+        this.vehicleName = vehicleName;
+        this.available = available;
+        this.dateOfReceipt = dateOfReceipt;
+        this.liftingCapacity = liftingCapacity;
     }
 
     public Vehicle() {
@@ -73,12 +83,12 @@ public class Vehicle {
         this.vehicleName = vehicleName;
     }
 
-    public boolean isAvailableStatus() {
-        return availableStatus;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setAvailableStatus(boolean availableStatus) {
-        this.availableStatus = availableStatus;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public Date getDateOfReceipt() {

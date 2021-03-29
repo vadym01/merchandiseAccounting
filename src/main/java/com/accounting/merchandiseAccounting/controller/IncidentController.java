@@ -1,5 +1,6 @@
 package com.accounting.merchandiseAccounting.controller;
 
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.service.IncidentService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
@@ -36,18 +37,19 @@ public class IncidentController {
     }
 
     @PutMapping
-    public ResponseEntity registerNewIncidentForVehicle(@Validated @RequestBody Incident incident, BindingResult bindingResult) {
+    public ResponseEntity registerNewIncident(@Validated @RequestBody Incident incident, BindingResult bindingResult) {
         ResponseEntity<?> responseEntity = mapValidationService.mapValidationService(bindingResult);
+        if(responseEntity != null) return responseEntity;
         Incident vehicleIncident = incidentService.saveNewIncident(incident);
         return new ResponseEntity(vehicleIncident, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteIncidentById(@PathVariable("id") long id){
+    public ResponseEntity deleteIncidentById(@PathVariable("id") long id) {
         int response = incidentService.deleteIncidentById(id);
-//        if (response == 0) {
-//            throw new I("Incident with id: " + id + " not found");
-//        }
+        if (response == 0) {
+            throw new CustomExceptionHandler("Incident with id: " + id + " not found");
+        }
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -61,5 +63,11 @@ public class IncidentController {
     public ResponseEntity findIncidentForEmployee() {
         List<Incident> incidentList = incidentService.findIncidentsForEmployee();
         return new ResponseEntity(incidentList, HttpStatus.OK);
+    }
+
+    @PutMapping("status/{id}")
+    public ResponseEntity changeIncidentStatus(@PathVariable("id") long id){
+        incidentService.changeIncidentStatus(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -3,7 +3,9 @@ package com.accounting.merchandiseAccounting.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Objects;
@@ -30,7 +32,7 @@ import java.util.Objects;
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
                 " p.shipmentDate as shipmentDate" +
-                    " FROM Product p WHERE p.INVNumber = :INVNumber"),
+                " FROM Product p WHERE p.INVNumber = :INVNumber"),
         @NamedQuery(name = "getProductHistoryByEmployeeId", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
@@ -56,30 +58,42 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "INV_number", nullable = false)
+    @Column(name = "INV_number")
     private long INVNumber;
-    @Column(name = "product_name", nullable = false)
-    @Size(min = 2,message = "product name/identifier should be at list 2 characters")
+    @Column(name = "product_name")
+    @Size(min = 2, max = 40,
+            message = "product name/identifier should contain minimum 2 characters and maximum 40 characters")
+    @NotNull(message = "product name/identifier is required")
     private String productName;
-    @Column(name = "description", nullable = false)
-    @Size(min = 2, message = "description should be at list 2 characters")
+    @Column(name = "description")
+    @Size(min = 2, max = 60,
+            message = "description should contain minimum 2 characters and maximum 60 characters")
+    @NotNull(message = "description is required")
     private String description;
-    @Column(name = "volume", nullable = false)
-    @DecimalMin(value = "0.1", message = "volume is required")
+    @Column(name = "volume")
+    @DecimalMin(value = "0.01", message = "minimum value for volume is 0.1")
+    @DecimalMax(value = "50.0", message = "maximum value for volume is 50.0")
     private double volume;
-    @Column(name = "weight", nullable = false)
-    @DecimalMin(value = "0.1", message = "weight is required")
+    @Column(name = "weight")
+    @DecimalMin(value = "0.01", message = "minimum value for weight is 0.1")
+    @DecimalMax(value = "1000.0", message = "maximum value for weight is 1000.0")
     private double weight;
-    @Column(name = "sender", nullable = false)
-    @Size(min = 2, message = "sender identifier should by at list 2 characters")
+    @Column(name = "sender")
+    @Size(min = 2, max = 40,
+            message = "sender identifier should contain minimum 2 characters and maximum 40 characters")
+    @NotNull(message = "sender is required")
     private String sender;
-    @Column(name = "receiver", nullable = false)
-    @Size(min = 2, message = "receiver should be at list 2 characters")
+    @Column(name = "receiver")
+    @Size(min = 2, max = 40,
+            message = "receiver identifier should contain minimum 2 characters and maximum 40 characters")
+    @NotNull(message = "receiver is required")
     private String receiver;
-    @Column(name = "receipt_date", nullable = false)
+    @Column(name = "receipt_date")
+    @NotNull(message = "receipt date is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date receiptDate;
-    @Column(name = "scheduled_shipment_date", nullable = false)
+    @Column(name = "scheduled_shipment_date")
+    @NotNull(message = "scheduled shipment date is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date scheduledShipmentDate;
     @Column(name = "arrival_date")
@@ -88,12 +102,12 @@ public class Product {
     @Column(name = "is_present", columnDefinition = "boolean default true")
     private boolean isPresent = true;
     @Column(name = "is_processed", columnDefinition = "boolean default false")
-    private boolean isProcessed;
+    private boolean isProcessed = false;
     @ManyToOne()
-    @JoinColumn(name = "loaded_by_employee_id",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "loaded_by_employee_id", insertable = false, updatable = false)
     private Employee loadedByEmployee;
     @ManyToOne()
-    @JoinColumn(name = "sent_by_employee_id",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "sent_by_employee_id", insertable = false, updatable = false)
     private Employee sentByEmployee;
     @Column(name = "shipment_date")
     @JsonFormat(pattern = "yyyy-MM-dd")

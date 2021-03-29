@@ -69,7 +69,7 @@ class EmployeeRepositoryImplTest {
     @BeforeEach
     public void init() {
         employee = new Employee("Jhan", "Stewarts", "Anatolievich", true, getDate("1993-12-12"));
-        incident = new Incident("testIncidentForEmployee", new Date(), employee);
+        incident = new Incident("testIncidentForEmployee", new Date(),false, employee);
         employeeList = Arrays.asList(
                 new Employee("Jordan", "Albertson", "BAtikovitch", true, getDate("1993-05-18")),
                 new Employee("Georg", "Allford", "BAtikovitch", true,  getDate("1993-05-18")),

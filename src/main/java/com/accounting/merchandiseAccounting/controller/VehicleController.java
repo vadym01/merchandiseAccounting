@@ -1,5 +1,6 @@
 package com.accounting.merchandiseAccounting.controller;
 
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
@@ -44,9 +45,6 @@ public class VehicleController {
     @GetMapping("{id}")
     public ResponseEntity<?> getVehicleById(@PathVariable("id") long id) {
         Vehicle vehicle = vehicleService.findVehicleById(id);
-//        if(vehicle == null){
-//            throw new ResourceNotFoundException("Vehicle with id: " + " is not present");
-//        }
         return new ResponseEntity<>(vehicle, HttpStatus.OK);
     }
 
@@ -62,9 +60,9 @@ public class VehicleController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteVehicle(@PathVariable("id") long id) {
         int res = vehicleService.deleteVehicleById(id);
-//        if (res == 0) {
-//            throw new ResourceNotFoundException("Vehicle with id: " + " is not present");
-//        }
+        if (res == 0) {
+            throw new CustomExceptionHandler("Vehicle with id: " + id + " is not present");
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.model.*;
 import com.accounting.merchandiseAccounting.repository.*;
+import com.accounting.merchandiseAccounting.service.ProductService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -52,6 +53,9 @@ class ProductRepositoryImplTest {
     @Autowired
     private IncidentRepository incidentRepository;
 
+    @Autowired
+    private ProductService productService;
+
 
     @Autowired
     private EntityManager entityManager;
@@ -60,6 +64,7 @@ class ProductRepositoryImplTest {
 
     private Employee employee;
     private Product product;
+    private Vehicle vehicle;
     private Product notProcessedProduct;
     private Incident incident;
     private List<Employee> employeeList;
@@ -80,6 +85,7 @@ class ProductRepositoryImplTest {
         employee = new Employee("Jhan", "Stewarts", "Anatolievich",true, getDate("1993-12-12"));
         product = new Product("Computer", "Laptop", 23.4, 12.3, "Jordan Albertson", "Georg Allford", new Date(), new Date(), new Date(),
                 true, true, new Date());
+        vehicle = new Vehicle("VehicleForProducts", true, new Date(), 100);
         productList = new ArrayList<Product>(Arrays.asList(
                 new Product("CPU", "accessories", 1.1, 0.3, "Oleg Hit", "Georg Allford", new Date(), new Date(), new Date(),
                         true, false, new Date()),
@@ -87,7 +93,7 @@ class ProductRepositoryImplTest {
                         false, true, new Date())
         ));
 
-        incident = new Incident("testIncidentForEmployee", new Date(), employee);
+        incident = new Incident("testIncidentForEmployee", new Date(),false, employee);
         employeeList = Arrays.asList(
                 new Employee("Jordan", "Albertson", "BAtikovitch",true, getDate("1993-05-18")),
                 new Employee("Georg", "Allford", "BAtikovitch",true, getDate("1993-05-18")),
@@ -118,6 +124,11 @@ class ProductRepositoryImplTest {
         Query query = session.getNamedQuery("findProductById")
                 .setParameter("id", testProduct);
         assertNotNull(query.getSingleResult());
+    }
+
+    @Test
+    void checkForResourcesOnLoadingProcess(){
+        productService.saveProduct(product);
     }
 
     @Test

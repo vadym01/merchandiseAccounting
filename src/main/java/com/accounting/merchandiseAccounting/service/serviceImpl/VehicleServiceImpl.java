@@ -1,10 +1,13 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
+import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import com.accounting.merchandiseAccounting.service.VehicleService;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,5 +53,13 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public void updateVehicle(Vehicle vehicle) {
         vehicleRepository.updateVehicle(vehicle);
+    }
+
+
+    @Override
+    public void changeAvailableStatusForVehicle(long vehicleId) {
+        Vehicle vehicle = findVehicleById(vehicleId);
+        vehicle.setAvailable(!vehicle.isAvailable());
+        updateVehicle(vehicle);
     }
 }

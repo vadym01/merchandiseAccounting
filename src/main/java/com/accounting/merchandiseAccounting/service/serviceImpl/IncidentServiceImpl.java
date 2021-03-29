@@ -1,8 +1,11 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
+import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
+import com.accounting.merchandiseAccounting.service.EmployeeService;
 import com.accounting.merchandiseAccounting.service.IncidentService;
+import com.accounting.merchandiseAccounting.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,11 @@ public class IncidentServiceImpl implements IncidentService {
     @Autowired
     private IncidentRepository incidentRepository;
 
-//    @Override
-//    public void registerNewIncident(Incident incident, long employeeId, long vehicleId) {
-//        incidentRepository.registerNewIncident(incident, employeeId, vehicleId);
-//    }
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private VehicleService vehicleService;
 
     @Override
     public Incident findIncidentById(long id) {
@@ -37,10 +41,14 @@ public class IncidentServiceImpl implements IncidentService {
         return incidentList;
     }
 
-
     @Override
     public Incident saveNewIncident(Incident incident) {
         Incident vehicleIncident = incidentRepository.saveNewIncident(incident);
+        if(incident.getEmployee() != null){
+            employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
+        }else {
+            vehicleService.changeAvailableStatusForVehicle(incident.getVehicle().getId());
+        }
         return vehicleIncident;
     }
 
@@ -56,4 +64,15 @@ public class IncidentServiceImpl implements IncidentService {
         return incidentList;
     }
 
+    @Override
+    public void changeIncidentStatus(long incidentId) {
+        Incident incident = findIncidentById(incidentId);
+        incident.setResolved(!incident.isResolved());
+        if(incident.getEmployee() != null){
+        employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
+        }else {
+            vehicleService.changeAvailableStatusForVehicle(incident.getVehicle().getId());
+        }
+        incidentRepository.updateIncident(incident);
+    }
 }

@@ -45,12 +45,12 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @GetMapping("{id}")
     public ResponseEntity<?> findOneById(@PathVariable("id") long id) {
         Employee employee = employeeService.findOneById(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
+
 
     @GetMapping("available")
     public ResponseEntity<?> getAllAvailableEmployee() {

@@ -21,4 +21,6 @@ public interface IncidentRepository {
 
     List<Incident> findIncidentsForEmployee();
 
+    void updateIncident(Incident incident);
+
 }

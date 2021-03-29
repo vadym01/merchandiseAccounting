@@ -2,9 +2,14 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
+import com.accounting.merchandiseAccounting.model.Vehicle;
+import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
+import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,8 +25,23 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @Override
     public Product saveProduct(Product product) {
+        List<Vehicle> allAvailableVehicle = vehicleRepository.getAllAvailableVehicle();
+        List<Employee> allAvailableEmployee = employeeRepository.getAllAvailableEmployees();
+         allAvailableVehicle.stream()
+                .filter(vehicle -> vehicle.getLiftingCapacity() >= product.getWeight())
+                .findFirst().orElseThrow(() -> new CustomExceptionHandler("Not found vehicle with required" +
+                        "lifting capacity"));
+        allAvailableEmployee.stream().findAny().orElseThrow(() -> new CustomExceptionHandler("No employee found" +
+                "for loading process"));
+
         Product productResponse = productRepository.saveProduct(product);
         return productResponse;
     }
@@ -95,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
         int totalSpace = 100;
         int totalAmount = Math.toIntExact(productRepository.getTotalAmountOfProducts());
         int freeSpace = totalSpace - totalAmount;
-        ProductStorageReport productStorageReport = new ProductStorageReport(totalAmount,freeSpace);
+        ProductStorageReport productStorageReport = new ProductStorageReport(totalAmount, freeSpace);
         return productStorageReport;
     }
 }

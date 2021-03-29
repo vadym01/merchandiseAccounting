@@ -1,8 +1,10 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Incident;
+import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
+import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
 import com.accounting.merchandiseAccounting.service.VehicleService;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +34,11 @@ public class IncidentRepositoryImpl implements IncidentRepository {
     private VehicleService vehicleService;
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private VehicleRepository vehicleRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     private Session session;
 
     @PostConstruct
@@ -43,23 +50,24 @@ public class IncidentRepositoryImpl implements IncidentRepository {
     public Incident findIncidentById(long id) {
         try {
             Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
-            Incident incident = (Incident) query.list().get(0);
+            Incident incident = (Incident) query.getSingleResult();
             return incident;
         } catch (Exception e) {
-            throw new IdNotFoundException("Incident with id: " + id + " are not present");
+            e.printStackTrace();
+            throw new CustomExceptionHandler("No incident was found with id: " + id);
         }
     }
 
     @Override
     public List<Incident> findAllIncidents() {
-        List<Incident> incidents = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findAllIncidents");
-            incidents = query.list();
+            List<Incident> incidents = query.list();
+            return incidents;
         } catch (Exception e) {
-            throw new HibernateException("Database connection error");
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
-        return incidents;
     }
 
     @Override
@@ -70,14 +78,14 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             int num = query.executeUpdate();
             session.getTransaction().commit();
             return num;
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
-            return 0;
+            e.printStackTrace();
+            throw new CustomExceptionHandler("No incident was found with id:"  + id);
         }
     }
 
@@ -88,16 +96,17 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             Incident incident1 = (Incident) session.merge(incident);
             session.getTransaction().commit();
             return incident1;
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
-            return null;
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
+
 
     @Override
     public List<Incident> findIncidentsForVehicle() {
@@ -105,9 +114,9 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             Query query = session.getNamedQuery("findIncidentsForVehicle");
             List<Incident> incidentList = query.getResultList();
             return incidentList;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -117,9 +126,27 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             Query query = session.getNamedQuery("findIncidentsForEmployee");
             List<Incident> incidentList = query.getResultList();
             return incidentList;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
+
+    @Override
+    public void updateIncident(Incident incident) {
+        try {
+            session.beginTransaction();
+            session.merge(incident);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                session.getTransaction().rollback();
+            } catch (RuntimeException runtimeException) {
+                e.printStackTrace();
+            }
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
+        }
+    }
+
 }

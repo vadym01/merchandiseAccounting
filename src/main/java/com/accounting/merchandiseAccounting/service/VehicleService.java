@@ -12,4 +12,5 @@ public interface VehicleService {
     List<Vehicle> getAllAvailableVehicle();
     List<Vehicle> findVehicleByVehicleName(String vehicleName);
     void updateVehicle(Vehicle vehicle);
+    void changeAvailableStatusForVehicle(long id);
 }

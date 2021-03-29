@@ -20,4 +20,5 @@ public interface IncidentService {
 
     List<Incident> findIncidentsForEmployee();
 
+    void changeIncidentStatus(long incidentId);
 }

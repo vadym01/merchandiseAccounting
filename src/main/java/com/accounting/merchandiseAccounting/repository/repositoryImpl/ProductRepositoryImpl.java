@@ -2,7 +2,7 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
@@ -54,14 +54,13 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.save(product);
             session.getTransaction().commit();
             return product;
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
-            return null;
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -73,7 +72,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return product;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IdNotFoundException("Product with selected id: " + id + " does not exist");
+            throw new CustomExceptionHandler("No product was found with id: "  + id);
         }
     }
 
@@ -86,7 +85,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler("No product was found with name: "  + productName);
         }
     }
 
@@ -99,13 +98,13 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .executeUpdate();
             session.getTransaction().commit();
             return result;
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            return 0;
+            throw new CustomExceptionHandler("No product was found with id: "  + id);
         }
     }
 
@@ -117,7 +116,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -130,13 +129,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.getTransaction().begin();
             session.update(product);
             session.getTransaction().commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
+            throw new CustomExceptionHandler("No product was found with id: "  + id);
         }
     }
 
@@ -149,7 +149,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return product;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database connection error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -163,13 +163,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.beginTransaction();
             query.executeUpdate();
             session.getTransaction().commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -184,7 +185,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return product;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IdNotFoundException("product with id: " + INVNumber + " does not exist");
+            throw new CustomExceptionHandler("No product was found with id:"  + INVNumber);
         }
     }
 
@@ -201,7 +202,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productForProceedDTOList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IdNotFoundException("Employee with id: " + employeeId + " does not exist");
+            throw new CustomExceptionHandler("No employee was found with id: "  + employeeId);
         }
     }
 
@@ -217,7 +218,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productForProceedDTOList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IdNotFoundException("Product with date: " + shipment_date + " does not exist");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -232,13 +233,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.beginTransaction();
             query.executeUpdate();
             session.getTransaction().commit();
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -246,12 +248,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     public long getTotalAmountOfProducts() {
         try {
             long result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
-//            return result;
-            throw new HibernateException("Database connection error");
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
-//            throw new HibernateException("Database connection error");
-            return 0;
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -264,13 +264,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setParameter("INVNumber", INVNumber)
                     .executeUpdate();
             session.getTransaction().commit();
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            hibernateException.printStackTrace();
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 

@@ -1,6 +1,6 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.customExceptionHandler.IdNotFoundException;
+import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,15 +35,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public List<Employee> getAllEmployee() {
-        List<Employee> employeeList;
+
         try {
             Query query = session.getNamedQuery("getAllEmployee");
-            employeeList = query.getResultList();
+            List<Employee> employeeList = query.getResultList();
+            return employeeList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database error");
+            throw new CustomExceptionHandler(e.getMessage());
         }
-        return employeeList;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return employeeList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new HibernateException("Database error");
+            throw new CustomExceptionHandler("No employee was found with name: " + name);
         }
     }
 
@@ -66,13 +65,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void saveEmployee(Employee employee) {
         try {
             session.save(employee);
-        } catch (HibernateException hibernateException) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 logger.error(runtimeException.getMessage());
             }
-            hibernateException.printStackTrace();
+            e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             employee = (Employee) query.getSingleResult();
             return employee;
         } catch (Exception e) {
-            throw new IdNotFoundException("Employee with id:" + id + " does not exist");
+            throw new CustomExceptionHandler("No employee was found with id: " + id);
         }
     }
 
@@ -97,7 +97,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             employeeList = query.getResultList();
             return employeeList;
         } catch (Exception e) {
-            throw new HibernateException("Hibernate exception");
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 
@@ -107,13 +107,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             session.beginTransaction();
             session.merge(employee);
             session.getTransaction().commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 logger.error(runtimeException.getMessage());
             }
             e.printStackTrace();
+            throw new CustomExceptionHandler(e.getMessage());
         }
     }
 }
