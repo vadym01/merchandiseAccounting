@@ -2,7 +2,6 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
@@ -18,7 +17,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -54,13 +52,13 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.save(product);
             session.getTransaction().commit();
             return product;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -70,9 +68,9 @@ public class ProductRepositoryImpl implements ProductRepository {
             Query query = session.createNamedQuery("findProductById").setParameter("id", id);
             Product product = (Product) query.getSingleResult();
             return product;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+//            throw new HibernateException("asfsd");
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -83,9 +81,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setParameter("productName", '%' + productName + '%');
             List<Product> productList = query.list();
             return productList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with name: "  + productName);
+            } catch(Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -104,7 +101,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+            throw new RuntimeException("No product was found with id: "  + id);
         }
     }
 
@@ -116,7 +113,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -136,7 +133,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+            throw new RuntimeException("No product was found with id: "  + id);
         }
     }
 
@@ -149,7 +146,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return product;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -170,7 +167,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -185,7 +182,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return product;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id:"  + INVNumber);
+            throw new RuntimeException("No product was found with id:"  + INVNumber);
         }
     }
 
@@ -202,7 +199,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productForProceedDTOList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler("No employee was found with id: "  + employeeId);
+            throw new RuntimeException("No employee was found with id: "  + employeeId);
         }
     }
 
@@ -218,7 +215,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productForProceedDTOList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -240,7 +237,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -251,7 +248,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -271,7 +268,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 

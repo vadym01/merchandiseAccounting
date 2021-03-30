@@ -2,7 +2,6 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
@@ -37,9 +36,9 @@ public class ProductServiceImpl implements ProductService {
         List<Employee> allAvailableEmployee = employeeRepository.getAllAvailableEmployees();
          allAvailableVehicle.stream()
                 .filter(vehicle -> vehicle.getLiftingCapacity() >= product.getWeight())
-                .findFirst().orElseThrow(() -> new CustomExceptionHandler("Not found vehicle with required" +
+                .findFirst().orElseThrow(() -> new RuntimeException("Not found vehicle with required" +
                         "lifting capacity"));
-        allAvailableEmployee.stream().findAny().orElseThrow(() -> new CustomExceptionHandler("No employee found" +
+        allAvailableEmployee.stream().findAny().orElseThrow(() -> new RuntimeException("No employee found" +
                 "for loading process"));
 
         Product productResponse = productRepository.saveProduct(product);

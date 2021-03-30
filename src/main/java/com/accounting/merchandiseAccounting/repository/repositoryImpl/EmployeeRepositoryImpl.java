@@ -1,6 +1,5 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +41,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return employeeList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -56,7 +55,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return employeeList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler("No employee was found with name: " + name);
+            throw new RuntimeException("No employee was found with name: " + name);
         }
     }
 
@@ -72,7 +71,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 logger.error(runtimeException.getMessage());
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -85,7 +84,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             employee = (Employee) query.getSingleResult();
             return employee;
         } catch (Exception e) {
-            throw new CustomExceptionHandler("No employee was found with id: " + id);
+            throw new RuntimeException("No employee was found with id: " + id);
         }
     }
 
@@ -97,7 +96,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             employeeList = query.getResultList();
             return employeeList;
         } catch (Exception e) {
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -114,7 +113,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 logger.error(runtimeException.getMessage());
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

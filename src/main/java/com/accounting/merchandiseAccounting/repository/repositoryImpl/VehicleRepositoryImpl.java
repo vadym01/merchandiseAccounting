@@ -1,6 +1,5 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +46,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -58,7 +57,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             Vehicle vehicle = (Vehicle)query.getSingleResult();
             return vehicle;
         }catch (Exception e){
-            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
+            throw new RuntimeException("No vehicle was found with id: " + id);
         }
     }
 
@@ -77,7 +76,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
+            throw new RuntimeException("No vehicle was found with id: " + id);
         }
     }
 
@@ -90,7 +89,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-        throw new CustomExceptionHandler("No vehicle was found with name: " + name);
+        throw new RuntimeException("No vehicle was found with name: " + name);
         }
     }
 
@@ -102,7 +101,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -113,7 +112,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             List<Vehicle> vehicleList = query.list();
             return vehicleList;
         }catch (Exception e) {
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -130,7 +129,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

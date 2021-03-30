@@ -1,6 +1,6 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.textException.CustomNotFoundException;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,14 +47,11 @@ public class IncidentRepositoryImpl implements IncidentRepository {
 
     @Override
     public Incident findIncidentById(long id) {
-        try {
-            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
-            Incident incident = (Incident) query.getSingleResult();
-            return incident;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No incident was found with id: " + id);
-        }
+//            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
+//            Incident incident = (Incident) query.getSingleResult();
+//            return incident;
+            throw new HibernateException("asfas");
+
     }
 
     @Override
@@ -66,7 +62,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             return incidents;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -85,7 +81,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler("No incident was found with id:"  + id);
+            throw new RuntimeException("No incident was found with id:"  + id);
         }
     }
 
@@ -103,7 +99,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -116,7 +112,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             return incidentList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -128,7 +124,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             return incidentList;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -145,7 +141,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
                 e.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
