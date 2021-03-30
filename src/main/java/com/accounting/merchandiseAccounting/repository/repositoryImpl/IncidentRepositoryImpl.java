@@ -1,6 +1,6 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.textException.CustomNotFoundException;
+
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
@@ -47,10 +47,10 @@ public class IncidentRepositoryImpl implements IncidentRepository {
 
     @Override
     public Incident findIncidentById(long id) {
-//            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
-//            Incident incident = (Incident) query.getSingleResult();
-//            return incident;
-            throw new HibernateException("asfas");
+            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
+            Incident incident = (Incident) query.getSingleResult();
+            return incident;
+//            throw new HibernateException("asfas");
 
     }
 

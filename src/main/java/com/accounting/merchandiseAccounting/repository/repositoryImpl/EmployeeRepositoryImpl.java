@@ -1,7 +1,9 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
+
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
+import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Service
@@ -35,28 +39,29 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public List<Employee> getAllEmployee() {
 
-        try {
+//        try {
             Query query = session.getNamedQuery("getAllEmployee");
             List<Employee> employeeList = query.getResultList();
             return employeeList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e.getMessage());
+//        }
     }
 
     @Override
     public List<Employee> findEmployeeByName(String name) {
         List<Employee> employeeList;
-        try {
+//        try {
             Query query = session.getNamedQuery("findEmployeeByName")
                     .setParameter("firstName", '%' + name + '%');
             employeeList = query.getResultList();
             return employeeList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("No employee was found with name: " + name);
-        }
+//            throw new HibernateException("asfa");
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("No employee was found with name: " + name);
+//        }
     }
 
     @Override
@@ -77,15 +82,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Employee getEmployeeById(long id) {
-        Employee employee;
-        try {
+            Employee employee;
             Query query = session.getNamedQuery("getEmployeeById")
                     .setParameter("id", id);
             employee = (Employee) query.getSingleResult();
             return employee;
-        } catch (Exception e) {
-            throw new RuntimeException("No employee was found with id: " + id);
-        }
+//            throw new RuntimeException();
     }
 
     @Override
