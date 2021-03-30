@@ -2,7 +2,8 @@ package com.accounting.merchandiseAccounting.controller;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
@@ -56,7 +57,7 @@ public class ProductController {
     public ResponseEntity deleteProductById(@PathVariable("id") long id) {
         int result = productService.deleteProductById(id);
         if(result == 0){
-            throw new CustomExceptionHandler("Product with selected id: " + id + " does not exist");
+            throw new IdNotFoundException("Product with selected id: " + id + " does not exist");
         }
         return new ResponseEntity(HttpStatus.OK);
     }

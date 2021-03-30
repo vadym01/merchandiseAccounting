@@ -1,10 +1,9 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 
@@ -15,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Service
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
-    private final static Logger logger = LogManager.getLogger(EmployeeRepositoryImpl.class);
+//    private final static Logger logger = LogManager.getLogger(EmployeeRepositoryImpl.class);
 
     @Autowired
     private EntityManager entityManager;
@@ -35,14 +35,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public List<Employee> getAllEmployee() {
-
         try {
             Query query = session.getNamedQuery("getAllEmployee");
             List<Employee> employeeList = query.getResultList();
             return employeeList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -55,8 +53,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             employeeList = query.getResultList();
             return employeeList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No employee was found with name: " + name);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -69,36 +66,38 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                logger.error(runtimeException.getMessage());
+                throw new BadRequestExceptionHandler(e.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
     @Override
     public Employee getEmployeeById(long id) {
-        Employee employee;
         try {
             Query query = session.getNamedQuery("getEmployeeById")
                     .setParameter("id", id);
-            employee = (Employee) query.getSingleResult();
+            Employee employee = (Employee) query.getSingleResult();
             return employee;
-        } catch (Exception e) {
-            throw new CustomExceptionHandler("No employee was found with id: " + id);
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No employee was found with id: " + id);
+        } catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
+
     }
 
     @Override
     public List<Employee> getAllAvailableEmployees() {
-        List<Employee> employeeList;
         try {
+            List<Employee> employeeList;
             Query query = session.getNamedQuery("getAllAvailableEmployees");
             employeeList = query.getResultList();
             return employeeList;
-        } catch (Exception e) {
-            throw new CustomExceptionHandler(e.getMessage());
+        }catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
+
     }
 
     @Override
@@ -111,10 +110,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                logger.error(runtimeException.getMessage());
+                throw new BadRequestExceptionHandler(e.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 }

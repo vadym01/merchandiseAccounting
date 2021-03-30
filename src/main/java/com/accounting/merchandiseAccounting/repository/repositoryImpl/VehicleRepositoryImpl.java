@@ -1,6 +1,7 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -44,10 +47,9 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -57,8 +59,10 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             Query query = session.getNamedQuery("findVehicleById").setParameter("id",id);
             Vehicle vehicle = (Vehicle)query.getSingleResult();
             return vehicle;
+        }catch (NoResultException e){
+            throw new IdNotFoundException("No vehicle was found with id: " + id);
         }catch (Exception e){
-            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -70,14 +74,15 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             int num = query.executeUpdate();
             transaction.commit();
             return num;
+        }catch (NoResultException e) {
+            throw new IdNotFoundException("No vehicle was found with id: " + id);
         }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No vehicle was found with id: " + id);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -90,7 +95,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-        throw new CustomExceptionHandler("No vehicle was found with name: " + name);
+        throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -102,7 +107,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             return vehicleList;
         }catch (Exception e){
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -113,7 +118,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             List<Vehicle> vehicleList = query.list();
             return vehicleList;
         }catch (Exception e) {
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -123,14 +128,16 @@ public class VehicleRepositoryImpl implements VehicleRepository {
             session.getTransaction().begin();
             session.merge(vehicle);
             session.getTransaction().commit();
+        }catch (NoResultException e) {
+            throw new IdNotFoundException("No vehicle was found with name: " + vehicle);
         }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             }catch (RuntimeException runtimeException){
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 }

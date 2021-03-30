@@ -2,7 +2,8 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
@@ -11,17 +12,16 @@ import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Date;
 import java.util.List;
 
@@ -58,9 +58,9 @@ public class ProductRepositoryImpl implements ProductRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(e.getMessage());
             }
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -70,9 +70,10 @@ public class ProductRepositoryImpl implements ProductRepository {
             Query query = session.createNamedQuery("findProductById").setParameter("id", id);
             Product product = (Product) query.getSingleResult();
             return product;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No product was found with INV: " + id);
+        }catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -84,8 +85,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             List<Product> productList = query.list();
             return productList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with name: "  + productName);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -98,13 +98,15 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .executeUpdate();
             session.getTransaction().commit();
             return result;
-        } catch (Exception e) {
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No product was found with INV: "  + id);
+        } catch (Exception e){
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -115,8 +117,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             List<Product> productList = query.list();
             return productList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -129,14 +130,15 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.getTransaction().begin();
             session.update(product);
             session.getTransaction().commit();
-        } catch (Exception e) {
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No product was found with INV: "  + id);
+        } catch (Exception e){
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id: "  + id);
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -148,8 +150,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .getResultList();
             return product;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -167,10 +168,9 @@ public class ProductRepositoryImpl implements ProductRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -183,9 +183,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList().get(0);
             return product;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No product was found with id:"  + INVNumber);
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No product was found with INV: " + INVNumber);
+        }catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -200,9 +201,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList();
             return productForProceedDTOList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No employee was found with id: "  + employeeId);
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No employee was found with INV: "  + employeeId);
+        } catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -216,9 +218,10 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
                     .getResultList();
             return productForProceedDTOList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+        } catch (NoResultException e) {
+            throw new IdNotFoundException(e.getMessage());
+        }   catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -233,14 +236,16 @@ public class ProductRepositoryImpl implements ProductRepository {
             session.beginTransaction();
             query.executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No product was found with INV: "  + INVNumber);
+        }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -250,8 +255,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             long result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
             return result;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -264,15 +268,17 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setParameter("INVNumber", INVNumber)
                     .executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
+        } catch (NoResultException e) {
+           throw new IdNotFoundException("No product was found with id: " + INVNumber);
+    }catch (Exception e){
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
                 runtimeException.printStackTrace();
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
-    }
+        }
 
 }

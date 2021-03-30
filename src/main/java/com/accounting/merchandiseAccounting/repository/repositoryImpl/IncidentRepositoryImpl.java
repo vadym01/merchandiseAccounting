@@ -1,6 +1,8 @@
 package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
@@ -15,10 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,9 +54,10 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
             Incident incident = (Incident) query.getSingleResult();
             return incident;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler("No incident was found with id: " + id);
+        } catch (NoResultException e) {
+            throw new IdNotFoundException("No incident was found with id: " + id);
+        }catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -65,8 +68,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             List<Incident> incidents = query.list();
             return incidents;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -78,14 +80,16 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             int num = query.executeUpdate();
             session.getTransaction().commit();
             return num;
-        } catch (Exception e) {
+        } catch (NoResultException e) {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
             e.printStackTrace();
-            throw new CustomExceptionHandler("No incident was found with id:"  + id);
+            throw new IdNotFoundException("No incident was found with id:"  + id);
+        } catch (Exception e){
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -100,10 +104,9 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                runtimeException.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -115,8 +118,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             List<Incident> incidentList = query.getResultList();
             return incidentList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -127,8 +129,7 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             List<Incident> incidentList = query.getResultList();
             return incidentList;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
@@ -142,10 +143,9 @@ public class IncidentRepositoryImpl implements IncidentRepository {
             try {
                 session.getTransaction().rollback();
             } catch (RuntimeException runtimeException) {
-                e.printStackTrace();
+                throw new BadRequestExceptionHandler(runtimeException.getMessage());
             }
-            e.printStackTrace();
-            throw new CustomExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 

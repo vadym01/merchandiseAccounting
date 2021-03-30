@@ -1,6 +1,6 @@
 package com.accounting.merchandiseAccounting.controller;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
@@ -61,7 +61,7 @@ public class VehicleController {
     public ResponseEntity<?> deleteVehicle(@PathVariable("id") long id) {
         int res = vehicleService.deleteVehicleById(id);
         if (res == 0) {
-            throw new CustomExceptionHandler("Vehicle with id: " + id + " is not present");
+            throw new BadRequestExceptionHandler("Vehicle with id: " + id + " is not present");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,6 +1,7 @@
 package com.accounting.merchandiseAccounting.controller;
 
-import com.accounting.merchandiseAccounting.exceptions.CustomExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.service.IncidentService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
@@ -48,7 +49,7 @@ public class IncidentController {
     public ResponseEntity deleteIncidentById(@PathVariable("id") long id) {
         int response = incidentService.deleteIncidentById(id);
         if (response == 0) {
-            throw new CustomExceptionHandler("Incident with id: " + id + " not found");
+            throw new IdNotFoundException("Incident with id: " + id + " not found");
         }
         return new ResponseEntity(HttpStatus.OK);
     }
