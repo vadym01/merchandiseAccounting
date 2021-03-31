@@ -36,7 +36,9 @@ import java.util.Objects;
         @NamedQuery(name = "getProductHistoryByEmployeeId", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +
                 " p.arrivalDate as arrivalDate," +
-                " p.shipmentDate as shipmentDate" +
+                " p.shipmentDate as shipmentDate," +
+                "p.scheduledShipmentDate as scheduledShipmentDate," +
+                "p.receiptDate as receiptDate" +
                 " FROM Product p WHERE p.loadedByEmployee = :loadedByEmployee"),
         @NamedQuery(name = "getProductInfoByDate", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
                 " p.description as description, p.volume as volume, p.weight as weight," +

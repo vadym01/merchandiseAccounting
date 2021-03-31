@@ -12,6 +12,7 @@ import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -193,9 +194,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
         try {
-            Employee employee = (Employee) session.getNamedQuery("getEmployeeById")
-                    .setParameter("id", employeeId);
-            List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
+            Employee employee = session.get(Employee.class, employeeId);
+            List<ProductForProceedDTO> productForProceedDTOList =  session.getNamedQuery("getProductHistoryByEmployeeId")
                     .setParameter("loadedByEmployee", employee)
                     .unwrap(Query.class)
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
