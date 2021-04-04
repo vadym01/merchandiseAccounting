@@ -1,17 +1,19 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
-import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
-import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
+import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
+import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,16 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private CrudProvider<Product> crudProvider;
+
+
+
+    @Autowired
+    public void setCrudProvider(CrudProvider<Product> crudProvider) {
+        this.crudProvider = crudProvider;
+        this.crudProvider.setClassInstance(Product.class);
+    }
+
     @Override
     public Product saveProduct(Product product) {
         List<Vehicle> allAvailableVehicle = vehicleRepository.getAllAvailableVehicle();
@@ -42,34 +54,45 @@ public class ProductServiceImpl implements ProductService {
         allAvailableEmployee.stream().findAny().orElseThrow(() -> new BadRequestExceptionHandler("No employee found" +
                 "for loading process"));
 
-        Product productResponse = productRepository.saveProduct(product);
+        Product productResponse = productRepository.saveOrUpdateProduct(product);
         return productResponse;
     }
 
     @Override
     public Product findProductById(long id) {
-        return productRepository.findProductById(id);
+        Product product = crudProvider.findOneById(id);
+        return product;
     }
 
-    @Override
-    public List<Product> findProductByProductName(String productName) {
-        return productRepository.findProductByProductName(productName);
-    }
+//    @Override
+//    public List<Product> findProductsByProductName(String productName) {
+//        return productRepository.findProductsByProductName(productName);
+//    }
 
     @Override
     public int deleteProductById(long id) {
-        return productRepository.deleteProductById(id);
+        crudProvider.deleteById(id);
+        return 1;
     }
 
+//    @Override
+//    public List<Product> findAllProductsWhichIsNotProcessed() {
+//        List<Product> productList = productRepository.findAllProductsWhichIsNotProcessed();
+//        return productList;
+//    }
+
     @Override
-    public List<Product> findAllProductsWhichIsNotProcessed() {
-        List<Product> productList = productRepository.findAllProductsWhichIsNotProcessed();
+    public List<Product> findAllProducts() {
+        List<Product> productList = crudProvider.findAll();
         return productList;
     }
 
     @Override
     public void updateProductProceedStatusById(long id) {
-        productRepository.updateProductProceedStatusById(id);
+            Product product = crudProvider.findOneById(id);
+            product.setProcessed(true);
+            product.setArrivalDate(new Date());
+            crudProvider.update(product);
     }
 
     @Override

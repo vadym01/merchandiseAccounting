@@ -10,7 +10,7 @@ public interface IncidentService {
 
     Incident findIncidentById(long id);
 
-    int deleteIncidentById(long id);
+    void deleteIncidentById(long id);
 
     List<Incident> findAllIncidents();
 

@@ -2,6 +2,7 @@ package com.accounting.merchandiseAccounting.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -16,7 +17,7 @@ import java.util.Objects;
         @NamedQuery(name = "getAllProducts", query = "FROM Product"),
         @NamedQuery(name = "deleteProductById", query = "DELETE Product WHERE INVNumber = :id"),
         @NamedQuery(name = "findProductById", query = "FROM Product WHERE INVNumber = :id"),
-        @NamedQuery(name = "findProductByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName"),
+        @NamedQuery(name = "findProductsByProductName", query = "FROM Product as p WHERE p.productName LIKE :productName"),
         @NamedQuery(name = "findAllProductsWhichIsNotProcessed", query = "FROM Product p WHERE p.isProcessed = false"),
         @NamedQuery(name = "updateProductProceedStatusById", query = "UPDATE Product p SET p.isProcessed = :isPrecessed WHERE p.INVNumber = :id"),
         @NamedQuery(name = "getProductInfoForProceeding", query = "SELECT p.INVNumber as INVNumber, p.productName as productName," +
@@ -54,7 +55,11 @@ import java.util.Objects;
                 "WHERE INVNumber = :INVNumber"),
         @NamedQuery(name = "updateShipmentValueForIsPresent", query = "UPDATE Product p SET p.isPresent = :isPresent " +
                 "WHERE p.INVNumber = :INVNumber"),
-        @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT COUNT(p.INVNumber) as total from Product p")
+        @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT COUNT(p.INVNumber) as total from Product p"),
+        @NamedQuery(name = "updateProduct", query = "Update Product SET productName = :productName, description = :description," +
+                "volume = :volume, weight = :weight, sender = :sender, receiver = :receiver, receiptDate = :receiptDate," +
+                "scheduledShipmentDate = :scheduledShipmentDate, isPresent = :isPresent, " +
+                "isProcessed = :isProcessed WHERE INVNumber = :INVNumber")
 })
 public class Product {
 
@@ -114,7 +119,6 @@ public class Product {
     @Column(name = "shipment_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date shipmentDate;
-
 
     public Product(long INVNumber, String productName, String description, double volume, double weight, String sender, String receiver, Date receiptDate, Date scheduledShipmentDate, Date arrivalDate, boolean isPresent, boolean isProcessed, Employee loadedByEmployee, Employee sentByEmployee, Date shipmentDate) {
         this.INVNumber = INVNumber;

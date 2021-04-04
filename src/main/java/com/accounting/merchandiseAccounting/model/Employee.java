@@ -13,8 +13,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "employee")
 @NamedQueries({
-        @NamedQuery(name = "getAllEmployee", query = "FROM Employee "),
-        @NamedQuery(name = "getEmployeeById", query = "FROM Employee WHERE id = :id"),
+//        @NamedQuery(name = "getAllEmployee", query = "FROM Employee "),
+//        @NamedQuery(name = "getEmployeeById", query = "FROM Employee WHERE id = :id"),
         @NamedQuery(name = "findEmployeeByName", query = "FROM Employee as e WHERE e.firstName LIKE :firstName"),
         @NamedQuery(name = "getAllAvailableEmployees",
                 query = "SELECT e FROM Employee e WHERE e.available = true")
@@ -51,7 +51,7 @@ public class Employee {
     @OneToMany(mappedBy = "sentByEmployee", cascade = CascadeType.PERSIST)
     private List<Product> productListSentByEmployee = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.MERGE)
     private List<Incident> incident;
 
 

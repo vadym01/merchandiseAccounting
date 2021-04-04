@@ -33,16 +33,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         session = sessionFactory.openSession();
     }
 
-    @Override
-    public List<Employee> getAllEmployee() {
-        try {
-            Query query = session.getNamedQuery("getAllEmployee");
-            List<Employee> employeeList = query.getResultList();
-            return employeeList;
-        } catch (Exception e) {
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public List<Employee> getAllEmployee() {
+//        try {
+//            Query query = session.getNamedQuery("getAllEmployee");
+//            List<Employee> employeeList = query.getResultList();
+//            return employeeList;
+//        } catch (Exception e) {
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
     @Override
     public List<Employee> findEmployeeByName(String name) {
@@ -57,35 +57,35 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
     }
 
-    @Override
-    @Transactional
-    public void saveEmployee(Employee employee) {
-        try {
-            session.save(employee);
-        } catch (Exception e) {
-            try {
-                session.getTransaction().rollback();
-            } catch (RuntimeException runtimeException) {
-                throw new BadRequestExceptionHandler(e.getMessage());
-            }
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    @Transactional
+//    public void saveEmployee(Employee employee) {
+//        try {
+//            session.save(employee);
+//        } catch (Exception e) {
+//            try {
+//                session.getTransaction().rollback();
+//            } catch (RuntimeException runtimeException) {
+//                throw new BadRequestExceptionHandler(e.getMessage());
+//            }
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
-    @Override
-    public Employee getEmployeeById(long id) {
-        try {
-            Query query = session.getNamedQuery("getEmployeeById")
-                    .setParameter("id", id);
-            Employee employee = (Employee) query.getSingleResult();
-            return employee;
-        } catch (NoResultException e) {
-            throw new IdNotFoundException("No employee was found with id: " + id);
-        } catch (Exception e){
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-
-    }
+//    @Override
+//    public Employee getEmployeeById(long id) {
+//        try {
+//            Query query = session.getNamedQuery("getEmployeeById")
+//                    .setParameter("id", id);
+//            Employee employee = (Employee) query.getSingleResult();
+//            return employee;
+//        } catch (NoResultException e) {
+//            throw new IdNotFoundException("No employee was found with id: " + id);
+//        } catch (Exception e){
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//
+//    }
 
     @Override
     public List<Employee> getAllAvailableEmployees() {
@@ -97,24 +97,23 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }catch (Exception e){
             throw new BadRequestExceptionHandler(e.getMessage());
         }
-
     }
 
-    @Override
-    public void updateEmployee(Employee employee) {
-        try {
-            session.beginTransaction();
-            session.merge(employee);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                session.getTransaction().rollback();
-            } catch (RuntimeException runtimeException) {
-                throw new BadRequestExceptionHandler(e.getMessage());
-            }
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public void updateEmployee(Employee employee) {
+//        try {
+//            session.beginTransaction();
+//            session.merge(employee);
+//            session.getTransaction().commit();
+//        } catch (Exception e) {
+//            try {
+//                session.getTransaction().rollback();
+//            } catch (RuntimeException runtimeException) {
+//                throw new BadRequestExceptionHandler(e.getMessage());
+//            }
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 }
 
 

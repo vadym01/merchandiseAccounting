@@ -1,8 +1,8 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
-import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.IncidentRepository;
+import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
 import com.accounting.merchandiseAccounting.service.IncidentService;
 import com.accounting.merchandiseAccounting.service.VehicleService;
@@ -23,27 +23,36 @@ public class IncidentServiceImpl implements IncidentService {
     @Autowired
     private VehicleService vehicleService;
 
+    private CrudProvider<Incident> crudProvider;
+
+    @Autowired
+    public void setCrudProvider(CrudProvider<Incident> crudProvider) {
+        this.crudProvider = crudProvider;
+        this.crudProvider.setClassInstance(Incident.class);
+    }
+
+
     @Override
     public Incident findIncidentById(long id) {
-        Incident incident = incidentRepository.findIncidentById(id);
+        Incident incident = crudProvider.findOneById(id);
         return incident;
     }
 
     @Override
-    public int deleteIncidentById(long id) {
-        int result = incidentRepository.deleteIncidentById(id);
-        return result;
+    public void deleteIncidentById(long id) {
+        crudProvider.deleteById(id);
     }
 
     @Override
     public List<Incident> findAllIncidents() {
-        List<Incident> incidentList = incidentRepository.findAllIncidents();
+        List<Incident> incidentList = crudProvider.findAll();
         return incidentList;
     }
 
     @Override
     public Incident saveNewIncident(Incident incident) {
-        Incident vehicleIncident = incidentRepository.saveNewIncident(incident);
+        System.out.println(incident.getId());
+        Incident vehicleIncident = crudProvider.save(incident);
         if(incident.getEmployee() != null){
             employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
         }else {
@@ -73,6 +82,6 @@ public class IncidentServiceImpl implements IncidentService {
         }else {
             vehicleService.changeAvailableStatusForVehicle(incident.getVehicle().getId());
         }
-        incidentRepository.updateIncident(incident);
+        crudProvider.update(incident);
     }
 }

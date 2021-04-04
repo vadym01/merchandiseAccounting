@@ -2,7 +2,9 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 
 import com.accounting.merchandiseAccounting.model.Employee;
 //import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
+import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
+import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -22,9 +24,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private CrudProvider<Employee> crudProvider;
+
+    @Autowired
+    public void setCrudProvider(CrudProvider<Employee> crudProvider) {
+        this.crudProvider = crudProvider;
+        this.crudProvider.setClassInstance(Employee.class);
+    }
+
     @Override
     public List<Employee> getAllEmployees() {
-        List<Employee> employeeList = employeeRepository.getAllEmployee();
+        List<Employee> employeeList = crudProvider.findAll();
         return employeeList;
     }
 
@@ -36,12 +46,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void saveEmployee(Employee employee) {
-        employeeRepository.saveEmployee(employee);
+        crudProvider.save(employee);
     }
 
     @Override
     public Employee findOneById(long id) {
-        Employee employeeById = employeeRepository.getEmployeeById(id);
+        Employee employeeById = crudProvider.findOneById(id);
         return employeeById;
     }
 
@@ -53,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployee(Employee employee) {
-        employeeRepository.updateEmployee(employee);
+        crudProvider.update(employee);
     }
 
     @Override

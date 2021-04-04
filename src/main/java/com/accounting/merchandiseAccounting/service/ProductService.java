@@ -1,9 +1,9 @@
 package com.accounting.merchandiseAccounting.service;
 
-import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
-import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
+import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
 
 import java.util.Date;
 import java.util.List;
@@ -13,11 +13,13 @@ public interface ProductService {
 
     Product findProductById(long id);
 
-    List<Product> findProductByProductName(String productName);
+//    List<Product> findProductsByProductName(String productName);
 
     int deleteProductById(long id);
 
-    List<Product> findAllProductsWhichIsNotProcessed();
+    List<Product> findAllProducts();
+
+//    List<Product> findAllProductsWhichIsNotProcessed();
 
     void updateProductProceedStatusById(long id);
 

@@ -48,67 +48,67 @@ public class IncidentRepositoryImpl implements IncidentRepository {
         session = sessionFactory.openSession();
     }
 
-    @Override
-    public Incident findIncidentById(long id) {
-        try {
-            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
-            Incident incident = (Incident) query.getSingleResult();
-            return incident;
-        } catch (NoResultException e) {
-            throw new IdNotFoundException("No incident was found with id: " + id);
-        }catch (Exception e){
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public Incident findIncidentById(long id) {
+//        try {
+//            Query query = session.createNamedQuery("findIncidentById").setParameter("id", id);
+//            Incident incident = (Incident) query.getSingleResult();
+//            return incident;
+//        } catch (NoResultException e) {
+//            throw new IdNotFoundException("No incident was found with id: " + id);
+//        }catch (Exception e){
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
-    @Override
-    public List<Incident> findAllIncidents() {
-        try {
-            Query query = session.getNamedQuery("findAllIncidents");
-            List<Incident> incidents = query.list();
-            return incidents;
-        } catch (Exception e) {
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public List<Incident> findAllIncidents() {
+//        try {
+//            Query query = session.getNamedQuery("findAllIncidents");
+//            List<Incident> incidents = query.list();
+//            return incidents;
+//        } catch (Exception e) {
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
-    @Override
-    public int deleteIncidentById(long id) {
-        try {
-            Query query = session.getNamedQuery("deleteIncidentById").setParameter("id", id);
-            session.beginTransaction();
-            int num = query.executeUpdate();
-            session.getTransaction().commit();
-            return num;
-        } catch (NoResultException e) {
-            try {
-                session.getTransaction().rollback();
-            } catch (RuntimeException runtimeException) {
-                throw new BadRequestExceptionHandler(runtimeException.getMessage());
-            }
-            e.printStackTrace();
-            throw new IdNotFoundException("No incident was found with id:"  + id);
-        } catch (Exception e){
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public int deleteIncidentById(long id) {
+//        try {
+//            Query query = session.getNamedQuery("deleteIncidentById").setParameter("id", id);
+//            session.beginTransaction();
+//            int num = query.executeUpdate();
+//            session.getTransaction().commit();
+//            return num;
+//        } catch (NoResultException e) {
+//            try {
+//                session.getTransaction().rollback();
+//            } catch (RuntimeException runtimeException) {
+//                throw new BadRequestExceptionHandler(runtimeException.getMessage());
+//            }
+//            e.printStackTrace();
+//            throw new IdNotFoundException("No incident was found with id:"  + id);
+//        } catch (Exception e){
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
-    @Override
-    public Incident saveNewIncident(Incident incident) {
-        try {
-            session.getTransaction().begin();
-            Incident incident1 = (Incident) session.merge(incident);
-            session.getTransaction().commit();
-            return incident1;
-        } catch (Exception e) {
-            try {
-                session.getTransaction().rollback();
-            } catch (RuntimeException runtimeException) {
-                throw new BadRequestExceptionHandler(runtimeException.getMessage());
-            }
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public Incident saveNewIncident(Incident incident) {
+//        try {
+//            session.getTransaction().begin();
+//            Incident incident1 = (Incident) session.merge(incident);
+//            session.getTransaction().commit();
+//            return incident1;
+//        } catch (Exception e) {
+//            try {
+//                session.getTransaction().rollback();
+//            } catch (RuntimeException runtimeException) {
+//                throw new BadRequestExceptionHandler(runtimeException.getMessage());
+//            }
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
 
     @Override
@@ -133,20 +133,20 @@ public class IncidentRepositoryImpl implements IncidentRepository {
         }
     }
 
-    @Override
-    public void updateIncident(Incident incident) {
-        try {
-            session.beginTransaction();
-            session.merge(incident);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            try {
-                session.getTransaction().rollback();
-            } catch (RuntimeException runtimeException) {
-                throw new BadRequestExceptionHandler(runtimeException.getMessage());
-            }
-            throw new BadRequestExceptionHandler(e.getMessage());
-        }
-    }
+//    @Override
+//    public void updateIncident(Incident incident) {
+//        try {
+//            session.beginTransaction();
+//            session.merge(incident);
+//            session.getTransaction().commit();
+//        } catch (Exception e) {
+//            try {
+//                session.getTransaction().rollback();
+//            } catch (RuntimeException runtimeException) {
+//                throw new BadRequestExceptionHandler(runtimeException.getMessage());
+//            }
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
 
 }

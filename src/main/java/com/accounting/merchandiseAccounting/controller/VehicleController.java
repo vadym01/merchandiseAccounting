@@ -59,10 +59,10 @@ public class VehicleController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteVehicle(@PathVariable("id") long id) {
-        int res = vehicleService.deleteVehicleById(id);
-        if (res == 0) {
-            throw new BadRequestExceptionHandler("Vehicle with id: " + id + " is not present");
-        }
+        vehicleService.deleteVehicleById(id);
+//        if (res == 0) {
+//            throw new BadRequestExceptionHandler("Vehicle with id: " + id + " is not present");
+//        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

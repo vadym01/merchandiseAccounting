@@ -5,15 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "vehicle")
 @NamedQueries({
-        @NamedQuery(name = "findVehicleById", query = "FROM Vehicle WHERE id = :id"),
-        @NamedQuery(name = "deleteVehicleById", query = "DELETE Vehicle WHERE id = :id"),
-        @NamedQuery(name = "getAllVehicles", query = "FROM Vehicle"),
+//        @NamedQuery(name = "findVehicleById", query = "FROM Vehicle WHERE id = :id"),
+//        @NamedQuery(name = "deleteVehicleById", query = "DELETE Vehicle WHERE id = :id"),
+//        @NamedQuery(name = "getAllVehicles", query = "FROM Vehicle"),
         @NamedQuery(name = "getAllAvailableVehicle", query = "SELECT v FROM Vehicle v WHERE v.available = true"),
         @NamedQuery(name = "findVehicleByVehicleName", query = "FROM Vehicle as v WHERE v.vehicleName LIKE :vehicleName"),
 })
@@ -37,7 +38,7 @@ public class Vehicle {
     @DecimalMin(value = "0.1", message = "lifting capacity is required")
     private double liftingCapacity;
     @JsonIgnore
-    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.MERGE)
     private List<Incident> incident;
 
     public Vehicle(long id, String vehicleName, boolean available, Date dateOfReceipt, double liftingCapacity, List<Incident> incident) {

@@ -10,9 +10,9 @@ import java.util.Date;
 @Entity
 @Table(name = "incident")
 @NamedQueries({
-        @NamedQuery(name = "findAllIncidents", query = "FROM Incident"),
-        @NamedQuery(name = "findIncidentById", query = "FROM Incident WHERE id = :id"),
-        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incident i WHERE id = :id"),
+//        @NamedQuery(name = "findAllIncidents", query = "FROM Incident"),
+//        @NamedQuery(name = "findIncidentById", query = "FROM Incident WHERE id = :id"),
+//        @NamedQuery(name = "deleteIncidentById", query = "DELETE Incident i WHERE id = :id"),
         @NamedQuery(name = "findIncidentsForVehicle", query = "FROM Incident WHERE vehicle IS NOT NULL"),
         @NamedQuery(name = "findIncidentsForEmployee", query = "FROM Incident WHERE employee IS NOT NULL")
 

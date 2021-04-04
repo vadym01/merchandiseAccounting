@@ -89,45 +89,45 @@ class EmployeeRepositoryImplTest {
         session.getTransaction().commit();
     }
 
-    @Test
-    @Transactional
-    void findAllEmployees() {
-        Query query = session.getNamedQuery("getAllEmployee");
-        assertTrue(query.getResultList().isEmpty());
-        employeeList.forEach(
-                e -> session.save(e)
-        );
-        assertFalse(query.getResultList().isEmpty());
-        assertTrue(employeeRepository.getAllEmployee().size() == employeeList.size());
-    }
+//    @Test
+//    @Transactional
+//    void findAllEmployees() {
+//        Query query = session.getNamedQuery("getAllEmployee");
+//        assertTrue(query.getResultList().isEmpty());
+//        employeeList.forEach(
+//                e -> session.save(e)
+//        );
+//        assertFalse(query.getResultList().isEmpty());
+//        assertTrue(employeeRepository.getAllEmployee().size() == employeeList.size());
+//    }
 
-    @Test
-    void saveEmployee() {
-        List<Employee> employeeList = employeeRepository.getAllEmployee();
-        session.beginTransaction();
-        employeeRepository.saveEmployee(employee);
-        session.getTransaction().commit();
-        List<Employee> employeeAfterSaving = employeeRepository.getAllEmployee();
-        assertTrue(employeeAfterSaving.contains(employee));
-    }
+//    @Test
+//    void saveEmployee() {
+//        List<Employee> employeeList = employeeRepository.getAllEmployee();
+//        session.beginTransaction();
+//        employeeRepository.saveEmployee(employee);
+//        session.getTransaction().commit();
+//        List<Employee> employeeAfterSaving = employeeRepository.getAllEmployee();
+//        assertTrue(employeeAfterSaving.contains(employee));
+//    }
 
-    @Test
-    void findEmployeeByName() {
-        List<Employee> employeeList;
-        employeeRepository.saveEmployee(employee);
-        employeeList = employeeRepository.findEmployeeByName(employee.getFirstName());
-        assertTrue(employeeList.contains(employee));
-        employeeList = employeeRepository.findEmployeeByName(String.valueOf(employee.getFirstName().charAt(0)));
-        assertTrue(employeeList.contains(employee));
-    }
+//    @Test
+//    void findEmployeeByName() {
+//        List<Employee> employeeList;
+//        employeeRepository.saveEmployee(employee);
+//        employeeList = employeeRepository.findEmployeeByName(employee.getFirstName());
+//        assertTrue(employeeList.contains(employee));
+//        employeeList = employeeRepository.findEmployeeByName(String.valueOf(employee.getFirstName().charAt(0)));
+//        assertTrue(employeeList.contains(employee));
+//    }
 
-    @Test
-    void getEmployeeById() {
-        long employeeId = (long) session.save(employee);
-        Employee employeeById = employeeRepository.getEmployeeById(employeeId);
-        assertTrue(employeeById.getFirstName().equals(employee.getFirstName()));
-        assertTrue(employeeById.getLastName().equals(employee.getLastName()));
-    }
+//    @Test
+//    void getEmployeeById() {
+//        long employeeId = (long) session.save(employee);
+//        Employee employeeById = employeeRepository.getEmployeeById(employeeId);
+//        assertTrue(employeeById.getFirstName().equals(employee.getFirstName()));
+//        assertTrue(employeeById.getLastName().equals(employee.getLastName()));
+//    }
 
     @Test
     void getAllAvailableEmployees() {
@@ -147,16 +147,16 @@ class EmployeeRepositoryImplTest {
         assertThat(employeeRepository.getAllAvailableEmployees().size(), is(0));
     }
 
-    @Test
-    void updateEmployee() {
-        String originalEmployeeFirstName = employee.getFirstName();
-        long employeeId = (long) session.save(employee);
-        Query query = session.getNamedQuery("getEmployeeById")
-                .setParameter("id", employeeId);
-        Employee employeeForUpdate = (Employee) query.getSingleResult();
-        employeeForUpdate.setFirstName("notJhan");
-        employeeRepository.updateEmployee(employeeForUpdate);
-        Employee employeeAfterUpdates = (Employee) query.getSingleResult();
-        assertThat(originalEmployeeFirstName, not(employeeAfterUpdates.getFirstName()));
-    }
+//    @Test
+//    void updateEmployee() {
+//        String originalEmployeeFirstName = employee.getFirstName();
+//        long employeeId = (long) session.save(employee);
+//        Query query = session.getNamedQuery("getEmployeeById")
+//                .setParameter("id", employeeId);
+//        Employee employeeForUpdate = (Employee) query.getSingleResult();
+//        employeeForUpdate.setFirstName("notJhan");
+//        employeeRepository.updateEmployee(employeeForUpdate);
+//        Employee employeeAfterUpdates = (Employee) query.getSingleResult();
+//        assertThat(originalEmployeeFirstName, not(employeeAfterUpdates.getFirstName()));
+//    }
 }

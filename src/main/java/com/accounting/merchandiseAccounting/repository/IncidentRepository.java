@@ -9,18 +9,18 @@ import java.util.List;
 public interface IncidentRepository {
 //    void registerNewIncident(Incidents incidents, long employeeId, long vehicleId);
 
-    Incident findIncidentById(long id);
+//    Incident findIncidentById(long id);
 
-    int deleteIncidentById(long id);
+//    int deleteIncidentById(long id);
 
-    List<Incident> findAllIncidents();
+//    List<Incident> findAllIncidents();
 
-    Incident saveNewIncident(Incident incident);
+//    Incident saveNewIncident(Incident incident);
 
     List<Incident> findIncidentsForVehicle();
 
     List<Incident> findIncidentsForEmployee();
 
-    void updateIncident(Incident incident);
+//    void updateIncident(Incident incident);
 
 }

@@ -1,11 +1,10 @@
 package com.accounting.merchandiseAccounting.controller;
 
-import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
-import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
-import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
+import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.DTO.ProductStorageReport;
+import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,15 @@ public class ProductController {
     @Autowired
     private MapValidationService mapValidationService;
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(@RequestParam Optional<String> productName) {
-        List<Product> productList = productService.findProductByProductName(productName.orElse("_"));
+//    @GetMapping
+//    public ResponseEntity<List<Product>> findProductsByProductName(@RequestParam Optional<String> productName) {
+//        List<Product> productList = productService.findProductsByProductName(productName.orElse("_"));
+//        return new ResponseEntity<>(productList, HttpStatus.OK);
+//    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> productList = productService.findAllProducts();
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 

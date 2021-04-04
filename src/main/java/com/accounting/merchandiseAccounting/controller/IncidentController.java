@@ -47,10 +47,10 @@ public class IncidentController {
 
     @DeleteMapping("{id}")
     public ResponseEntity deleteIncidentById(@PathVariable("id") long id) {
-        int response = incidentService.deleteIncidentById(id);
-        if (response == 0) {
-            throw new IdNotFoundException("Incident with id: " + id + " not found");
-        }
+         incidentService.deleteIncidentById(id);
+//        if (response == 0) {
+//            throw new IdNotFoundException("Incident with id: " + id + " not found");
+//        }
         return new ResponseEntity(HttpStatus.OK);
     }
 

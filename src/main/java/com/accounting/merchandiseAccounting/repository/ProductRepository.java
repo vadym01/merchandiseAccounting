@@ -1,26 +1,28 @@
 package com.accounting.merchandiseAccounting.repository;
 
-import com.accounting.merchandiseAccounting.DTO.ProductForProceedDTO;
-import com.accounting.merchandiseAccounting.DTO.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
+import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
 import com.accounting.merchandiseAccounting.model.Product;
+import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface ProductRepository {
-    Product saveProduct(Product product);
+public interface ProductRepository{
+    Product saveOrUpdateProduct(Product product);
 
-    Product findProductById(long id);
+//    Product findProductById(long id);
 
-    List<Product> findProductByProductName(String productName);
+    List<Product> findProductsByProductName(String productName);
 
-    int deleteProductById(long id);
+//    int deleteProductById(long id);
 
     List<Product> findAllProductsWhichIsNotProcessed();
 
-    void updateProductProceedStatusById(long id);
+//    void updateProductProceedStatusById(long id);
 
     List<ProductForProceedDTO> getProductInfoForProceeding();
 

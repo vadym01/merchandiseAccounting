@@ -7,7 +7,7 @@ import java.util.List;
 public interface VehicleService {
     Vehicle saveVehicle(Vehicle vehicle);
     Vehicle findVehicleById(long id);
-    int deleteVehicleById(long id);
+    void deleteVehicleById(long id);
     List<Vehicle> getAllVehicle();
     List<Vehicle> getAllAvailableVehicle();
     List<Vehicle> findVehicleByVehicleName(String vehicleName);

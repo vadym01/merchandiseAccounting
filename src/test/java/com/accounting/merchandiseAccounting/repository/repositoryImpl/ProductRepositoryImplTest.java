@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +86,7 @@ class ProductRepositoryImplTest {
         employee = new Employee("Jhan", "Stewarts", "Anatolievich",true, getDate("1993-12-12"));
         product = new Product("Computer", "Laptop", 23.4, 12.3, "Jordan Albertson", "Georg Allford", new Date(), new Date(), new Date(),
                 true, true, new Date());
-        vehicle = new Vehicle("VehicleForProducts", true, new Date(), 100);
+//        vehicle = new Vehicle("VehicleForProducts", true, new, 100);
         productList = new ArrayList<Product>(Arrays.asList(
                 new Product("CPU", "accessories", 1.1, 0.3, "Oleg Hit", "Georg Allford", new Date(), new Date(), new Date(),
                         true, false, new Date()),
@@ -142,7 +143,7 @@ class ProductRepositoryImplTest {
         session.getTransaction().commit();
         List<Product> productListAfterSaving = session.getNamedQuery("getAllProducts").getResultList();
         assertTrue(productListAfterSaving.size() == 1);
-        Product product = productRepository.findProductById(testProductId);
+//        Product product = productRepository.findProductById(testProductId);
         assertThat(productName, is(product.getProductName()));
     }
 
@@ -153,7 +154,7 @@ class ProductRepositoryImplTest {
         session.beginTransaction();
         session.save(product);
         session.getTransaction().commit();
-        List<Product> productByProductName = productRepository.findProductByProductName(product.getProductName());
+        List<Product> productByProductName = productRepository.findProductsByProductName(product.getProductName());
         List<Product> productListAfterSaving = session.getNamedQuery("getAllProducts").getResultList();
         assertTrue(productListAfterSaving.size() != 0);
         assertEquals(productListAfterSaving.get(0), product);
@@ -164,7 +165,7 @@ class ProductRepositoryImplTest {
         long productId = (long) session.save(product);
         Product productById = session.find(Product.class, productId);
         assertThat(productById, is(product));
-        productRepository.deleteProductById(productId);
+//        productRepository.deleteProductById(productId);
         System.out.println(productId);
         List<Product> productList = session.getNamedQuery("getAllProducts").getResultList();
         assertThat(productList.size(), is(0));

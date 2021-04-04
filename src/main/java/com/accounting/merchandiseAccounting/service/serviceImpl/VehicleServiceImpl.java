@@ -1,13 +1,11 @@
 package com.accounting.merchandiseAccounting.service.serviceImpl;
 
-import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.VehicleRepository;
+import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.VehicleService;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,25 +15,34 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    private CrudProvider<Vehicle> crudProvider;
+
+    @Autowired
+    public void setCrudProvider(CrudProvider<Vehicle> crudProvider) {
+        this.crudProvider = crudProvider;
+        this.crudProvider.setClassInstance(Vehicle.class);
+    }
+
     @Override
     public Vehicle saveVehicle(Vehicle vehicle) {
-        Vehicle newVehicle = vehicleRepository.saveVehicle(vehicle);
+        Vehicle newVehicle = crudProvider.save(vehicle);
         return newVehicle;
     }
 
     @Override
     public Vehicle findVehicleById(long id) {
-        return vehicleRepository.findVehicleById(id);
+        return crudProvider.findOneById(id);
     }
 
     @Override
-    public int deleteVehicleById(long id) {
-        return vehicleRepository.deleteVehicleById(id);
+    public void deleteVehicleById(long id) {
+        crudProvider.deleteById(id);
     }
 
     @Override
     public List<Vehicle> getAllVehicle() {
-        return vehicleRepository.getAllVehicle();
+        List<Vehicle> vehicleList = crudProvider.findAll();
+        return vehicleList;
     }
 
     @Override
@@ -52,7 +59,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void updateVehicle(Vehicle vehicle) {
-        vehicleRepository.updateVehicle(vehicle);
+        crudProvider.update(vehicle);
     }
 
 
