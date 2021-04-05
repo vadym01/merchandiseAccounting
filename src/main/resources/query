@@ -45,3 +45,77 @@ alter table product add foreign key(sent_by_employee_id) references employee(id)
 
  alter table incident add foreign key(employee_id) references employee(id);
  alter table incident add foreign key(vehicle_id) references vehicle(id);
+
+ ______________________________________________________________________________________________________________
+
+ CREATE TABLE `employee` (
+   `id` int NOT NULL AUTO_INCREMENT,
+   `first_name` varchar(100) DEFAULT NULL,
+   `last_name` varchar(100) DEFAULT NULL,
+   `patronymic` varchar(100) DEFAULT NULL,
+   `dob` date DEFAULT NULL,
+   `available` tinyint(1) DEFAULT '1',
+   PRIMARY KEY (`id`)
+ )
+
+ CREATE TABLE `incident` (
+   `id` int NOT NULL AUTO_INCREMENT,
+   `incident_description` varchar(200) DEFAULT NULL,
+   `incident_date` date DEFAULT NULL,
+   `is_resolved` tinyint(1) DEFAULT NULL,
+   `employee_id` int DEFAULT NULL,
+   `vehicle_id` int DEFAULT NULL,
+   PRIMARY KEY (`id`),
+   KEY `employee_id` (`employee_id`),
+   KEY `vehicle_id` (`vehicle_id`),
+   FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
+   FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`)
+ )
+
+ CREATE TABLE `incidentTest` (
+   `id` int NOT NULL AUTO_INCREMENT,
+   `incident_description` varchar(200) DEFAULT NULL,
+   `incident_date` date DEFAULT NULL,
+   `is_resolved` tinyint(1) DEFAULT NULL,
+   `employee_id` int DEFAULT NULL,
+   `vehicle_id` int DEFAULT NULL,
+   PRIMARY KEY (`id`),
+   KEY `employee_id` (`employee_id`),
+   KEY `vehicle_id` (`vehicle_id`),
+   FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
+   FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`)
+ )
+
+CREATE TABLE `deleteProduct` (
+  `inv_number` int NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `volume` double DEFAULT NULL,
+  `weight` double DEFAULT NULL,
+  `sender` varchar(200) DEFAULT NULL,
+  `receiver` varchar(200) DEFAULT NULL,
+  `receipt_date` date DEFAULT NULL,
+  `scheduled_shipment_date` date DEFAULT NULL,
+  `arrival_date` date DEFAULT NULL,
+  `is_present` tinyint(1) DEFAULT NULL,
+  `is_processed` tinyint(1) DEFAULT NULL,
+  `loaded_by_employee_id` int DEFAULT NULL,
+  `sent_by_employee_id` int DEFAULT NULL,
+  `shipment_date` date DEFAULT NULL,
+  PRIMARY KEY (`inv_number`),
+  KEY `loaded_by_employee_id` (`loaded_by_employee_id`),
+  KEY `sent_by_employee_id` (`sent_by_employee_id`),
+ FOREIGN KEY (`loaded_by_employee_id`) REFERENCES `employee` (`id`),
+ FOREIGN KEY (`loaded_by_employee_id`) REFERENCES `employee` (`id`),
+FOREIGN KEY (`sent_by_employee_id`) REFERENCES `employee` (`id`)
+)
+
+CREATE TABLE `vehicle` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `vehicle_name` varchar(200) DEFAULT NULL,
+  `available` tinyint(1) DEFAULT '1',
+  `date_of_receipt` date DEFAULT NULL,
+  `lifting_capacity` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+
