@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,7 +53,8 @@ public class CrudProviderImpl<T> implements CrudProvider<T> {
 
 
     public List<T> findAll() {
-        List<T> findAll = entityManager.createQuery("FROM " + classInstance.getName()).getResultList();
+        List<T> findAll = new ArrayList<>();
+                findAll.addAll(entityManager.createQuery("FROM " + classInstance.getName()).getResultList());
         return findAll;
     }
 

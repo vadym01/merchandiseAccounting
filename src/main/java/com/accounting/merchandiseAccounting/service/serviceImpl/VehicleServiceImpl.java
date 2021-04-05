@@ -7,6 +7,7 @@ import com.accounting.merchandiseAccounting.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,20 +41,23 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> getAllVehicle() {
-        List<Vehicle> vehicleList = crudProvider.findAll();
+    public List<Vehicle> getAllVehicles() {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        vehicleList.addAll(crudProvider.findAll());
         return vehicleList;
     }
 
     @Override
-    public List<Vehicle> getAllAvailableVehicle() {
-        List<Vehicle> vehicleList = vehicleRepository.getAllAvailableVehicle();
+    public List<Vehicle> getAllAvailableVehicles() {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        vehicleList.addAll(vehicleRepository.getAllAvailableVehicles());
         return vehicleList;
     }
 
     @Override
     public List<Vehicle> findVehicleByVehicleName(String vehicleName) {
-        List<Vehicle> vehicleList = vehicleRepository.findVehicleByVehicleName(vehicleName);
+        List<Vehicle> vehicleList = new ArrayList<>();
+        vehicleList.addAll(vehicleRepository.findVehiclesByVehicleName(vehicleName));
         return vehicleList;
     }
 

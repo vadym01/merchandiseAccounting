@@ -9,6 +9,7 @@ import com.accounting.merchandiseAccounting.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,7 +46,8 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public List<Incident> findAllIncidents() {
-        List<Incident> incidentList = crudProvider.findAll();
+        List<Incident> incidentList = new ArrayList<>();
+        incidentList.addAll(crudProvider.findAll());
         return incidentList;
     }
 
@@ -53,9 +55,9 @@ public class IncidentServiceImpl implements IncidentService {
     public Incident saveNewIncident(Incident incident) {
         System.out.println(incident.getId());
         Incident vehicleIncident = crudProvider.save(incident);
-        if(incident.getEmployee() != null){
+        if (incident.getEmployee() != null) {
             employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
-        }else {
+        } else {
             vehicleService.changeAvailableStatusForVehicle(incident.getVehicle().getId());
         }
         return vehicleIncident;
@@ -63,13 +65,15 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public List<Incident> findIncidentsForVehicle() {
-        List<Incident> incidentList = incidentRepository.findIncidentsForVehicle();
+        List<Incident> incidentList = new ArrayList<>();
+        incidentList.addAll(incidentRepository.findIncidentsForVehicle());
         return incidentList;
     }
 
     @Override
     public List<Incident> findIncidentsForEmployee() {
-        List<Incident> incidentList = incidentRepository.findIncidentsForEmployee();
+        List<Incident> incidentList = new ArrayList<>();
+        incidentList.addAll(incidentRepository.findIncidentsForEmployee());
         return incidentList;
     }
 
@@ -77,9 +81,9 @@ public class IncidentServiceImpl implements IncidentService {
     public void changeIncidentStatus(long incidentId) {
         Incident incident = findIncidentById(incidentId);
         incident.setResolved(!incident.isResolved());
-        if(incident.getEmployee() != null){
-        employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
-        }else {
+        if (incident.getEmployee() != null) {
+            employeeService.changeAvailableStatusForEmployee(incident.getEmployee().getId());
+        } else {
             vehicleService.changeAvailableStatusForVehicle(incident.getVehicle().getId());
         }
         crudProvider.update(incident);

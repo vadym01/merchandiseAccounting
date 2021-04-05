@@ -26,7 +26,7 @@ public class EmployeeController {
 
     @GetMapping("find/")
     public ResponseEntity<List<Employee>> findEmployeeByFirstName(@RequestParam Optional<String> name) {
-        List<Employee> employeeList = employeeService.findEmployeeByName(name.orElse("_"));
+        List<Employee> employeeList = employeeService.findEmployeesByName(name.orElse("_"));
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 

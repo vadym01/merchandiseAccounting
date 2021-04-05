@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,10 +105,11 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> findProductsByProductName(String productName) {
+        List<Product> productList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findProductsByProductName")
                     .setParameter("productName", '%' + productName + '%');
-            List<Product> productList = query.list();
+            productList.addAll(query.list());
             return productList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
@@ -138,9 +140,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> findAllProductsWhichIsNotProcessed() {
+        List<Product> productList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findAllProductsWhichIsNotProcessed");
-            List<Product> productList = query.list();
+            productList.addAll(query.list());
             return productList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
@@ -169,12 +172,13 @@ public class ProductRepositoryImpl implements ProductRepository {
 //    }
 
     @Override
-    public List<ProductForProceedDTO> getProductInfoForProceeding() {
+    public List<ProductForProceedDTO> getProductsInfoForProceeding() {
+        List<ProductForProceedDTO> productList = new ArrayList<>();
         try {
-            List<ProductForProceedDTO> product = session.getNamedQuery("getProductInfoForProceeding").unwrap(Query.class).
+            productList.addAll(session.getNamedQuery("getProductInfoForProceeding").unwrap(Query.class).
                     setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
-                    .getResultList();
-            return product;
+                    .getResultList());
+            return productList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
         }
@@ -217,14 +221,15 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
+    public List<ProductForProceedDTO> getProductsHistoryByEmployeeId(long employeeId) {
+        List<ProductForProceedDTO> productForProceedDTOList = new ArrayList<>();
         try {
             Employee employee = session.get(Employee.class, employeeId);
-            List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductHistoryByEmployeeId")
+            productForProceedDTOList.addAll(session.getNamedQuery("getProductHistoryByEmployeeId")
                     .setParameter("loadedByEmployee", employee)
                     .unwrap(Query.class)
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
-                    .getResultList();
+                    .getResultList());
             return productForProceedDTOList;
         } catch (NoResultException e) {
             throw new IdNotFoundException("No employee was found with INV: " + employeeId);
@@ -234,14 +239,15 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent) {
+    public List<ProductForProceedDTO> getProductsInfoByDate(Date shipment_date, boolean isPresent) {
+        List<ProductForProceedDTO> productForProceedDTOList = new ArrayList<>();
         try {
-            List<ProductForProceedDTO> productForProceedDTOList = session.getNamedQuery("getProductInfoByDate")
+            productForProceedDTOList.addAll(session.getNamedQuery("getProductInfoByDate")
                     .setParameter("scheduledShipmentDate", new Date())
                     .setParameter("isPresent", true)
                     .unwrap(Query.class)
                     .setResultTransformer(Transformers.aliasToBean(ProductForProceedDTO.class))
-                    .getResultList();
+                    .getResultList());
             return productForProceedDTOList;
         } catch (NoResultException e) {
             throw new IdNotFoundException(e.getMessage());

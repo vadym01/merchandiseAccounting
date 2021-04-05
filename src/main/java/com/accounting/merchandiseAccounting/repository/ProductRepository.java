@@ -24,15 +24,15 @@ public interface ProductRepository{
 
 //    void updateProductProceedStatusById(long id);
 
-    List<ProductForProceedDTO> getProductInfoForProceeding();
+    List<ProductForProceedDTO> getProductsInfoForProceeding();
 
     void updateProductLoadedByEmployee(ProductLoadedByEmployeeInfoDTO productForProceedDto);
 
     ProductForProceedDTO getProductLoadedByEmployee(long id);
 
-    List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId);
+    List<ProductForProceedDTO> getProductsHistoryByEmployeeId(long employeeId);
 
-    List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent);
+    List<ProductForProceedDTO> getProductsInfoByDate(Date shipment_date, boolean isPresent);
 
     void updateShipmentValueForSentBy(long employeeId, long INVNumber);
 

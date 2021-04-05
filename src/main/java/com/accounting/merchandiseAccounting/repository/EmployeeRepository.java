@@ -13,7 +13,7 @@ public interface EmployeeRepository {
 //    List<Employee> getAllEmployee();
 //    void saveEmployee(Employee employee);
 //    Employee getEmployeeById(long id);
-    List<Employee> findEmployeeByName(String name);
+    List<Employee> findEmployeesByName(String name);
     List<Employee> getAllAvailableEmployees();
 //    void updateEmployee(Employee employee);
 }

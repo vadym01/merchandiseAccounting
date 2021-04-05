@@ -18,6 +18,7 @@ import javax.persistence.NoResultException;
 
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +29,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     @Autowired
     private EntityManager entityManager;
     @Autowired
-    private   SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
     private Session session;
 
     @PostConstruct
@@ -87,20 +88,21 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 //    }
 
     @Override
-        public List<Vehicle> findVehicleByVehicleName(String name){
-        try{
+    public List<Vehicle> findVehiclesByVehicleName(String name) {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        try {
             Query query = session.getNamedQuery("findVehicleByVehicleName")
                     .setParameter("vehicleName", '%' + name + '%');
-            List<Vehicle> vehicleList =query.list();
+            vehicleList.addAll(query.list());
             return vehicleList;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        throw new BadRequestExceptionHandler(e.getMessage());
+            throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
 
 //    @Override
-//    public List<Vehicle> getAllVehicle() {
+//    public List<Vehicle> getAllVehicles() {
 //        try {
 //            Query query = session.getNamedQuery("getAllVehicles");
 //            List<Vehicle> vehicleList = query.list();
@@ -112,12 +114,13 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 //    }
 
     @Override
-    public List<Vehicle> getAllAvailableVehicle() {
-        try{
+    public List<Vehicle> getAllAvailableVehicles() {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        try {
             Query query = session.getNamedQuery("getAllAvailableVehicle");
-            List<Vehicle> vehicleList = query.list();
+            vehicleList.addAll(query.list());
             return vehicleList;
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
         }
     }

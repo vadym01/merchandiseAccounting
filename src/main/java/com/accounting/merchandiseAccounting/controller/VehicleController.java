@@ -34,7 +34,7 @@ public class VehicleController {
 
     @GetMapping
     public ResponseEntity<?> getAllVehicle() {
-        List<Vehicle> vehicleList = vehicleService.getAllVehicle();
+        List<Vehicle> vehicleList = vehicleService.getAllVehicles();
         try {
             return new ResponseEntity<>(vehicleList, HttpStatus.OK);
         } catch (PropertyAccessException propertyAccessException) {
@@ -68,7 +68,7 @@ public class VehicleController {
 
     @GetMapping("available")
     public ResponseEntity getAllAvailableVehicle() {
-        List<Vehicle> vehicleList = vehicleService.getAllAvailableVehicle();
+        List<Vehicle> vehicleList = vehicleService.getAllAvailableVehicles();
         return new ResponseEntity(vehicleList, HttpStatus.OK);
     }
 

@@ -10,8 +10,8 @@ public interface VehicleRepository {
 //    Vehicle saveVehicle(Vehicle vehicle);
 //    Vehicle findVehicleById(long id);
 //    int deleteVehicleById(long id);
-//    List<Vehicle> getAllVehicle();
-    List<Vehicle> getAllAvailableVehicle();
-    List<Vehicle> findVehicleByVehicleName(String VehicleName);
+//    List<Vehicle> getAllVehicles();
+    List<Vehicle> getAllAvailableVehicles();
+    List<Vehicle> findVehiclesByVehicleName(String VehicleName);
 //    void updateVehicle(Vehicle vehicle);
 }

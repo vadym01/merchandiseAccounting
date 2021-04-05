@@ -21,6 +21,7 @@ import javax.persistence.NoResultException;
 
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -113,9 +114,10 @@ public class IncidentRepositoryImpl implements IncidentRepository {
 
     @Override
     public List<Incident> findIncidentsForVehicle() {
+        List<Incident> incidentList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findIncidentsForVehicle");
-            List<Incident> incidentList = query.getResultList();
+            incidentList.addAll(query.getResultList());
             return incidentList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
@@ -124,9 +126,10 @@ public class IncidentRepositoryImpl implements IncidentRepository {
 
     @Override
     public List<Incident> findIncidentsForEmployee() {
+        List<Incident> incidentList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findIncidentsForEmployee");
-            List<Incident> incidentList = query.getResultList();
+            incidentList.addAll(query.getResultList());
             return incidentList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());

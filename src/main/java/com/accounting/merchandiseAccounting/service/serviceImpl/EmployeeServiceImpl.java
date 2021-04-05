@@ -2,20 +2,14 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 
 import com.accounting.merchandiseAccounting.model.Employee;
 //import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
-import com.accounting.merchandiseAccounting.model.Incident;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,13 +28,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllEmployees() {
-        List<Employee> employeeList = crudProvider.findAll();
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.addAll(crudProvider.findAll());
         return employeeList;
     }
 
     @Override
-    public List<Employee> findEmployeeByName(String name) {
-        List<Employee> employeeList = employeeRepository.findEmployeeByName(name);
+    public List<Employee> findEmployeesByName(String name) {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.addAll(employeeRepository.findEmployeesByName(name));
         return employeeList;
     }
 
@@ -57,7 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAllAvailableEmployees() {
-        List<Employee> employeeList = employeeRepository.getAllAvailableEmployees();
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.addAll(employeeRepository.getAllAvailableEmployees());
         return employeeList;
     }
 

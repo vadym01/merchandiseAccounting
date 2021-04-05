@@ -13,10 +13,10 @@ import com.accounting.merchandiseAccounting.repository.VehicleRepository;
 import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
     private CrudProvider<Product> crudProvider;
 
 
-
     @Autowired
     public void setCrudProvider(CrudProvider<Product> crudProvider) {
         this.crudProvider = crudProvider;
@@ -45,12 +44,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        List<Vehicle> allAvailableVehicle = vehicleRepository.getAllAvailableVehicle();
-        List<Employee> allAvailableEmployee = employeeRepository.getAllAvailableEmployees();
-         allAvailableVehicle.stream()
+        List<Vehicle> allAvailableVehicle = new ArrayList<>();
+        List<Employee> allAvailableEmployee = new ArrayList<>();
+        allAvailableVehicle.addAll(vehicleRepository.getAllAvailableVehicles());
+        allAvailableEmployee.addAll(employeeRepository.getAllAvailableEmployees());
+        allAvailableVehicle.stream()
                 .filter(vehicle -> vehicle.getLiftingCapacity() >= product.getWeight())
                 .findFirst().orElseThrow(() -> new BadRequestExceptionHandler("Not found vehicle with required" +
-                        "lifting capacity"));
+                "lifting capacity"));
         allAvailableEmployee.stream().findAny().orElseThrow(() -> new BadRequestExceptionHandler("No employee found" +
                 "for loading process"));
 
@@ -83,21 +84,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAllProducts() {
-        List<Product> productList = crudProvider.findAll();
+        List<Product> productList = new ArrayList<>();
+        productList.addAll(crudProvider.findAll());
         return productList;
     }
 
     @Override
     public void updateProductProceedStatusById(long id) {
-            Product product = crudProvider.findOneById(id);
-            product.setProcessed(true);
-            product.setArrivalDate(new Date());
-            crudProvider.update(product);
+        Product product = crudProvider.findOneById(id);
+        product.setProcessed(true);
+        product.setArrivalDate(new Date());
+        crudProvider.update(product);
     }
 
     @Override
     public List<ProductForProceedDTO> getProductInfoForProceeding() {
-        List<ProductForProceedDTO> productForProceedDTOS = productRepository.getProductInfoForProceeding();
+        List<ProductForProceedDTO> productForProceedDTOS = new ArrayList<>();
+        productForProceedDTOS.addAll(productRepository.getProductsInfoForProceeding());
         return productForProceedDTOS;
     }
 
@@ -114,12 +117,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductForProceedDTO> getProductHistoryByEmployeeId(long employeeId) {
-        return productRepository.getProductHistoryByEmployeeId(employeeId);
+        List<ProductForProceedDTO> productForProceedDTOS = new ArrayList<>();
+        productForProceedDTOS.addAll(productRepository.getProductsHistoryByEmployeeId(employeeId));
+        return productForProceedDTOS;
     }
 
     @Override
     public List<ProductForProceedDTO> getProductInfoByDate(Date shipment_date, boolean isPresent) {
-        List<ProductForProceedDTO> productForProceedDTOList = productRepository.getProductInfoByDate(shipment_date, isPresent);
+        List<ProductForProceedDTO> productForProceedDTOList = new ArrayList<>();
+        productForProceedDTOList.addAll(productRepository.getProductsInfoByDate(shipment_date, isPresent));
         return productForProceedDTOList;
     }
 

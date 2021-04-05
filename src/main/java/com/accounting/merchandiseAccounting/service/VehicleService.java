@@ -8,9 +8,10 @@ public interface VehicleService {
     Vehicle saveVehicle(Vehicle vehicle);
     Vehicle findVehicleById(long id);
     void deleteVehicleById(long id);
-    List<Vehicle> getAllVehicle();
-    List<Vehicle> getAllAvailableVehicle();
+    List<Vehicle> getAllVehicles();
+    List<Vehicle> getAllAvailableVehicles();
     List<Vehicle> findVehicleByVehicleName(String vehicleName);
     void updateVehicle(Vehicle vehicle);
     void changeAvailableStatusForVehicle(long id);
 }
+

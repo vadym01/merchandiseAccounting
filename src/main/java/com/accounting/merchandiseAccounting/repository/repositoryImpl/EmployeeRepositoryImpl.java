@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,12 +46,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 //    }
 
     @Override
-    public List<Employee> findEmployeeByName(String name) {
-        List<Employee> employeeList;
+    public List<Employee> findEmployeesByName(String name) {
+        List<Employee> employeeList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findEmployeeByName")
                     .setParameter("firstName", '%' + name + '%');
-            employeeList = query.getResultList();
+            employeeList.addAll(query.getResultList());
             return employeeList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
@@ -89,12 +90,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public List<Employee> getAllAvailableEmployees() {
+        List<Employee> employeeList = new ArrayList<>();
         try {
-            List<Employee> employeeList;
             Query query = session.getNamedQuery("getAllAvailableEmployees");
-            employeeList = query.getResultList();
+            employeeList.addAll(query.getResultList());
             return employeeList;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
