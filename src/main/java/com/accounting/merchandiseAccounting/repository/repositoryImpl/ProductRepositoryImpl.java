@@ -2,12 +2,12 @@ package com.accounting.merchandiseAccounting.repository.repositoryImpl;
 
 import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductReportDto;
 import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
 import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
-import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import com.accounting.merchandiseAccounting.service.EmployeeService;
 import com.accounting.merchandiseAccounting.service.VehicleService;
 import com.accounting.merchandiseAccounting.service.ProductService;
@@ -281,14 +281,19 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public long getTotalAmountOfProducts() {
+    public ProductReportDto getTotalAmountOfProducts() {
         try {
-            long result = (long) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
-            return result;
+            ProductReportDto productReportDto = (ProductReportDto) session.getNamedQuery("getTotalAmountOfProducts")
+                    .unwrap(Query.class)
+                    .setResultTransformer(Transformers.aliasToBean(ProductReportDto.class)).getSingleResult();
+//            Number queryResult = (Number) session.getNamedQuery("getTotalAmountOfProducts").uniqueResult();
+//            double total = queryResult.doubleValue();
+            return productReportDto;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
+
 
     @Override
     public void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent) {

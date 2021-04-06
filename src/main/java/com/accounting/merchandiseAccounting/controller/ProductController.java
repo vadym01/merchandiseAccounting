@@ -2,9 +2,10 @@ package com.accounting.merchandiseAccounting.controller;
 
 import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductReportDto;
 import com.accounting.merchandiseAccounting.exceptions.IdNotFoundException;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
+import com.accounting.merchandiseAccounting.repository.ProductRepository;
 import com.accounting.merchandiseAccounting.service.ProductService;
 import com.accounting.merchandiseAccounting.validationService.MapValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ProductController {
 
     @Autowired
     private MapValidationService mapValidationService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
 //    @GetMapping
 //    public ResponseEntity<List<Product>> findProductsByProductName(@RequestParam Optional<String> productName) {
@@ -126,7 +130,8 @@ public class ProductController {
 
     @GetMapping("total")
     public ResponseEntity getTotalAmountOfProducts(){
-        ProductStorageReport productStorageReport = productService.getTotalAmountOfProducts();
+//        ProductStorageReport productStorageReport = productService.getTotalAmountOfProducts();
+        ProductReportDto productStorageReport = productService.getTotalAmountOfProducts();
         return new ResponseEntity(productStorageReport,HttpStatus.OK);
     }
 }

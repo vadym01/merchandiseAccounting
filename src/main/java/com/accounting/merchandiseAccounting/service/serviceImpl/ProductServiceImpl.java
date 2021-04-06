@@ -2,10 +2,10 @@ package com.accounting.merchandiseAccounting.service.serviceImpl;
 
 import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductReportDto;
 import com.accounting.merchandiseAccounting.exceptions.BadRequestExceptionHandler;
 import com.accounting.merchandiseAccounting.model.Employee;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
 import com.accounting.merchandiseAccounting.model.Vehicle;
 import com.accounting.merchandiseAccounting.repository.EmployeeRepository;
 import com.accounting.merchandiseAccounting.repository.ProductRepository;
@@ -44,6 +44,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
+
+         double totalAmount = getTotalAmountOfProducts().getTotalVolume() + product.getVolume();
+         if(totalAmount > 100){
+             throw new BadRequestExceptionHandler("Warehouse error: " +
+                     "Total available space: " +String.format("%.2f",( 100 - getTotalAmountOfProducts().getTotalVolume())) + "" +
+                     "required space: " + product.getVolume());
+         }
+
+
         List<Vehicle> allAvailableVehicle = new ArrayList<>();
         List<Employee> allAvailableEmployee = new ArrayList<>();
         allAvailableVehicle.addAll(vehicleRepository.getAllAvailableVehicles());
@@ -140,11 +149,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductStorageReport getTotalAmountOfProducts() {
-        int totalSpace = 100;
-        int totalAmount = Math.toIntExact(productRepository.getTotalAmountOfProducts());
-        int freeSpace = totalSpace - totalAmount;
-        ProductStorageReport productStorageReport = new ProductStorageReport(totalAmount, freeSpace);
-        return productStorageReport;
+    public ProductReportDto getTotalAmountOfProducts() {
+        return productRepository.getTotalAmountOfProducts();
     }
 }

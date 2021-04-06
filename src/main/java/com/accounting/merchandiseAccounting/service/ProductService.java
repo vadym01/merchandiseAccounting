@@ -2,8 +2,8 @@ package com.accounting.merchandiseAccounting.service;
 
 import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductReportDto;
 import com.accounting.merchandiseAccounting.model.Product;
-import com.accounting.merchandiseAccounting.dto.ProductStorageReport;
 
 import java.util.Date;
 import java.util.List;
@@ -37,5 +37,5 @@ public interface ProductService {
 
     void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent);
 
-    ProductStorageReport getTotalAmountOfProducts();
+    ProductReportDto getTotalAmountOfProducts();
 }

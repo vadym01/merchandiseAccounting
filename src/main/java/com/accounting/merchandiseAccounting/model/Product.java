@@ -55,7 +55,7 @@ import java.util.Objects;
                 "WHERE INVNumber = :INVNumber"),
         @NamedQuery(name = "updateShipmentValueForIsPresent", query = "UPDATE Product p SET p.isPresent = :isPresent " +
                 "WHERE p.INVNumber = :INVNumber"),
-        @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT COUNT(p.INVNumber) as total from Product p"),
+        @NamedQuery(name = "getTotalAmountOfProducts", query = "SELECT SUM(volume) as totalVolume, COUNT(INV_number) as totalUnits from Product p"),
         @NamedQuery(name = "updateProduct", query = "Update Product SET productName = :productName, description = :description," +
                 "volume = :volume, weight = :weight, sender = :sender, receiver = :receiver, receiptDate = :receiptDate," +
                 "scheduledShipmentDate = :scheduledShipmentDate, isPresent = :isPresent, " +
@@ -79,7 +79,7 @@ public class Product {
     private String description;
     @Column(name = "volume")
     @DecimalMin(value = "0.01", message = "minimum value for volume is 0.1")
-    @DecimalMax(value = "50.0", message = "maximum value for volume is 50.0")
+    @DecimalMax(value = "2.0", message = "maximum value for volume is 2.0")
     private double volume;
     @Column(name = "weight")
     @DecimalMin(value = "0.01", message = "minimum value for weight is 0.1")

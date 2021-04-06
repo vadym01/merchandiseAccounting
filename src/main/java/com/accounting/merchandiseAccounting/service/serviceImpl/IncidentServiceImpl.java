@@ -41,6 +41,7 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public void deleteIncidentById(long id) {
+        changeIncidentStatus(id);
         crudProvider.deleteById(id);
     }
 

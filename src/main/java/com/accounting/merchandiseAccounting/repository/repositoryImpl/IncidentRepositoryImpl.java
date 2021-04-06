@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -111,18 +113,36 @@ public class IncidentRepositoryImpl implements IncidentRepository {
 //        }
 //    }
 
-
+//------------------------------------------------
     @Override
     public List<Incident> findIncidentsForVehicle() {
         List<Incident> incidentList = new ArrayList<>();
         try {
             Query query = session.getNamedQuery("findIncidentsForVehicle");
+            query.list().forEach(e -> session.refresh(e));
             incidentList.addAll(query.getResultList());
             return incidentList;
         } catch (Exception e) {
             throw new BadRequestExceptionHandler(e.getMessage());
         }
     }
+
+//    @Override
+//    public List<Incident> findIncidentsForVehicle() {
+//        List<Incident> incidentList = new ArrayList<>();
+//        try {
+//            incidentList.addAll(entityManager.createQuery("FROM Incident WHERE vehicle IS NOT NULL").getResultList());
+////            incidentList.addAll(query.getResultList());
+//            return incidentList;
+//        } catch (Exception e) {
+//            throw new BadRequestExceptionHandler(e.getMessage());
+//        }
+//    }
+//---------------------------------------------------------------------
+
+
+
+
 
     @Override
     public List<Incident> findIncidentsForEmployee() {

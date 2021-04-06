@@ -2,6 +2,7 @@ package com.accounting.merchandiseAccounting.repository;
 
 import com.accounting.merchandiseAccounting.dto.ProductForProceedDTO;
 import com.accounting.merchandiseAccounting.dto.ProductLoadedByEmployeeInfoDTO;
+import com.accounting.merchandiseAccounting.dto.ProductReportDto;
 import com.accounting.merchandiseAccounting.model.Product;
 import com.accounting.merchandiseAccounting.repository.crudRepository.CrudProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,6 +39,6 @@ public interface ProductRepository{
 
     void updateShipmentValueForIsPresent(long INVNumber, boolean isPresent);
 
-    long getTotalAmountOfProducts();
+    ProductReportDto getTotalAmountOfProducts();
 
 }

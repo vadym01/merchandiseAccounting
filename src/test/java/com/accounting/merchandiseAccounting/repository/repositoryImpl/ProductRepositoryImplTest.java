@@ -227,6 +227,7 @@ class ProductRepositoryImplTest {
 
     @Test
     void getTotalAmountOfProducts() {
+        System.out.println(productRepository.getTotalAmountOfProducts());
     }
 
     @Test

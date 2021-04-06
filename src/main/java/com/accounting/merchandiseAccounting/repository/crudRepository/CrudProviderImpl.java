@@ -79,7 +79,7 @@ public class CrudProviderImpl<T> implements CrudProvider<T> {
     public T update(T entity) {
         try {
             session.getTransaction().begin();
-            session.update(entity);
+            session.merge(entity);
             session.getTransaction().commit();
             return null;
         } catch (Exception e) {
